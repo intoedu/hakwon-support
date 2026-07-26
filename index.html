@@ -188,7 +188,10 @@
   .tzbox ul{margin:8px 0 0;padding-left:18px;color:var(--muted)}
   .common{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
   @media(max-width:720px){.common{grid-template-columns:repeat(2,1fr)}}
-  .inp{border:1px solid var(--line);background:var(--paper);border-radius:9px;padding:11px 13px;font-size:.86rem;color:var(--muted)}
+  .inp{border:1px solid var(--line);background:var(--paper);border-radius:9px;padding:11px 13px;font-size:.9rem;color:var(--ink);font-family:inherit;width:100%}
+  .inp::placeholder{color:var(--muted)}
+  .inp:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 15%,transparent)}
+  textarea.inp{resize:vertical;min-height:110px;line-height:1.6}
   .consent{margin-top:14px;display:flex;gap:10px;align-items:flex-start;font-size:.84rem;color:var(--muted)}
   .consent .box{width:18px;height:18px;border:1.5px solid var(--accent);border-radius:5px;flex:0 0 auto;margin-top:2px}
   .consent a{color:var(--accent);font-weight:600;text-decoration:underline;cursor:pointer}
@@ -485,15 +488,21 @@
         <div class="form-step">
           <div class="fs-lab"><span class="dot">2</span>세부 항목 <span style="color:var(--muted);font-weight:600;font-size:.8rem">(선택한 지원에 따라 달라집니다)</span></div>
           <div class="fields" id="fields"></div>
+          <textarea class="inp" id="f_message" style="margin-top:14px" placeholder="위 항목들을 참고해, 필요하신 내용을 자유롭게 적어주세요."></textarea>
         </div>
         <div class="form-step">
           <div class="fs-lab"><span class="dot">3</span>기본 정보</div>
-          <div class="common"><div class="inp">학원명 *</div><div class="inp">담당자명 *</div><div class="inp">연락처 *</div><div class="inp">이메일 *</div></div>
-          <div class="consent"><span class="box"></span><span>개인정보 수집·이용에 동의합니다. 수집한 정보는 상담·견적 목적 외에는 사용하지 않습니다. <a onclick="scrollId('contact')">개인정보처리방침 보기</a></span></div>
+          <div class="common">
+            <input class="inp" id="f_academy" placeholder="학원명 *" autocomplete="organization">
+            <input class="inp" id="f_manager" placeholder="담당자명 *" autocomplete="name">
+            <input class="inp" id="f_phone" placeholder="연락처 *" inputmode="tel" autocomplete="tel">
+            <input class="inp" id="f_email" placeholder="이메일" inputmode="email" autocomplete="email">
+          </div>
+          <label class="consent"><input type="checkbox" id="f_consent" style="width:18px;height:18px;accent-color:var(--accent);margin-top:2px;flex:0 0 auto"><span>개인정보 수집·이용에 동의합니다. 수집한 정보는 상담·견적 목적 외에는 사용하지 않습니다. <a onclick="scrollId('contact')">개인정보처리방침 보기</a></span></label>
         </div>
         <div class="form-actions">
-          <a class="btn btn-primary" onclick="scrollId('contact')">신청서 제출</a>
-          <span class="hint">제출하면 담당자가 배정되어 1~2일 내 연락드립니다.</span>
+          <button class="btn btn-primary" type="button" id="submitBtn" onclick="submitRequest()">신청서 제출</button>
+          <span class="hint" id="formHint">제출하면 담당자가 배정되어 1~2일 내 연락드립니다.</span>
         </div>
       </div>
     </div>
@@ -893,6 +902,7 @@
   </div>
 </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
   var VIEWS=['home','doc','hr','content','mkt'];
   function scrollId(id){var el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});closeMenu();}
@@ -965,6 +975,32 @@
   /* initial route */
   var h=(location.hash||'').replace('#','');
   if(VIEWS.indexOf(h)>=0){go(h);}else{revealIn(document.getElementById('v-home'));}
+
+  /* ===== Supabase: 의뢰서(신청) 저장 ===== */
+  var SB_URL="https://qkvebwxewttqtcryfycy.supabase.co";
+  var SB_KEY="sb_publishable_Me_R6M540Fg60nmEVqByTg_p-zD8pxa";
+  var sb=(window.supabase&&window.supabase.createClient)?window.supabase.createClient(SB_URL,SB_KEY):null;
+  var AREA_KO={doc:"자료제작",hr:"인력",cnt:"컨텐츠",mkt:"마케팅"};
+  async function submitRequest(){
+    var hint=document.getElementById('formHint');
+    var setErr=function(m){hint.textContent=m;hint.style.color="#c0392b";};
+    var pick=document.querySelector('#picker .pick.on');
+    var area=pick?pick.getAttribute('data-k'):'doc';
+    var academy=document.getElementById('f_academy').value.trim();
+    var manager=document.getElementById('f_manager').value.trim();
+    var phone=document.getElementById('f_phone').value.trim();
+    var email=document.getElementById('f_email').value.trim();
+    var message=document.getElementById('f_message').value.trim();
+    var consent=document.getElementById('f_consent').checked;
+    if(!academy)return setErr('학원명을 입력해 주세요.');
+    if(!phone&&!email)return setErr('연락처 또는 이메일 중 하나는 입력해 주세요.');
+    if(!consent)return setErr('개인정보 수집·이용에 동의해 주세요.');
+    if(!sb)return setErr('연결 오류입니다. 새로고침 후 다시 시도해 주세요.');
+    var btn=document.getElementById('submitBtn');btn.disabled=true;btn.textContent='제출 중...';
+    var res=await sb.from('requests').insert({area:AREA_KO[area]||area,academy_name:academy,manager_name:manager,phone:phone,email:email,message:message,consent:consent});
+    if(res.error){btn.disabled=false;btn.textContent='신청서 제출';setErr('제출 실패: '+res.error.message);return;}
+    document.querySelector('#apply .form').innerHTML='<div style="padding:56px 28px;text-align:center"><div style="font-size:2.6rem">✅</div><h3 style="font-size:1.4rem;font-weight:800;margin:14px 0 8px">신청이 접수되었습니다</h3><p style="color:var(--muted);max-width:44ch;margin:0 auto">담당자가 배정되어 1~2일 내에 연락드리겠습니다. 감사합니다.</p></div>';
+  }
 </script>
 </body>
 </html>
