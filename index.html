@@ -284,6 +284,27 @@
   .folio-card figcaption b{display:block;font-size:.94rem;font-weight:800}
   .folio-card figcaption span{font-size:.8rem;color:var(--muted)}
 
+  /* auth */
+  .authArea{display:flex;align-items:center;gap:10px}
+  .authArea .lg{background:none;border:0;font-family:inherit;font-weight:600;font-size:.92rem;color:var(--muted);cursor:pointer;white-space:nowrap}
+  .authArea .lg:hover{color:var(--ink)}
+  .authArea .me{font-size:.85rem;font-weight:700;color:var(--brand);max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  @media(max-width:860px){.authArea{display:none}}
+  .modal{position:fixed;inset:0;z-index:200;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(8,14,28,.55);backdrop-filter:blur(3px)}
+  .modal.open{display:flex}
+  .modal-card{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:16px;width:100%;max-width:420px;box-shadow:0 30px 70px -30px rgba(0,0,0,.55);overflow:hidden}
+  .modal-x{position:absolute;top:14px;right:16px;background:none;border:0;font-size:1.5rem;color:var(--muted);cursor:pointer;line-height:1}
+  .modal-head{display:flex;border-bottom:1px solid var(--line)}
+  .modal-tab{flex:1;background:none;border:0;font-family:inherit;font-weight:800;font-size:1rem;padding:18px;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent}
+  .modal-tab.on{color:var(--brand);border-bottom-color:var(--accent)}
+  .modal-body{padding:24px}
+  .modal-body .fld{margin-bottom:12px}
+  .modal-body label{display:block;font-size:.8rem;font-weight:700;color:var(--ink);margin-bottom:6px}
+  .modal-msg{font-size:.85rem;margin:2px 0 12px;min-height:1.1em}
+  .modal-msg.err{color:#c0392b}
+  .modal-msg.ok{color:#1e7e34}
+  .modal .btn{width:100%;justify-content:center}
+
   /* success case */
   .case{background:linear-gradient(155deg,var(--band-bg),#0d1f3b);color:#fff;border-radius:var(--radius);padding:36px;margin-top:6px;border:1px solid var(--band-line)}
   .case .ck{font-size:.8rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--band-gold)}
@@ -336,6 +357,7 @@
       <button class="navlink" onclick="go('home','faq')">자주 묻는 질문</button>
       <button class="navlink" onclick="scrollId('contact')">문의하기</button>
     </nav>
+    <span class="authArea" id="authArea"></span>
     <a class="btn btn-primary headcta" onclick="go('home','apply')">신청하기</a>
     <button class="burger" id="burger" aria-label="메뉴"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
   </div>
@@ -348,6 +370,7 @@
     <a onclick="go('home','apply')">신청하기</a>
     <a onclick="go('home','faq')">자주 묻는 질문</a>
     <a onclick="scrollId('contact')">문의하기</a>
+    <a id="mAuth" onclick="openAuth('login')">로그인 / 회원가입</a>
   </div>
 </header>
 
@@ -902,6 +925,34 @@
   </div>
 </footer>
 
+<!-- 로그인 / 회원가입 모달 -->
+<div class="modal" id="authModal" onclick="if(event.target===this)closeAuth()">
+  <div class="modal-card">
+    <button class="modal-x" onclick="closeAuth()" aria-label="닫기">×</button>
+    <div class="modal-head">
+      <button class="modal-tab on" id="tabLogin" type="button" onclick="switchAuthTab('login')">로그인</button>
+      <button class="modal-tab" id="tabSignup" type="button" onclick="switchAuthTab('signup')">회원가입</button>
+    </div>
+    <div class="modal-body">
+      <div id="paneLogin">
+        <div class="fld"><label>이메일</label><input class="inp" id="li_email" type="email" inputmode="email" autocomplete="email" placeholder="이메일"></div>
+        <div class="fld"><label>비밀번호</label><input class="inp" id="li_pw" type="password" autocomplete="current-password" placeholder="비밀번호"></div>
+        <div class="modal-msg" id="li_msg"></div>
+        <button class="btn btn-primary" type="button" onclick="doLogin()">로그인</button>
+      </div>
+      <div id="paneSignup" style="display:none">
+        <div class="fld"><label>학원명 *</label><input class="inp" id="su_academy" autocomplete="organization" placeholder="학원명"></div>
+        <div class="fld"><label>담당자명</label><input class="inp" id="su_manager" autocomplete="name" placeholder="담당자명"></div>
+        <div class="fld"><label>연락처</label><input class="inp" id="su_phone" inputmode="tel" autocomplete="tel" placeholder="연락처"></div>
+        <div class="fld"><label>이메일 *</label><input class="inp" id="su_email" type="email" inputmode="email" autocomplete="email" placeholder="이메일"></div>
+        <div class="fld"><label>비밀번호 *</label><input class="inp" id="su_pw" type="password" autocomplete="new-password" placeholder="비밀번호 (6자 이상)"></div>
+        <div class="modal-msg" id="su_msg"></div>
+        <button class="btn btn-primary" type="button" onclick="doSignup()">회원가입</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
   var VIEWS=['home','doc','hr','content','mkt'];
@@ -1001,6 +1052,55 @@
     if(res.error){btn.disabled=false;btn.textContent='신청서 제출';setErr('제출 실패: '+res.error.message);return;}
     document.querySelector('#apply .form').innerHTML='<div style="padding:56px 28px;text-align:center"><div style="font-size:2.6rem">✅</div><h3 style="font-size:1.4rem;font-weight:800;margin:14px 0 8px">신청이 접수되었습니다</h3><p style="color:var(--muted);max-width:44ch;margin:0 auto">담당자가 배정되어 1~2일 내에 연락드리겠습니다. 감사합니다.</p></div>';
   }
+
+  /* ===== 로그인 / 회원가입 ===== */
+  function openAuth(tab){switchAuthTab(tab||'login');document.getElementById('authModal').classList.add('open');closeMenu();}
+  function closeAuth(){document.getElementById('authModal').classList.remove('open');}
+  function switchAuthTab(t){
+    var l=(t!=='signup');
+    document.getElementById('tabLogin').classList.toggle('on',l);
+    document.getElementById('tabSignup').classList.toggle('on',!l);
+    document.getElementById('paneLogin').style.display=l?'':'none';
+    document.getElementById('paneSignup').style.display=l?'none':'';
+  }
+  async function doLogin(){
+    var m=document.getElementById('li_msg');m.className='modal-msg';m.textContent='';
+    var email=document.getElementById('li_email').value.trim(),pw=document.getElementById('li_pw').value;
+    if(!email||!pw){m.className='modal-msg err';m.textContent='이메일과 비밀번호를 입력해 주세요.';return;}
+    if(!sb){m.className='modal-msg err';m.textContent='연결 오류입니다.';return;}
+    m.textContent='로그인 중...';
+    var res=await sb.auth.signInWithPassword({email:email,password:pw});
+    if(res.error){m.className='modal-msg err';m.textContent='로그인 실패: 이메일 또는 비밀번호를 확인해 주세요.';return;}
+    closeAuth();updateAuthUI();
+  }
+  async function doSignup(){
+    var m=document.getElementById('su_msg');m.className='modal-msg';m.textContent='';
+    var academy=document.getElementById('su_academy').value.trim(),manager=document.getElementById('su_manager').value.trim(),phone=document.getElementById('su_phone').value.trim(),email=document.getElementById('su_email').value.trim(),pw=document.getElementById('su_pw').value;
+    if(!academy||!email||!pw){m.className='modal-msg err';m.textContent='학원명·이메일·비밀번호는 필수입니다.';return;}
+    if(pw.length<6){m.className='modal-msg err';m.textContent='비밀번호는 6자 이상이어야 합니다.';return;}
+    if(!sb){m.className='modal-msg err';m.textContent='연결 오류입니다.';return;}
+    m.textContent='가입 중...';
+    var res=await sb.auth.signUp({email:email,password:pw,options:{data:{academy_name:academy,manager_name:manager,phone:phone}}});
+    if(res.error){m.className='modal-msg err';m.textContent='가입 실패: '+res.error.message;return;}
+    if(res.data&&res.data.session){closeAuth();updateAuthUI();}
+    else{m.className='modal-msg ok';m.textContent='가입 완료! 로그인 탭에서 로그인해 주세요.';}
+  }
+  async function doLogout(){if(sb){await sb.auth.signOut();}updateAuthUI();}
+  async function updateAuthUI(){
+    var area=document.getElementById('authArea');if(!area||!sb)return;
+    var res=await sb.auth.getUser();
+    var user=(res&&res.data)?res.data.user:null;
+    if(user){
+      var meta=user.user_metadata||{};
+      var name=meta.academy_name||user.email;
+      area.innerHTML='<span class="me" title="'+name+'">'+name+' 님</span><button class="lg" type="button" onclick="doLogout()">로그아웃</button>';
+      var ma=document.getElementById('mAuth');if(ma){ma.textContent='로그아웃';ma.setAttribute('onclick','doLogout()');}
+    }else{
+      area.innerHTML='<button class="lg" type="button" onclick="openAuth(\'login\')">로그인</button>';
+      var ma2=document.getElementById('mAuth');if(ma2){ma2.textContent='로그인 / 회원가입';ma2.setAttribute('onclick',"openAuth('login')");}
+    }
+  }
+  if(sb){sb.auth.onAuthStateChange(function(){updateAuthUI();});updateAuthUI();}
 </script>
 </body>
 </html>
