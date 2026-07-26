@@ -98,8 +98,8 @@
   .side .k{width:30px;height:30px;flex:0 0 auto;border-radius:8px;background:var(--surface-2);color:var(--brand);display:grid;place-items:center}
   .side li:hover .k{background:var(--accent);color:#fff}
   .side .k svg{width:17px;height:17px}
-  .side .t{font-weight:700;font-size:.95rem}
-  .side .d{font-size:.79rem;color:var(--muted);margin-top:1px}
+  .side .t{display:block;font-weight:700;font-size:.95rem}
+  .side .d{display:block;font-size:.79rem;color:var(--muted);margin-top:2px}
   .side .p{margin-left:auto;font-size:.79rem;font-weight:700;color:var(--gold);white-space:nowrap}
 
   /* generic section */
@@ -160,7 +160,7 @@
   .prow .fee{font-weight:800;font-size:1.05rem;color:var(--gold)}
   @media(max-width:720px){.prow{grid-template-columns:1fr 1fr;row-gap:6px}.prow.h{display:none}.prow .inc{grid-column:1/3;order:4}.prow .lbl{font-size:.72rem;color:var(--muted);font-weight:700}}
   .pnote{margin-top:16px;font-size:.86rem;color:var(--muted)}
-  .pnote b{color:var(--ink)}
+  .pnote b{color:var(--ink);font-size:1.04rem}
 
   /* form */
   .form{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}
@@ -264,6 +264,22 @@
   .fcard b{font-weight:800;font-size:.98rem}
   .fcard p{color:var(--muted);font-size:.86rem;margin-top:6px}
   .area-cta{margin-top:30px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+
+  /* portfolio */
+  .folio{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:8px}
+  @media(max-width:820px){.folio{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:520px){.folio{grid-template-columns:1fr}}
+  .folio-card{margin:0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--surface);transition:transform .15s,border-color .2s}
+  .folio-card:hover{transform:translateY(-3px);border-color:var(--accent)}
+  .shot{aspect-ratio:16/10;display:flex;flex-direction:column}
+  .chrome{height:26px;background:var(--surface-2);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:5px;padding:0 11px;flex:0 0 auto}
+  .chrome i{width:8px;height:8px;border-radius:50%;background:var(--line);flex:0 0 auto}
+  .shotbody{flex:1;display:grid;place-items:center;gap:4px;background:linear-gradient(140deg,var(--brand),#0d1f3b);color:#fff;text-align:center;padding:14px}
+  .shotbody b{font-size:1.02rem;font-weight:800;letter-spacing:-.01em}
+  .shotbody span{font-size:.75rem;color:#B9C8E6}
+  .folio-card figcaption{padding:13px 15px;border-top:1px solid var(--line)}
+  .folio-card figcaption b{display:block;font-size:.94rem;font-weight:800}
+  .folio-card figcaption span{font-size:.8rem;color:var(--muted)}
 
   /* success case */
   .case{background:linear-gradient(155deg,var(--band-bg),#0d1f3b);color:#fff;border-radius:var(--radius);padding:36px;margin-top:6px;border:1px solid var(--band-line)}
@@ -440,10 +456,10 @@
       </div>
       <div class="ptable reveal">
         <div class="prow h"><div>단계</div><div>포함 기능</div><div>제작비</div><div>월 관리비</div></div>
-        <div class="prow"><div class="stage">1단계<small>단순 홍보형</small></div><div class="inc"><span class="lbl">포함 · </span>학원 소개, 원장 인사말, 시설·시간표 안내, 오시는 길(지도), 전화·카톡 상담 연결</div><div class="free"><span class="lbl">제작비 </span>무료</div><div class="fee tnum"><span class="lbl">월 </span>3만원</div></div>
-        <div class="prow"><div class="stage">2단계<small>소통형</small></div><div class="inc"><span class="lbl">포함 · </span>1단계 + 회원가입·로그인, 공지·Q&amp;A 게시판, 갤러리, 자료실</div><div class="free"><span class="lbl">제작비 </span>무료</div><div class="fee tnum"><span class="lbl">월 </span>4~6만원</div></div>
-        <div class="prow"><div class="stage">3단계<small>신청·결제형</small></div><div class="inc"><span class="lbl">포함 · </span>2단계 + 강좌 목록, 온라인 수강신청, 신청 관리, 카드 결제 연동</div><div class="free"><span class="lbl">제작비 </span>별도 협의</div><div class="fee tnum"><span class="lbl">월 </span>7~10만원</div></div>
-        <div class="prow"><div class="stage">4단계<small>맞춤 제작형</small></div><div class="inc"><span class="lbl">포함 · </span>정해진 틀 없이 학원 요구에 맞춰 기능·디자인을 자유롭게 설계하는 완전 맞춤형</div><div class="free"><span class="lbl">제작비 </span>견적 후 안내</div><div class="fee"><span class="lbl">월 </span>견적 후 안내</div></div>
+        <div class="prow"><div class="stage">1단계<small>단순 홍보형</small></div><div class="inc">학원 소개, 원장 인사말, 시설·시간표 안내, 오시는 길(지도), 전화·카톡 상담 연결</div><div class="free"><span class="lbl">제작비 </span>무료</div><div class="fee tnum"><span class="lbl">월 </span>3만원</div></div>
+        <div class="prow"><div class="stage">2단계<small>소통형</small></div><div class="inc">1단계 + 회원가입·로그인, 공지·Q&amp;A 게시판, 갤러리, 자료실</div><div class="free"><span class="lbl">제작비 </span>무료</div><div class="fee tnum"><span class="lbl">월 </span>4~6만원</div></div>
+        <div class="prow"><div class="stage">3단계<small>신청·결제형</small></div><div class="inc">2단계 + 강좌 목록, 온라인 수강신청, 신청 관리, 카드 결제 연동</div><div class="free"><span class="lbl">제작비 </span>별도 협의</div><div class="fee tnum"><span class="lbl">월 </span>7~10만원</div></div>
+        <div class="prow"><div class="stage">4단계<small>맞춤 제작형</small></div><div class="inc">정해진 틀 없이 학원 요구에 맞춰 기능·디자인을 자유롭게 설계하는 완전 맞춤형</div><div class="free"><span class="lbl">제작비 </span>견적 후 안내</div><div class="fee">견적 후 안내</div></div>
       </div>
       <p class="pnote">※ <b>유료 도메인은 학원 부담</b>입니다(연 1~2만원대). 사용 여부는 신청 시 선택하실 수 있으며, 도메인은 학원 소유가 됩니다.</p>
     </div>
@@ -560,6 +576,13 @@
           </div>
         </div>
 
+        <div class="panel-intro reveal" style="margin-top:56px"><div><div class="kicker">제작 사례</div><h2>우리가 직접 만든 결과물</h2><p>말보다 결과물로 보여드립니다. 학원지원센터가 제작한 홈페이지 예시입니다.</p></div></div>
+        <div class="folio reveal">
+          <figure class="folio-card"><div class="shot"><span class="chrome"><i></i><i></i><i></i></span><div class="shotbody"><b>OO영어학원</b><span>학원 소개 · 시간표 · 상담 연결</span></div></div><figcaption><b>OO영어학원</b><span>1단계 · 단순 홍보형</span></figcaption></figure>
+          <figure class="folio-card"><div class="shot"><span class="chrome"><i></i><i></i><i></i></span><div class="shotbody"><b>OO수학학원</b><span>게시판 · Q&amp;A · 갤러리</span></div></div><figcaption><b>OO수학학원</b><span>2단계 · 소통형</span></figcaption></figure>
+          <figure class="folio-card"><div class="shot"><span class="chrome"><i></i><i></i><i></i></span><div class="shotbody"><b>OO입시학원</b><span>온라인 수강신청 · 관리</span></div></div><figcaption><b>OO입시학원</b><span>3단계 · 신청형</span></figcaption></figure>
+        </div>
+        <div class="cnote">🖼️ <b>실제 작업물로 교체 예정:</b> 만드신 홈페이지의 스크린샷이나 주소(URL)를 주시면 이 자리에 진짜 결과물로 넣어 드립니다. (앱·프로그램·디자인 탭에도 동일하게 넣을 수 있어요.)</div>
         <div class="area-cta"><a class="btn btn-primary" onclick="applyWith('doc')">홈페이지 제작 신청하기 →</a><a class="btn btn-ghost" onclick="go('home','price')">관리비 안내 보기</a></div>
       </div>
 
