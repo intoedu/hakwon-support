@@ -191,6 +191,14 @@
   .tzbox{margin-top:14px;background:color-mix(in srgb,var(--gold) 12%,var(--surface));border:1px solid color-mix(in srgb,var(--gold) 40%,var(--line));border-radius:10px;padding:14px 16px;font-size:.84rem}
   .tzbox b{color:var(--gold)}
   .tzbox ul{margin:8px 0 0;padding-left:18px;color:var(--muted)}
+  .ff{margin-bottom:20px}
+  .ff .fflabel{display:block;font-size:.88rem;font-weight:800;color:var(--ink);margin-bottom:10px}
+  .ff .fflabel.req::after{content:' *';color:var(--accent)}
+  .ffopts{display:flex;flex-wrap:wrap;gap:8px}
+  .ffopt{position:relative;display:inline-flex;align-items:center;border:1.5px solid var(--line);background:var(--paper);border-radius:999px;padding:8px 15px;font-size:.86rem;font-weight:600;color:var(--ink);cursor:pointer;transition:border-color .15s,background .15s;user-select:none}
+  .ffopt:hover{border-color:var(--accent)}
+  .ffopt input{position:absolute;opacity:0;width:0;height:0}
+  .ffopt:has(input:checked){border-color:var(--accent);background:color-mix(in srgb,var(--accent) 10%,var(--surface));color:var(--accent-ink);box-shadow:inset 0 0 0 1px var(--accent)}
   .common{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
   @media(max-width:720px){.common{grid-template-columns:repeat(2,1fr)}}
   .inp{border:1px solid var(--line);background:var(--paper);border-radius:9px;padding:11px 13px;font-size:.9rem;color:var(--ink);font-family:inherit;width:100%}
@@ -565,7 +573,7 @@
         <div class="form-step">
           <div class="fs-lab"><span class="dot">2</span>세부 항목 <span style="color:var(--muted);font-weight:600;font-size:.8rem">(선택한 지원에 따라 달라집니다)</span></div>
           <div class="fields" id="fields"></div>
-          <textarea class="inp" id="f_message" style="margin-top:14px" placeholder="위 항목들을 참고해, 필요하신 내용을 자유롭게 적어주세요."></textarea>
+          <div class="ff" style="margin-top:24px"><span class="fflabel">전체적으로 원하시는 것 (자유롭게)</span><textarea class="inp" id="f_message" placeholder="큰 그림을 자유롭게 적어주세요. 예: 어떤 목적으로 · 어떤 느낌으로 · 특별히 신경 쓰고 싶은 점 등"></textarea></div>
         </div>
         <div class="form-step">
           <div class="fs-lab"><span class="dot">3</span>기본 정보</div>
@@ -575,6 +583,7 @@
             <input class="inp" id="f_phone" placeholder="연락처 *" inputmode="tel" autocomplete="tel">
             <input class="inp" id="f_email" placeholder="이메일" inputmode="email" autocomplete="email">
           </div>
+          <div class="ff" style="margin-top:16px"><span class="fflabel">기타 요청사항</span><textarea class="inp" id="f_extra" placeholder="작은 바람이라도 좋습니다." style="min-height:70px"></textarea></div>
           <label class="consent"><input type="checkbox" id="f_consent" style="width:18px;height:18px;accent-color:var(--accent);margin-top:2px;flex:0 0 auto"><span>개인정보 수집·이용에 동의합니다. 수집한 정보는 상담·견적 목적 외에는 사용하지 않습니다. <a onclick="scrollId('contact')">개인정보처리방침 보기</a></span></label>
         </div>
         <div class="form-actions">
@@ -1120,26 +1129,95 @@
   function applyWith(k){go('home','apply');setTimeout(function(){selectPick(k);},80);}
 
   /* form picker */
-  var FIELDS={
-    doc:{title:"자료제작 지원",cap:"홈페이지·디자인 등 제작에 필요한 정보를 받습니다.",chips:[["제작 종류(홈페이지/앱/프로그램/디자인)",1],["홈페이지 단계(1·2·3)",0],["유료 도메인 사용 여부",0],["예상 페이지 수",0],["디자인 컨셉·참고 사이트",0],["메인 색상 2~3개",0],["메인 카피",0],["서브 카피",0],["원고·사진 준비 여부",0],["오픈 희망일",0],["파일 첨부",0]],tz:0},
-    hr:{title:"인력 지원",cap:"원하는 원어민 선생님 조건을 받습니다.",chips:[["원하는 국적(필리핀/미국/무관)",1],["수업 형태(줌/대면)",0],["과목·레벨",1],["원하는 시간대·요일(한국시간)",1],["주당 횟수",0],["학생 연령·인원",0],["우대 조건",0],["예상 비용",0],["시작 희망일",0]],tz:1},
-    cnt:{title:"컨텐츠 지원",cap:"제공할 학습 콘텐츠 정보를 받습니다.",chips:[["유형(유학자료/SAT/IM VOCA/기타)",1],["대상 학생(학년·레벨)",1],["학생 수",0],["사용 목적",0],["시작 희망일",0]],tz:0},
-    mkt:{title:"마케팅·광고 지원",cap:"좋은 글을 위해 학원 정보를 자세히 받습니다.",chips:[["학원 소개(어떤 학원인지)",1],["학원 강점",1],["시그니처(대표 프로그램·차별점)",1],["블로그 URL",0],["목표(모객/브랜딩/특정강좌)",0],["홍보할 강좌·이벤트",0],["월 발행 희망 횟수",0],["타깃(학년·학부모)",0],["사진·후기 제공 가능 여부",0],["예상 예산",0]],tz:0}
+  var FORM_SCHEMA={
+    doc:[
+      {t:'check',k:'제작 종류',req:1,opts:['홈페이지','앱','프로그램','디자인(포스터·브로셔·명함)']},
+      {t:'radio',k:'제작 방식',opts:['기존 것을 그대로 이전','비슷한 느낌으로 새로','완전히 새로 제작']},
+      {t:'radio',k:'홈페이지 단계 (홈페이지 선택 시)',opts:['1단계 단순 홍보형','2단계 소통형','3단계 신청·결제형','4단계 맞춤 제작형','잘 모르겠음']},
+      {t:'check',k:'필요한 메뉴',opts:['메인(홈)','소개·인사말','사업 안내','공지·소식','갤러리(사진)','오시는 길','문의하기','신청·예약','자주 묻는 질문']},
+      {t:'check',k:'가지고 계신 자료',opts:['로고','소개글/인사말','사진','영상','기존 인쇄물·홍보물']},
+      {t:'check',k:'원하는 디자인 느낌',opts:['깔끔·심플','따뜻·친근','전문·신뢰','고급·세련','활기·밝음']},
+      {t:'text',k:'좋아하는 색 / 피하고 싶은 색'},
+      {t:'text',k:'참고하고 싶은 사이트 (1~2개)'},
+      {t:'radio',k:'유료 도메인',opts:['이미 있음','새로 필요함','잘 모르겠음']},
+      {t:'text',k:'희망 완료 시기'},
+      {t:'text',k:'생각하시는 예산'}
+    ],
+    hr:[
+      {t:'check',k:'원하는 국적',req:1,opts:['필리핀','미국','무관']},
+      {t:'check',k:'수업 형태',opts:['줌(화상)','대면']},
+      {t:'text',k:'과목·레벨',req:1},
+      {t:'text',k:'원하는 시간대·요일 (한국시간 기준)',req:1},
+      {t:'text',k:'주당 수업 횟수'},
+      {t:'text',k:'학생 연령·인원'},
+      {t:'text',k:'예상 비용'},
+      {t:'text',k:'시작 희망일'},
+      {t:'note',note:'tz'}
+    ],
+    cnt:[
+      {t:'check',k:'유형',req:1,opts:['유학자료','SAT','IM VOCA','기타']},
+      {t:'text',k:'대상 학생 (학년·레벨)',req:1},
+      {t:'text',k:'학생 수'},
+      {t:'text',k:'사용 목적'},
+      {t:'text',k:'시작 희망일'}
+    ],
+    mkt:[
+      {t:'textarea',k:'학원 소개·강점·시그니처 (자세할수록 좋아요)',req:1},
+      {t:'check',k:'목표',opts:['모객','브랜딩','특정 강좌 홍보']},
+      {t:'text',k:'블로그 URL (있다면)'},
+      {t:'text',k:'홍보할 강좌·이벤트'},
+      {t:'text',k:'월 발행 희망 횟수'},
+      {t:'text',k:'타깃 (학년·학부모 등)'},
+      {t:'check',k:'사진·후기 제공',opts:['사진 있음','후기 있음','없음']},
+      {t:'text',k:'예상 예산'}
+    ]
   };
-  function render(k){
-    var f=FIELDS[k],h='<h4>'+f.title+'</h4><div class="cap">'+f.cap+'</div><div class="chips">';
-    for(var i=0;i<f.chips.length;i++){h+='<span class="chip'+(f.chips[i][1]?' req':'')+'">'+f.chips[i][0]+'</span>';}
-    h+='</div>';
-    if(f.tz){h+='<div class="tzbox"><b>⏰ 시차 안내</b><ul><li>필리핀은 한국보다 1시간, 미국은 14시간 느립니다.</li><li>원하는 시간은 <b style="color:inherit">한국시간 기준</b>으로 적어주세요.</li><li>미국 선생님은 한국시간 오후 1시~오후 8시 수업이 어렵습니다.</li></ul></div>';}
+  function renderFields(k){
+    var schema=FORM_SCHEMA[k]||[],h='';
+    for(var i=0;i<schema.length;i++){var f=schema[i];
+      if(f.t==='note'){
+        if(f.note==='tz')h+='<div class="tzbox"><b>⏰ 시차 안내</b><ul><li>필리핀은 한국보다 1시간, 미국은 14시간 느립니다.</li><li>원하는 시간은 <b style="color:inherit">한국시간 기준</b>으로 적어주세요.</li><li>미국 선생님은 한국시간 오후 1시~오후 8시 수업이 어렵습니다.</li></ul></div>';
+        continue;
+      }
+      h+='<div class="ff"><span class="fflabel'+(f.req?' req':'')+'">'+esc(f.k)+'</span>';
+      if(f.t==='check'||f.t==='radio'){
+        h+='<div class="ffopts">';
+        for(var j=0;j<f.opts.length;j++){
+          var inp=f.t==='radio'?'<input type="radio" name="ff_'+i+'">':'<input type="checkbox">';
+          h+='<label class="ffopt" data-k="'+esc(f.k)+'">'+inp+esc(f.opts[j])+'</label>';
+        }
+        h+='</div>';
+      }else if(f.t==='textarea'){
+        h+='<textarea class="inp ffinput" data-k="'+esc(f.k)+'" style="min-height:90px"></textarea>';
+      }else{
+        h+='<input class="inp ffinput" data-k="'+esc(f.k)+'">';
+      }
+      h+='</div>';
+    }
     document.getElementById('fields').innerHTML=h;
+  }
+  function collectDetails(k){
+    var schema=FORM_SCHEMA[k]||[],d={};
+    schema.forEach(function(f){
+      if(f.t==='note')return;
+      if(f.t==='check'||f.t==='radio'){
+        var vals=[];
+        document.querySelectorAll('#fields .ffopt[data-k="'+f.k+'"]').forEach(function(lab){if(lab.querySelector('input').checked)vals.push(lab.textContent.trim());});
+        if(vals.length)d[f.k]=(f.t==='radio'?vals[0]:vals);
+      }else{
+        var el=document.querySelector('#fields .ffinput[data-k="'+f.k+'"]');
+        if(el&&el.value.trim())d[f.k]=el.value.trim();
+      }
+    });
+    return d;
   }
   function selectPick(k){
     var picks=document.querySelectorAll('#picker .pick');
     picks.forEach(function(x){x.classList.toggle('on',x.getAttribute('data-k')===k);});
-    render(k);
+    renderFields(k);
   }
   document.querySelectorAll('#picker .pick').forEach(function(b){b.addEventListener('click',function(){selectPick(b.getAttribute('data-k'));});});
-  render('doc');
+  renderFields('doc');
 
   /* sub pills */
   document.querySelectorAll('.subpills').forEach(function(row){
@@ -1190,7 +1268,10 @@
     if(!consent)return setErr('개인정보 수집·이용에 동의해 주세요.');
     if(!sb)return setErr('연결 오류입니다. 새로고침 후 다시 시도해 주세요.');
     var btn=document.getElementById('submitBtn');btn.disabled=true;btn.textContent='제출 중...';
-    var res=await sb.from('requests').insert({area:AREA_KO[area]||area,academy_name:academy,manager_name:manager,phone:phone,email:email,message:message,consent:consent});
+    var details=collectDetails(area);
+    var extra=document.getElementById('f_extra').value.trim();
+    if(extra)details['기타 요청사항']=extra;
+    var res=await sb.from('requests').insert({area:AREA_KO[area]||area,academy_name:academy,manager_name:manager,phone:phone,email:email,message:message,details:details,consent:consent});
     if(res.error){btn.disabled=false;btn.textContent='신청서 제출';setErr('제출 실패: '+res.error.message);return;}
     document.querySelector('#apply .form').innerHTML='<div style="padding:56px 28px;text-align:center"><div style="font-size:2.6rem">✅</div><h3 style="font-size:1.4rem;font-weight:800;margin:14px 0 8px">신청이 접수되었습니다</h3><p style="color:var(--muted);max-width:44ch;margin:0 auto">담당자가 배정되어 1~2일 내에 연락드리겠습니다. 감사합니다.</p></div>';
   }
