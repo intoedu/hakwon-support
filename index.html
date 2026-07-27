@@ -111,6 +111,11 @@
 
   /* support cards */
   .tint{background:var(--surface-2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .value{background:var(--surface-2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .value .wrap{padding:76px 24px;text-align:center}
+  .value .kicker{color:var(--gold)}
+  .value p{font-size:clamp(1.2rem,2.5vw,1.65rem);font-weight:700;line-height:1.8;color:var(--ink);margin:16px auto 0;letter-spacing:-.01em;text-wrap:balance}
+  .value .vsig{font-size:1.02rem;font-weight:700;color:var(--gold);margin-top:20px;line-height:1.6}
   .grid4{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
   @media(max-width:720px){.grid4{grid-template-columns:1fr}}
   .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:26px;display:flex;flex-direction:column;gap:13px;transition:border-color .2s,transform .15s;cursor:pointer}
@@ -424,7 +429,7 @@
     <div class="wrap">
       <div>
         <span class="eyebrow">학원 경영 B2B 종합 지원 플랫폼</span>
-        <h1>가장 쉬운 학원 확장,<br><span class="hl">시스템과 콘텐츠만</span> 바꿔도 시작됩니다.</h1>
+        <h1>학원을 살리고,<br><span class="hl">교육을 세웁니다.</span></h1>
         <p class="lead">홈페이지·디자인 같은 IT 자료 제작부터 마케팅·PR, 원어민 인력, 유학·온라인 콘텐츠까지. 학원 경영에 필요한 모든 인프라를 한 곳에서 일괄 공급하는 파트너 전용 지원 센터입니다.</p>
         <div class="hero-cta">
           <a href="#" class="btn btn-primary" onclick="go('home','apply');return false;">지원 신청하기 →</a>
@@ -481,6 +486,14 @@
           <div class="cardlink">자세히 보기 <span>→</span></div>
         </article>
       </div>
+    </div>
+  </section>
+
+  <section class="value">
+    <div class="wrap reveal">
+      <div class="kicker">우리의 가치</div>
+      <p>학원을 살리는 일.<br>단순한 사업을 넘어,<br>올바른 교육을 세우기 위해<br>필요한 모든 것을 지원하는 일.</p>
+      <p class="vsig">그것이 ESC가 지키는 가치입니다.</p>
     </div>
   </section>
 
@@ -1313,7 +1326,8 @@
     if(!rows.length){el.innerHTML='<div class="board-empty">아직 문의가 없습니다. 첫 문의를 남겨보세요.</div>';return;}
     var h='';
     for(var i=0;i<rows.length;i++){var q=rows[i];
-      h+='<div class="brow" onclick="openQDetail(\''+q.qid+'\','+(q.qsecret?'true':'false')+')"><span class="bt">'+(q.qsecret?'🔒 ':'')+esc(q.qtitle)+'</span><span class="bmeta">'+(q.qanswered?'<span class="btag ans">답변완료</span>':'')+(q.qname?esc(q.qname)+' · ':'')+fmtDate(q.qcreated)+'</span></div>';
+      var adm=window.__isAdmin?'<span class="adm-btns"><button class="adm-btn del" onclick="event.stopPropagation();deleteQuestion(\''+q.qid+'\')">삭제</button></span>':'';
+      h+='<div class="brow" onclick="openQDetail(\''+q.qid+'\','+(q.qsecret?'true':'false')+')"><span class="bt">'+(q.qsecret?'🔒 ':'')+esc(q.qtitle)+'</span><span class="bmeta">'+(q.qanswered?'<span class="btag ans">답변완료</span>':'')+(q.qname?esc(q.qname)+' · ':'')+fmtDate(q.qcreated)+adm+'</span></div>';
     }
     el.innerHTML=h;
   }
