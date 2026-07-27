@@ -339,6 +339,12 @@
   .modal-body h3{font-size:1.2rem;font-weight:800;margin-bottom:14px}
   .chk{display:flex;gap:8px;align-items:center;font-size:.9rem;color:var(--ink);cursor:pointer}
   .chk input{width:17px;height:17px;accent-color:var(--accent);flex:0 0 auto}
+  .adm-btns{display:inline-flex;gap:4px;margin-left:8px}
+  .adm-btn{background:none;border:0;font-family:inherit;font-size:.78rem;font-weight:700;color:var(--accent);cursor:pointer;padding:2px 4px;border-radius:6px}
+  .adm-btn.del{color:#c0392b}
+  .adm-btn:hover{background:var(--surface-2)}
+  .qcontact{font-size:.85rem;color:var(--muted);margin-top:8px}
+  .qcontact b{color:var(--ink)}
 
   /* success case */
   .case{background:linear-gradient(155deg,var(--band-bg),#0d1f3b);color:#fff;border-radius:var(--radius);padding:36px;margin-top:6px;border:1px solid var(--band-line)}
@@ -946,6 +952,12 @@
       <div class="subpanel" id="board-qna">
         <div class="board-head"><h2>문의</h2><button class="btn btn-primary" type="button" onclick="openQForm()">+ 문의하기</button></div>
         <div id="qnaList" class="board-list"><div class="board-empty">불러오는 중…</div></div>
+        <div class="sec-head" style="max-width:none;margin:52px 0 20px"><div class="kicker">FAQ</div><h2 style="font-size:1.4rem">자주 묻는 질문</h2></div>
+        <details open><summary>제작비가 정말 없나요?<span class="plus"></span></summary><div class="ans"><b>프리미엄(파트너) 회원</b>은 1·2단계를 제작비 없이 월 관리비만 받습니다. 일반 회원은 제작비가 별도로 있으며, 3·4단계는 기능에 따라 견적으로 안내됩니다. 로그인하면 회원 종류에 맞는 가격이 자동으로 표시됩니다.</div></details>
+        <details><summary>유료 도메인 비용은 누가 내나요?<span class="plus"></span></summary><div class="ans">도메인은 학원 소유가 되기 때문에 학원에서 부담합니다(연 1~2만원대). 신청 시 사용 여부를 선택하실 수 있고, 무료 주소로도 시작할 수 있습니다.</div></details>
+        <details><summary>원어민 수업 시차는 어떻게 되나요?<span class="plus"></span></summary><div class="ans">필리핀은 한국보다 1시간, 미국은 14시간 느립니다. 원하는 시간은 한국시간 기준으로 적어주시면 되고, 미국 선생님은 한국시간 오후 1시~오후 8시 수업이 어렵습니다(현지 심야 시간대).</div></details>
+        <details><summary>온라인 카드 결제도 되나요?<span class="plus"></span></summary><div class="ans">현재는 계좌 안내로 진행하며, 카드 결제(PG) 연동 기능은 추후 단계에서 추가될 예정입니다.</div></details>
+        <details><summary>파트너 학원이 아니어도 신청할 수 있나요?<span class="plus"></span></summary><div class="ans">본 사이트는 파트너 학원 전용입니다. 신규로 함께하고 싶으신 경우 문의하기로 남겨주시면 별도로 안내해 드립니다.</div></details>
       </div>
     </div>
   </section>
@@ -1021,7 +1033,7 @@
   <div class="modal-card wide">
     <button class="modal-x" onclick="closeModal('noticeModal')" aria-label="닫기">×</button>
     <div class="modal-body">
-      <h3>새 공지 작성</h3>
+      <h3 id="ntModalTitle">새 공지 작성</h3>
       <div class="fld"><label>제목</label><input class="inp" id="nt_title" placeholder="공지 제목"></div>
       <div class="fld"><label>내용</label><textarea class="inp" id="nt_body" style="min-height:170px" placeholder="공지 내용"></textarea></div>
       <div class="modal-msg" id="nt_msg"></div>
@@ -1284,11 +1296,12 @@
     var nb=document.getElementById('noticeNewBtn');if(nb)nb.style.display=window.__isAdmin?'':'none';
     var res=await sb.from('notices').select('*').order('created_at',{ascending:false});
     if(res.error){el.innerHTML='<div class="board-empty">불러오지 못했습니다.</div>';return;}
-    var rows=res.data||[];
+    var rows=res.data||[];window.__notices=rows;
     if(!rows.length){el.innerHTML='<div class="board-empty">아직 공지가 없습니다.</div>';return;}
     var h='';
     for(var i=0;i<rows.length;i++){var n=rows[i];
-      h+='<div class="brow na"><div class="nhead" onclick="this.parentNode.classList.toggle(\'open\')"><span class="bt">'+esc(n.title)+'</span><span class="bmeta">'+(n.author_name?esc(n.author_name)+' · ':'')+fmtDate(n.created_at)+'</span></div><div class="nbody">'+esc(n.body)+'</div></div>';
+      var adm=window.__isAdmin?'<span class="adm-btns"><button class="adm-btn" onclick="event.stopPropagation();editNotice(\''+n.id+'\')">수정</button><button class="adm-btn del" onclick="event.stopPropagation();deleteNotice(\''+n.id+'\')">삭제</button></span>':'';
+      h+='<div class="brow na"><div class="nhead" onclick="this.parentNode.classList.toggle(\'open\')"><span class="bt">'+esc(n.title)+'</span><span class="bmeta">'+(n.author_name?esc(n.author_name)+' · ':'')+fmtDate(n.created_at)+adm+'</span></div><div class="nbody">'+esc(n.body)+'</div></div>';
     }
     el.innerHTML=h;
   }
@@ -1304,14 +1317,31 @@
     }
     el.innerHTML=h;
   }
-  function openNoticeForm(){document.getElementById('nt_title').value='';document.getElementById('nt_body').value='';var m=document.getElementById('nt_msg');m.textContent='';m.className='modal-msg';document.getElementById('noticeModal').classList.add('open');}
+  function openNoticeForm(){window.__noticeEditId=null;document.getElementById('ntModalTitle').textContent='새 공지 작성';document.getElementById('nt_title').value='';document.getElementById('nt_body').value='';var m=document.getElementById('nt_msg');m.textContent='';m.className='modal-msg';document.getElementById('noticeModal').classList.add('open');}
+  function editNotice(id){
+    var n=(window.__notices||[]).filter(function(x){return x.id===id;})[0];if(!n)return;
+    window.__noticeEditId=id;
+    document.getElementById('ntModalTitle').textContent='공지 수정';
+    document.getElementById('nt_title').value=n.title;
+    document.getElementById('nt_body').value=n.body;
+    var m=document.getElementById('nt_msg');m.textContent='';m.className='modal-msg';
+    document.getElementById('noticeModal').classList.add('open');
+  }
   async function submitNotice(){
     var m=document.getElementById('nt_msg');m.className='modal-msg';
     var t=document.getElementById('nt_title').value.trim(),b=document.getElementById('nt_body').value.trim();
     if(!t||!b){m.className='modal-msg err';m.textContent='제목과 내용을 입력해 주세요.';return;}
-    var res=await sb.from('notices').insert({title:t,body:b,author_name:'ESC 운영팀'});
-    if(res.error){m.className='modal-msg err';m.textContent='등록 실패: '+res.error.message;return;}
-    closeModal('noticeModal');loadNotices();
+    var res;
+    if(window.__noticeEditId){res=await sb.from('notices').update({title:t,body:b}).eq('id',window.__noticeEditId);}
+    else{res=await sb.from('notices').insert({title:t,body:b,author_name:'ESC 운영팀'});}
+    if(res.error){m.className='modal-msg err';m.textContent='저장 실패: '+res.error.message;return;}
+    window.__noticeEditId=null;closeModal('noticeModal');loadNotices();
+  }
+  async function deleteNotice(id){
+    if(!confirm('이 공지를 삭제할까요?'))return;
+    var res=await sb.from('notices').delete().eq('id',id);
+    if(res.error){alert('삭제 실패: '+res.error.message);return;}
+    loadNotices();
   }
   function openQForm(){['q_title','q_body','q_name','q_contact','q_pw'].forEach(function(id){document.getElementById(id).value='';});document.getElementById('q_secret').checked=false;document.getElementById('q_pwrap').style.display='none';var m=document.getElementById('q_msg');m.textContent='';m.className='modal-msg';document.getElementById('qformModal').classList.add('open');}
   async function submitQuestion(){
@@ -1337,9 +1367,16 @@
     var q=(res.data&&res.data.length)?res.data[0]:null;
     if(!q){var mm=document.getElementById('qd_msg');if(mm){mm.className='modal-msg err';mm.textContent='비밀번호가 올바르지 않습니다.';}else{box.innerHTML='<div class="board-empty">내용을 불러올 수 없습니다.</div>';}return;}
     var h='<h3>'+(q.qsecret?'🔒 ':'')+esc(q.qtitle)+'</h3><div class="bmeta" style="margin-bottom:14px;color:var(--muted);font-size:.82rem">'+(q.qname?esc(q.qname)+' · ':'')+fmtDate(q.qcreated)+'</div><div class="qbody">'+esc(q.qbody)+'</div>';
+    if(window.__isAdmin&&q.qcontact){h+='<div class="qcontact">📞 연락처: <b>'+esc(q.qcontact)+'</b></div>';}
     if(q.qanswer){h+='<div class="qanswer"><b>ESC 답변</b><p>'+esc(q.qanswer)+'</p></div>';}
-    if(window.__isAdmin){h+='<div class="fld" style="margin-top:18px"><label>답변 '+(q.qanswer?'수정':'작성')+'</label><textarea class="inp" id="qd_answer" style="min-height:100px">'+esc(q.qanswer||'')+'</textarea></div><div class="modal-msg" id="qd_amsg"></div><button class="btn btn-primary" type="button" onclick="submitAnswer(\''+id+'\')">답변 저장</button>';}
+    if(window.__isAdmin){h+='<div class="fld" style="margin-top:18px"><label>답변 '+(q.qanswer?'수정':'작성')+'</label><textarea class="inp" id="qd_answer" style="min-height:100px">'+esc(q.qanswer||'')+'</textarea></div><div class="modal-msg" id="qd_amsg"></div><div class="area-cta" style="margin-top:14px"><button class="btn btn-primary" type="button" onclick="submitAnswer(\''+id+'\')">답변 저장</button><button class="btn btn-ghost" type="button" style="border-color:#e0b4b4;color:#c0392b" onclick="deleteQuestion(\''+id+'\')">문의 삭제</button></div>';}
     box.innerHTML=h;
+  }
+  async function deleteQuestion(id){
+    if(!confirm('이 문의를 삭제할까요?'))return;
+    var res=await sb.rpc('delete_question',{p_id:id});
+    if(res.error||res.data!==true){alert('삭제에 실패했습니다.');return;}
+    closeModal('qdetailModal');loadQuestions();
   }
   async function submitAnswer(id){
     var m=document.getElementById('qd_amsg');m.className='modal-msg';
