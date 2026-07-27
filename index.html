@@ -304,6 +304,9 @@
   .modal-msg.err{color:#c0392b}
   .modal-msg.ok{color:#1e7e34}
   .modal .btn{width:100%;justify-content:center}
+  .authArea .pbadge{background:linear-gradient(135deg,var(--gold),#8a5a17);color:#fff;font-size:.7rem;font-weight:800;padding:3px 9px;border-radius:999px;letter-spacing:.03em;white-space:nowrap}
+  .authArea .up{background:none;border:1px solid var(--gold);color:var(--gold);font-family:inherit;font-weight:700;font-size:.8rem;padding:4px 10px;border-radius:999px;cursor:pointer;white-space:nowrap}
+  .authArea .up:hover{background:var(--gold);color:#fff}
 
   /* success case */
   .case{background:linear-gradient(155deg,var(--band-bg),#0d1f3b);color:#fff;border-radius:var(--radius);padding:36px;margin-top:6px;border:1px solid var(--band-line)}
@@ -496,7 +499,7 @@
       <div class="sec-head reveal">
         <div class="kicker">Apply</div>
         <h2>지원 신청</h2>
-        <p>필요한 지원을 고르면 그에 맞는 항목만 나타납니다. 아래 버튼을 눌러 미리 확인해 보세요.</p>
+        <p>필요한 지원을 고르면 그에 맞는 항목만 나타납니다. <b style="color:var(--gold)">프리미엄 회원</b>은 로그인 후 신청하시면 회원가로 견적을 받으실 수 있습니다.</p>
       </div>
       <div class="form reveal">
         <div class="form-step">
@@ -953,6 +956,20 @@
   </div>
 </div>
 
+<!-- 프리미엄 전환 모달 -->
+<div class="modal" id="premiumModal" onclick="if(event.target===this)closePremium()">
+  <div class="modal-card" style="max-width:390px">
+    <button class="modal-x" onclick="closePremium()" aria-label="닫기">×</button>
+    <div class="modal-body" style="padding:28px">
+      <h3 style="font-size:1.25rem;font-weight:800;margin-bottom:6px">프리미엄 회원 전환</h3>
+      <p style="color:var(--muted);font-size:.9rem;margin-bottom:16px;line-height:1.6">ESC와 연결된 파트너 학원에 발급된 코드를 입력하면 <b style="color:var(--gold)">프리미엄 회원가</b>로 이용하실 수 있습니다.</p>
+      <input class="inp" id="pm_code" placeholder="프리미엄 코드 (예: ESC-XXXXX)" autocomplete="off">
+      <div class="modal-msg" id="pm_msg"></div>
+      <button class="btn btn-primary" type="button" onclick="doRedeem()">전환하기</button>
+    </div>
+  </div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
   var VIEWS=['home','doc','hr','content','mkt'];
@@ -1090,15 +1107,35 @@
     var area=document.getElementById('authArea');if(!area||!sb)return;
     var res=await sb.auth.getUser();
     var user=(res&&res.data)?res.data.user:null;
+    var ma=document.getElementById('mAuth');
     if(user){
       var meta=user.user_metadata||{};
       var name=meta.academy_name||user.email;
-      area.innerHTML='<span class="me" title="'+name+'">'+name+' 님</span><button class="lg" type="button" onclick="doLogout()">로그아웃</button>';
-      var ma=document.getElementById('mAuth');if(ma){ma.textContent='로그아웃';ma.setAttribute('onclick','doLogout()');}
+      window.__uid=user.id;
+      var premium=false;
+      try{var p=await sb.from('profiles').select('is_premium').eq('id',user.id).single();if(p.data)premium=!!p.data.is_premium;}catch(e){}
+      window.__isPremium=premium;
+      var tail=premium?'<span class="pbadge">프리미엄</span>':'<button class="up" type="button" onclick="openPremium()">프리미엄 전환</button>';
+      area.innerHTML='<span class="me" title="'+name+'">'+name+' 님</span>'+tail+'<button class="lg" type="button" onclick="doLogout()">로그아웃</button>';
+      if(ma){ma.textContent='로그아웃';ma.setAttribute('onclick','doLogout()');}
     }else{
+      window.__uid=null;window.__isPremium=false;
       area.innerHTML='<button class="lg" type="button" onclick="openAuth(\'login\')">로그인</button>';
-      var ma2=document.getElementById('mAuth');if(ma2){ma2.textContent='로그인 / 회원가입';ma2.setAttribute('onclick',"openAuth('login')");}
+      if(ma){ma.textContent='로그인 / 회원가입';ma.setAttribute('onclick',"openAuth('login')");}
     }
+  }
+  function openPremium(){var c=document.getElementById('pm_code');c.value='';var m=document.getElementById('pm_msg');m.textContent='';m.className='modal-msg';document.getElementById('premiumModal').classList.add('open');closeMenu();}
+  function closePremium(){document.getElementById('premiumModal').classList.remove('open');}
+  async function doRedeem(){
+    var m=document.getElementById('pm_msg');m.className='modal-msg';m.textContent='';
+    var code=document.getElementById('pm_code').value.trim();
+    if(!code){m.className='modal-msg err';m.textContent='코드를 입력해 주세요.';return;}
+    if(!sb){m.className='modal-msg err';m.textContent='연결 오류입니다.';return;}
+    m.textContent='확인 중...';
+    var res=await sb.rpc('redeem_member_code',{p_code:code});
+    if(res.error){m.className='modal-msg err';m.textContent='오류: '+res.error.message;return;}
+    if(res.data&&res.data.ok){m.className='modal-msg ok';m.textContent='🎉 프리미엄 회원으로 전환되었습니다!';updateAuthUI();setTimeout(closePremium,1400);}
+    else{m.className='modal-msg err';m.textContent=(res.data&&res.data.error)||'전환에 실패했습니다.';}
   }
   if(sb){sb.auth.onAuthStateChange(function(){updateAuthUI();});updateAuthUI();}
 </script>
