@@ -316,8 +316,9 @@
   </div>
   <div class="sheet-f">
     <button class="btn btn-ghost" type="button" onclick="closeDetail()">닫기</button>
-    <button class="btn btn-danger hide" id="d_del" type="button" onclick="deleteRequest()">삭제</button>
-    <span class="saved" id="d_saved">저장됨 ✓</span>
+    <button class="btn btn-danger hide" id="d_del" type="button" onclick="deleteRequest()">🗑 의뢰 삭제</button>
+    <span class="muted hide" id="d_delnote" style="font-size:.78rem">최고관리자만 삭제할 수 있습니다</span>
+    <span class="saved" id="d_saved" style="margin-left:auto">저장됨 ✓</span>
   </div>
 </div></div>
 
@@ -338,7 +339,7 @@
   };
   var STATUSES=['접수','진행중','보류','완료'];
   var ROLE_KO={owner:'최고관리자',admin:'관리자',staff:'직원'};
-  var PERM_KO={site_board:'홈페이지 게시판 관리',manage_staff:'직원 승인·권한 관리',delete_request:'의뢰 삭제'};
+  var PERM_KO={site_board:'홈페이지 게시판 관리',manage_staff:'직원 승인·권한 관리'};
 
   var ME=null, STAFF=[], DATA={'인력':[],'컨텐츠':[],'마케팅':[]}, CUR='인력', CURROW=null, STTAB='wait';
 
@@ -523,7 +524,9 @@
     $('d_memo').value=r.memo||'';
     renderTodos();
     renderInfo(r);
-    $('d_del').classList.toggle('hide',!can('delete_request'));
+    var isOwner=(ME.role==='owner');
+    $('d_del').classList.toggle('hide',!isOwner);
+    $('d_delnote').classList.toggle('hide',isOwner);
     $('detail').classList.add('open');
   };
   window.closeDetail=function(){$('detail').classList.remove('open');CURROW=null;};
@@ -586,9 +589,15 @@
   };
   window.deleteRequest=async function(){
     if(!CURROW)return;
-    if(!confirm('이 의뢰를 삭제할까요? 되돌릴 수 없습니다.\n\n'+(CURROW.academy_name||'')))return;
-    var r=await sb.from('requests').delete().eq('id',CURROW.id);
+    if(ME.role!=='owner'){toast('의뢰 삭제는 최고관리자만 할 수 있습니다');return;}
+    var q='아래 의뢰를 완전히 삭제할까요? 되돌릴 수 없습니다.\n\n'
+      +'· 학원: '+(CURROW.academy_name||'-')+'\n'
+      +'· 영역: '+(AREAS[CURROW.area]||CURROW.area)+'\n'
+      +'· 접수: '+fdatetime(CURROW.created_at);
+    if(!confirm(q))return;
+    var r=await sb.from('requests').delete().eq('id',CURROW.id).select('id');
     if(r.error){toast('삭제 실패: '+r.error.message);return;}
+    if(!r.data||!r.data.length){toast('삭제 권한이 없습니다 (최고관리자만 가능)');return;}
     closeDetail();toast('삭제했습니다');loadAll();
   };
 
@@ -639,8 +648,9 @@
     $('staffWrap').innerHTML=h;
   }
   async function updStaff(id,patch,msg){
-    var r=await sb.from('staff').update(patch).eq('id',id);
+    var r=await sb.from('staff').update(patch).eq('id',id).select('id');
     if(r.error){toast('실패: '+r.error.message);return;}
+    if(!r.data||!r.data.length){toast('권한이 없어 변경되지 않았습니다');await loadAll();renderStaff();return;}
     toast(msg||'저장했습니다');
     await loadAll();renderStaff();
   }
