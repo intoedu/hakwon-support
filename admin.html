@@ -1,0 +1,660 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>ESC 관리자 · 의뢰 관리</title>
+<style>
+  :root{
+    --paper:#F5F7FC; --surface:#FFFFFF; --surface-2:#F3F6FB;
+    --ink:#0E1B33; --muted:#56657F; --line:#E2E8F2;
+    --brand:#16305C; --accent:#2E5FE8; --accent-ink:#1E47C0;
+    --gold:#B67A22; --band-bg:#12294D; --band-line:#2A436E; --band-text:#DCE6F8;
+    --ok:#1E8E5A; --warn:#B67A22; --bad:#C0392B;
+    --radius:14px;
+    --f:-apple-system,"Apple SD Gothic Neo","Pretendard","Noto Sans KR","Malgun Gothic",system-ui,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--f);line-height:1.6;font-size:15px;-webkit-font-smoothing:antialiased}
+  h1,h2,h3,h4{margin:0;letter-spacing:-.01em;line-height:1.3;word-break:keep-all}
+  p{margin:0}
+  input,select,textarea,button{font-family:inherit;font-size:inherit;color:inherit}
+  .tnum{font-variant-numeric:tabular-nums}
+  .hide{display:none!important}
+
+  /* ---------- 로그인 게이트 ---------- */
+  .gate{min-height:100vh;display:grid;place-items:center;padding:28px}
+  .gate-card{width:100%;max-width:440px;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:34px;box-shadow:0 14px 40px rgba(16,32,64,.08)}
+  .gate-logo{display:flex;align-items:baseline;gap:9px;font-weight:800;font-size:1.2rem;letter-spacing:-.02em}
+  .gate-logo b{color:var(--brand)}
+  .gate-logo span{font-size:.82rem;color:var(--muted);font-weight:700}
+  .gate h2{font-size:1.35rem;font-weight:800;margin:22px 0 6px}
+  .gate .sub{color:var(--muted);font-size:.9rem}
+  .tabs{display:flex;gap:6px;background:var(--surface-2);border-radius:999px;padding:5px;margin:22px 0 18px}
+  .tab{flex:1;border:0;background:none;font-weight:700;font-size:.9rem;color:var(--muted);padding:9px;border-radius:999px;cursor:pointer}
+  .tab.on{background:var(--surface);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.08)}
+  .fld{margin-bottom:12px}
+  .fld label{display:block;font-size:.82rem;font-weight:700;color:var(--muted);margin-bottom:6px}
+  .inp{width:100%;border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:11px 13px;outline:none;transition:.15s}
+  .inp:focus{border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 14%,transparent)}
+  textarea.inp{min-height:84px;resize:vertical;line-height:1.6}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;font-weight:700;font-size:.9rem;padding:11px 18px;border-radius:10px;border:1.5px solid transparent;cursor:pointer;transition:.15s}
+  .btn-primary{background:var(--accent);color:#fff}
+  .btn-primary:hover{background:var(--accent-ink)}
+  .btn-ghost{background:transparent;border-color:var(--line);color:var(--ink)}
+  .btn-ghost:hover{border-color:var(--accent);color:var(--accent)}
+  .btn-danger{background:transparent;border-color:color-mix(in srgb,var(--bad) 40%,var(--line));color:var(--bad)}
+  .btn-danger:hover{background:color-mix(in srgb,var(--bad) 8%,transparent)}
+  .btn-block{width:100%}
+  .btn[disabled]{opacity:.55;cursor:not-allowed}
+  .msg{font-size:.85rem;margin-top:12px;min-height:20px}
+  .msg.err{color:var(--bad)}
+  .msg.ok{color:var(--ok)}
+  .gate-note{margin-top:18px;font-size:.8rem;color:var(--muted);border-top:1px solid var(--line);padding-top:14px}
+
+  /* ---------- 앱 레이아웃 ---------- */
+  .app{display:grid;grid-template-columns:236px 1fr;min-height:100vh}
+  .side{background:var(--surface);border-right:1px solid var(--line);padding:20px 16px;display:flex;flex-direction:column;gap:6px;position:sticky;top:0;height:100vh}
+  .side .logo{display:flex;align-items:center;gap:10px;padding:6px 8px 18px}
+  .side .logo .mark{width:38px;height:38px;border-radius:10px;background:var(--band-bg);color:#fff;display:grid;place-items:center;font-weight:800;font-size:.86rem;letter-spacing:.02em}
+  .side .logo b{font-size:.95rem;font-weight:800;display:block}
+  .side .logo span{font-size:.76rem;color:var(--muted)}
+  .navb{display:flex;align-items:center;gap:9px;border:0;background:none;text-align:left;font-weight:700;font-size:.92rem;color:var(--muted);padding:10px 12px;border-radius:10px;cursor:pointer;width:100%}
+  .navb:hover{background:var(--surface-2);color:var(--ink)}
+  .navb.on{background:var(--band-bg);color:#fff}
+  .navb .cnt{margin-left:auto;font-size:.75rem;font-weight:800;background:var(--surface-2);color:var(--muted);padding:1px 8px;border-radius:999px}
+  .navb.on .cnt{background:rgba(255,255,255,.16);color:#fff}
+  .navb .cnt.alert{background:var(--bad);color:#fff}
+  .side-sep{height:1px;background:var(--line);margin:12px 4px}
+  .side-foot{margin-top:auto;border-top:1px solid var(--line);padding-top:14px}
+  .whoami{padding:8px 10px;border-radius:10px;background:var(--surface-2);margin-bottom:10px}
+  .whoami b{display:block;font-size:.88rem}
+  .whoami span{font-size:.76rem;color:var(--muted)}
+  .main{padding:26px 30px 60px;min-width:0}
+  .head{display:flex;align-items:flex-end;gap:16px;flex-wrap:wrap;margin-bottom:20px}
+  .head h1{font-size:1.5rem;font-weight:800}
+  .head p{color:var(--muted);font-size:.88rem;margin-top:4px}
+  .head .sp{margin-left:auto;display:flex;gap:8px;align-items:center}
+  .stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:20px}
+  .stat{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px 18px}
+  .stat b{display:block;font-size:1.7rem;font-weight:800;letter-spacing:-.02em}
+  .stat span{font-size:.8rem;color:var(--muted);font-weight:600}
+  .toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+  .toolbar .inp{max-width:280px}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+  table{width:100%;border-collapse:collapse}
+  th{font-size:.76rem;font-weight:700;color:var(--muted);text-align:left;padding:13px 14px;background:var(--surface-2);border-bottom:1px solid var(--line);white-space:nowrap}
+  td{padding:13px 14px;border-bottom:1px solid var(--line);font-size:.89rem;vertical-align:middle}
+  tr:last-child td{border-bottom:0}
+  tbody tr{cursor:pointer}
+  tbody tr:hover{background:color-mix(in srgb,var(--accent) 4%,var(--surface))}
+  .num{color:var(--muted);font-size:.82rem;width:42px}
+  td .nm{font-weight:800;white-space:nowrap}
+  td .sub{display:block;font-size:.76rem;color:var(--muted);font-weight:600}
+  .muted{color:var(--muted)}
+  .badge{display:inline-block;font-size:.74rem;font-weight:800;padding:3px 10px;border-radius:999px;white-space:nowrap}
+  .b-접수{background:#EDF1FB;color:#2E5FE8}
+  .b-진행중{background:#FFF3E0;color:#B67A22}
+  .b-보류{background:#F1F3F7;color:#56657F}
+  .b-완료{background:#E7F6EE;color:#1E8E5A}
+  .b-prem{background:color-mix(in srgb,var(--gold) 16%,#fff);color:var(--gold);border:1px solid color-mix(in srgb,var(--gold) 35%,var(--line))}
+  .b-owner{background:#12294D;color:#fff}
+  .b-admin{background:#EDF1FB;color:#2E5FE8}
+  .b-staff{background:#F1F3F7;color:#56657F}
+  .prog{display:flex;align-items:center;gap:8px;min-width:110px}
+  .bar{flex:1;height:6px;border-radius:999px;background:var(--surface-2);overflow:hidden}
+  .bar i{display:block;height:100%;background:var(--accent);border-radius:999px}
+  .empty{padding:56px 20px;text-align:center;color:var(--muted)}
+  .empty b{display:block;font-size:1.05rem;color:var(--ink);margin-bottom:6px}
+
+  /* ---------- 상세 모달 ---------- */
+  .modal{position:fixed;inset:0;background:rgba(10,20,40,.5);display:none;align-items:flex-start;justify-content:center;padding:34px 18px;z-index:60;overflow:auto}
+  .modal.open{display:flex}
+  .sheet{width:100%;max-width:720px;background:var(--surface);border-radius:18px;overflow:hidden;box-shadow:0 24px 60px rgba(10,20,40,.3)}
+  .sheet-h{padding:20px 24px;border-bottom:1px solid var(--line);display:flex;align-items:flex-start;gap:12px}
+  .sheet-h h3{font-size:1.2rem;font-weight:800}
+  .sheet-h .meta{font-size:.8rem;color:var(--muted);margin-top:3px}
+  .x{margin-left:auto;border:0;background:none;font-size:1.3rem;color:var(--muted);cursor:pointer;line-height:1;padding:2px 6px}
+  .sheet-b{padding:22px 24px}
+  .sec-t{font-size:.78rem;font-weight:800;color:var(--accent);letter-spacing:.04em;margin:22px 0 10px}
+  .sec-t:first-child{margin-top:0}
+  .pills{display:flex;gap:7px;flex-wrap:wrap}
+  .pill{border:1.5px solid var(--line);background:var(--surface);border-radius:999px;padding:7px 15px;font-size:.85rem;font-weight:700;color:var(--muted);cursor:pointer}
+  .pill.on{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 10%,var(--surface));color:var(--accent)}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .todo{display:flex;align-items:center;gap:9px;border:1px solid var(--line);border-radius:10px;padding:8px 10px;margin-bottom:7px;background:var(--surface)}
+  .todo input[type=checkbox]{width:17px;height:17px;accent-color:var(--accent);flex:0 0 auto;cursor:pointer}
+  .todo .t{flex:1;font-size:.9rem}
+  .todo.done .t{text-decoration:line-through;color:var(--muted)}
+  .todo .due{border:1px solid var(--line);border-radius:8px;padding:4px 8px;font-size:.78rem;color:var(--muted);background:var(--surface-2)}
+  .todo .del{border:0;background:none;color:var(--muted);cursor:pointer;font-size:1rem;padding:0 4px}
+  .todo .del:hover{color:var(--bad)}
+  .addrow{display:flex;gap:8px}
+  .addrow .btn{flex:0 0 auto;white-space:nowrap}
+  .info{border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  .irow{display:grid;grid-template-columns:150px 1fr;gap:14px;padding:11px 14px;border-bottom:1px solid var(--line);font-size:.88rem}
+  .irow:last-child{border-bottom:0}
+  .irow .k{color:var(--muted);font-weight:700;font-size:.82rem}
+  .sheet-f{padding:16px 24px;border-top:1px solid var(--line);display:flex;gap:9px;align-items:center;background:var(--surface-2)}
+  .saved{font-size:.82rem;color:var(--ok);font-weight:700;opacity:0;transition:.2s}
+  .saved.on{opacity:1}
+
+  .toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(12px);background:var(--band-bg);color:#fff;padding:11px 20px;border-radius:999px;font-size:.86rem;font-weight:700;opacity:0;pointer-events:none;transition:.22s;z-index:90}
+  .toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+
+  @media(max-width:860px){
+    .app{grid-template-columns:1fr}
+    .side{position:static;height:auto;flex-direction:row;flex-wrap:wrap;align-items:center;border-right:0;border-bottom:1px solid var(--line);gap:6px}
+    .side .logo{padding:0 10px 0 0}
+    .navb{width:auto}
+    .side-sep{display:none}
+    .side-foot{margin:0 0 0 auto;border:0;padding:0;display:flex;gap:6px;align-items:center}
+    .whoami{margin:0}
+    .main{padding:18px 16px 50px}
+    .stats{grid-template-columns:repeat(2,1fr)}
+    .grid2{grid-template-columns:1fr}
+    .irow{grid-template-columns:1fr;gap:2px}
+  }
+</style>
+</head>
+<body>
+
+<!-- ================= 로그인 / 승인 대기 게이트 ================= -->
+<div class="gate" id="gate">
+  <div class="gate-card">
+    <div class="gate-logo"><b>ESC</b><span>학원지원센터 · 관리자</span></div>
+
+    <!-- 로그인/가입 -->
+    <div id="gAuth">
+      <h2>직원 로그인</h2>
+      <p class="sub">ESC 내부 직원용 페이지입니다. 처음이시면 계정을 만든 뒤 승인을 요청해 주세요.</p>
+      <div class="tabs">
+        <button class="tab on" id="tabLogin" type="button" onclick="switchTab('login')">로그인</button>
+        <button class="tab" id="tabJoin" type="button" onclick="switchTab('join')">계정 만들기</button>
+      </div>
+      <div id="paneLogin">
+        <div class="fld"><label>이메일</label><input class="inp" id="li_email" type="email" autocomplete="username"></div>
+        <div class="fld"><label>비밀번호</label><input class="inp" id="li_pw" type="password" autocomplete="current-password"></div>
+        <button class="btn btn-primary btn-block" type="button" onclick="doLogin()">로그인</button>
+      </div>
+      <div id="paneJoin" style="display:none">
+        <div class="fld"><label>이메일</label><input class="inp" id="su_email" type="email" autocomplete="username"></div>
+        <div class="fld"><label>비밀번호 (6자 이상)</label><input class="inp" id="su_pw" type="password" autocomplete="new-password"></div>
+        <div class="fld"><label>이름</label><input class="inp" id="su_name" placeholder="실명으로 적어주세요"></div>
+        <div class="fld"><label>연락처</label><input class="inp" id="su_phone" inputmode="tel" placeholder="010-0000-0000"></div>
+        <button class="btn btn-primary btn-block" type="button" onclick="doSignup()">계정 만들고 승인 요청</button>
+      </div>
+      <div class="msg" id="gMsg"></div>
+      <div class="gate-note">계정을 만들면 최고관리자에게 승인 요청이 전달됩니다. 승인 후부터 의뢰 목록을 볼 수 있습니다.</div>
+    </div>
+
+    <!-- 직원 신청(이미 로그인은 되어 있으나 staff 없음) -->
+    <div id="gApply" style="display:none">
+      <h2>직원 승인 요청</h2>
+      <p class="sub">로그인은 되었지만 아직 직원으로 등록되지 않았습니다. 아래 정보를 남기면 최고관리자에게 승인 요청이 전달됩니다.</p>
+      <div class="fld" style="margin-top:20px"><label>이름</label><input class="inp" id="ap_name" placeholder="실명으로 적어주세요"></div>
+      <div class="fld"><label>연락처</label><input class="inp" id="ap_phone" inputmode="tel" placeholder="010-0000-0000"></div>
+      <button class="btn btn-primary btn-block" type="button" onclick="requestStaff()">승인 요청 보내기</button>
+      <div class="msg" id="apMsg"></div>
+      <div class="gate-note"><span id="apWho"></span> <a href="#" onclick="doLogout();return false;" style="color:var(--accent);font-weight:700">다른 계정으로 로그인</a></div>
+    </div>
+
+    <!-- 승인 대기 -->
+    <div id="gWait" style="display:none">
+      <h2>승인 대기 중입니다</h2>
+      <p class="sub" style="margin-top:8px">최고관리자가 승인하면 바로 이용하실 수 있습니다. 승인 후 이 페이지를 새로고침해 주세요.</p>
+      <div class="info" style="margin:20px 0">
+        <div class="irow"><span class="k">이름</span><span id="w_name"></span></div>
+        <div class="irow"><span class="k">이메일</span><span id="w_email"></span></div>
+        <div class="irow"><span class="k">요청일</span><span id="w_at"></span></div>
+      </div>
+      <button class="btn btn-ghost btn-block" type="button" onclick="location.reload()">새로고침</button>
+      <div class="gate-note"><a href="#" onclick="doLogout();return false;" style="color:var(--accent);font-weight:700">로그아웃</a></div>
+    </div>
+
+    <!-- 거절됨 -->
+    <div id="gDenied" style="display:none">
+      <h2>이용이 제한된 계정입니다</h2>
+      <p class="sub" style="margin-top:8px">이 계정은 현재 접근 권한이 없습니다. 최고관리자에게 문의해 주세요.</p>
+      <div style="margin-top:20px"><button class="btn btn-ghost btn-block" type="button" onclick="doLogout()">로그아웃</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= 관리자 앱 ================= -->
+<div class="app hide" id="app">
+  <aside class="side">
+    <div class="logo"><div class="mark">ESC</div><div><b>의뢰 관리</b><span>학원지원센터</span></div></div>
+    <button class="navb on" data-nav="인력" type="button">인력지원 <span class="cnt" id="c-인력">0</span></button>
+    <button class="navb" data-nav="컨텐츠" type="button">컨텐츠지원 <span class="cnt" id="c-컨텐츠">0</span></button>
+    <button class="navb" data-nav="마케팅" type="button">마케팅지원 <span class="cnt" id="c-마케팅">0</span></button>
+    <div class="side-sep"></div>
+    <button class="navb hide" data-nav="staff" id="navStaff" type="button">관리자 목록 <span class="cnt" id="c-staff">0</span></button>
+    <div class="side-foot">
+      <div class="whoami"><b id="meName">-</b><span id="meRole">-</span></div>
+      <button class="navb" type="button" onclick="loadAll(true)">↻ 새로고침</button>
+      <button class="navb" type="button" onclick="doLogout()">로그아웃</button>
+    </div>
+  </aside>
+
+  <main class="main">
+    <!-- 의뢰 리스트 -->
+    <section id="viewList">
+      <div class="head">
+        <div><h1 id="listTitle">인력지원 의뢰</h1><p id="listSub">신청받은 의뢰를 확인하고 담당자·진행상황을 관리합니다.</p></div>
+      </div>
+      <div class="stats">
+        <div class="stat"><b class="tnum" id="s-all">0</b><span>전체</span></div>
+        <div class="stat"><b class="tnum" id="s-new">0</b><span>접수</span></div>
+        <div class="stat"><b class="tnum" id="s-ing">0</b><span>진행중</span></div>
+        <div class="stat"><b class="tnum" id="s-done">0</b><span>완료</span></div>
+      </div>
+      <div class="toolbar">
+        <input class="inp" id="q" placeholder="학원명·담당자·메모 검색" oninput="renderList()">
+        <select class="inp" id="fStatus" style="max-width:150px" onchange="renderList()">
+          <option value="">상태 전체</option>
+          <option>접수</option><option>진행중</option><option>보류</option><option>완료</option>
+        </select>
+        <select class="inp" id="fMine" style="max-width:150px" onchange="renderList()">
+          <option value="">담당자 전체</option>
+          <option value="__me">내 담당</option>
+          <option value="__none">미배정</option>
+        </select>
+      </div>
+      <div class="card"><table>
+        <thead><tr>
+          <th class="num">#</th><th>상호명(학원)</th><th>작업 종류</th><th>담당자</th><th>작업 메모</th><th>작업 진행</th><th>상태</th><th>접수일</th>
+        </tr></thead>
+        <tbody id="rows"></tbody>
+      </table><div class="empty hide" id="listEmpty"><b>아직 신청이 없습니다</b>홈페이지에서 신청이 들어오면 여기에 표시됩니다.</div></div>
+    </section>
+
+    <!-- 관리자 목록 -->
+    <section id="viewStaff" class="hide">
+      <div class="head">
+        <div><h1>관리자 목록</h1><p>승인 요청을 수락하고 직분·권한을 관리합니다.</p></div>
+      </div>
+      <div class="toolbar">
+        <button class="pill on" id="stTabWait" type="button" onclick="staffTab('wait')">승인 대기 <span id="waitCnt">(0)</span></button>
+        <button class="pill" id="stTabOk" type="button" onclick="staffTab('ok')">승인된 직원</button>
+      </div>
+      <div class="card" id="staffWrap"></div>
+      <div class="empty hide" id="staffEmpty"></div>
+    </section>
+  </main>
+</div>
+
+<!-- 의뢰 상세 -->
+<div class="modal" id="detail"><div class="sheet">
+  <div class="sheet-h">
+    <div><h3 id="d_title">-</h3><div class="meta" id="d_meta">-</div></div>
+    <button class="x" type="button" onclick="closeDetail()">✕</button>
+  </div>
+  <div class="sheet-b">
+    <div class="sec-t">상태</div>
+    <div class="pills" id="d_status"></div>
+
+    <div class="sec-t">작업 종류 · 담당자</div>
+    <div class="grid2">
+      <div><input class="inp" id="d_work" list="workOpts" placeholder="예: 필리핀 원어민" onchange="saveField('work_type',this.value)"><datalist id="workOpts"></datalist></div>
+      <div><select class="inp" id="d_assignee" onchange="saveField('assignee_id',this.value||null)"></select></div>
+    </div>
+
+    <div class="sec-t">작업 메모</div>
+    <textarea class="inp" id="d_memo" placeholder="진행하면서 남길 메모를 적어주세요." onchange="saveField('memo',this.value)"></textarea>
+
+    <div class="sec-t">작업 진행 <span class="muted" id="d_progtxt" style="font-weight:600"></span></div>
+    <div id="d_todos"></div>
+    <div class="addrow">
+      <input class="inp" id="d_newtodo" placeholder="할 일 입력 후 Enter" onkeydown="if(event.key==='Enter')addTodo()">
+      <button class="btn btn-ghost" type="button" onclick="addTodo()">추가</button>
+    </div>
+
+    <div class="sec-t">의뢰처 정보</div>
+    <div class="info" id="d_info"></div>
+  </div>
+  <div class="sheet-f">
+    <button class="btn btn-ghost" type="button" onclick="closeDetail()">닫기</button>
+    <button class="btn btn-danger hide" id="d_del" type="button" onclick="deleteRequest()">삭제</button>
+    <span class="saved" id="d_saved">저장됨 ✓</span>
+  </div>
+</div></div>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+(function(){
+  var SB_URL="https://qkvebwxewttqtcryfycy.supabase.co";
+  var SB_KEY="sb_publishable_Me_R6M540Fg60nmEVqByTg_p-zD8pxa";
+  var sb=(window.supabase&&window.supabase.createClient)?window.supabase.createClient(SB_URL,SB_KEY):null;
+
+  var AREAS={'인력':'인력지원','컨텐츠':'컨텐츠지원','마케팅':'마케팅지원'};
+  var WORK_OPTS={
+    '인력':['필리핀 원어민','미국 원어민','필리핀+미국','기타'],
+    '컨텐츠':['유학자료','SAT','IM VOCA','기타'],
+    '마케팅':['블로그 대행','기타']
+  };
+  var STATUSES=['접수','진행중','보류','완료'];
+  var ROLE_KO={owner:'최고관리자',admin:'관리자',staff:'직원'};
+  var PERM_KO={site_board:'홈페이지 게시판 관리',manage_staff:'직원 승인·권한 관리',delete_request:'의뢰 삭제'};
+
+  var ME=null, STAFF=[], DATA={'인력':[],'컨텐츠':[],'마케팅':[]}, CUR='인력', CURROW=null, STTAB='wait';
+
+  function $(id){return document.getElementById(id);}
+  function esc(s){return (s==null?'':(''+s)).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+  function fdate(s){if(!s)return '-';var d=new Date(s);return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2);}
+  function fdatetime(s){if(!s)return '-';var d=new Date(s);return fdate(s)+' '+('0'+d.getHours()).slice(-2)+':'+('0'+d.getMinutes()).slice(-2);}
+  function normStatus(s){if(!s)return '접수';if(s==='신청접수'||s==='접수·견적')return '접수';return STATUSES.indexOf(s)>=0?s:'접수';}
+  function toast(m){var t=$('toast');t.textContent=m;t.classList.add('on');setTimeout(function(){t.classList.remove('on');},1800);}
+  function can(k){return !!ME&&(ME.role==='owner'||(ME.perms&&ME.perms[k]===true));}
+
+  /* ---------- 게이트 ---------- */
+  function showPane(id){
+    ['gAuth','gApply','gWait','gDenied'].forEach(function(x){$(x).style.display=(x===id?'':'none');});
+    $('gate').classList.remove('hide');$('app').classList.add('hide');
+  }
+  window.switchTab=function(t){
+    var l=(t==='login');
+    $('tabLogin').classList.toggle('on',l);$('tabJoin').classList.toggle('on',!l);
+    $('paneLogin').style.display=l?'':'none';$('paneJoin').style.display=l?'none':'';
+    $('gMsg').textContent='';
+  };
+  function gmsg(t,cls){var m=$('gMsg');m.textContent=t;m.className='msg'+(cls?' '+cls:'');}
+
+  window.doLogin=async function(){
+    var email=$('li_email').value.trim(),pw=$('li_pw').value;
+    if(!email||!pw)return gmsg('이메일과 비밀번호를 입력해 주세요.','err');
+    if(!sb)return gmsg('연결 오류입니다. 새로고침해 주세요.','err');
+    gmsg('로그인 중...');
+    var r=await sb.auth.signInWithPassword({email:email,password:pw});
+    if(r.error)return gmsg('로그인 실패: '+r.error.message,'err');
+    boot();
+  };
+  window.doSignup=async function(){
+    var email=$('su_email').value.trim(),pw=$('su_pw').value,name=$('su_name').value.trim(),phone=$('su_phone').value.trim();
+    if(!email||!pw)return gmsg('이메일과 비밀번호를 입력해 주세요.','err');
+    if(pw.length<6)return gmsg('비밀번호는 6자 이상으로 해주세요.','err');
+    if(!name)return gmsg('이름을 입력해 주세요.','err');
+    if(!sb)return gmsg('연결 오류입니다.','err');
+    gmsg('계정 만드는 중...');
+    var r=await sb.auth.signUp({email:email,password:pw});
+    if(r.error)return gmsg('가입 실패: '+r.error.message+' (이미 계정이 있다면 로그인 후 승인 요청을 보내주세요)','err');
+    var s=await sb.auth.getSession();
+    if(!s.data.session){return gmsg('계정이 생성되었습니다. 로그인 탭에서 로그인해 주세요.','ok');}
+    var ins=await insertStaff(name,phone);
+    if(ins)return gmsg(ins,'err');
+    boot();
+  };
+  async function insertStaff(name,phone){
+    var u=(await sb.auth.getUser()).data.user;
+    if(!u)return '로그인 정보를 찾을 수 없습니다.';
+    var r=await sb.from('staff').insert({id:u.id,email:u.email,name:name,phone:phone,role:'staff',status:'pending'});
+    return r.error?('승인 요청 실패: '+r.error.message):null;
+  }
+  window.requestStaff=function(){
+    var name=$('ap_name').value.trim(),phone=$('ap_phone').value.trim();
+    var m=$('apMsg');m.className='msg';
+    if(!name){m.className='msg err';m.textContent='이름을 입력해 주세요.';return;}
+    m.textContent='요청 보내는 중...';
+    insertStaff(name,phone).then(function(err){
+      if(err){m.className='msg err';m.textContent=err;return;}
+      boot();
+    });
+  };
+  window.doLogout=async function(){if(sb)await sb.auth.signOut();location.reload();};
+
+  /* ---------- 부팅 ---------- */
+  async function boot(){
+    if(!sb){showPane('gAuth');gmsg('Supabase 연결에 실패했습니다.','err');return;}
+    var ses=(await sb.auth.getSession()).data.session;
+    if(!ses){showPane('gAuth');return;}
+    var r=await sb.from('staff').select('*').eq('id',ses.user.id).maybeSingle();
+    if(r.error){showPane('gAuth');gmsg('조회 오류: '+r.error.message,'err');return;}
+    var me=r.data;
+    if(!me){$('apWho').textContent=ses.user.email+' 로 로그인됨 ·';showPane('gApply');return;}
+    if(me.status==='pending'){
+      $('w_name').textContent=me.name||'-';$('w_email').textContent=me.email||ses.user.email;$('w_at').textContent=fdatetime(me.created_at);
+      showPane('gWait');return;
+    }
+    if(me.status!=='approved'){showPane('gDenied');return;}
+    ME=me;
+    $('gate').classList.add('hide');$('app').classList.remove('hide');
+    $('meName').textContent=(me.name||me.email||'-');
+    $('meRole').textContent=ROLE_KO[me.role]||'직원';
+    if(me.role==='owner'||can('manage_staff'))$('navStaff').classList.remove('hide');
+    loadAll();
+  }
+
+  /* ---------- 데이터 ---------- */
+  window.loadAll=async function(manual){
+    var rs=await sb.from('requests').select('*').order('created_at',{ascending:false});
+    if(rs.error){toast('불러오기 실패: '+rs.error.message);return;}
+    DATA={'인력':[],'컨텐츠':[],'마케팅':[]};
+    (rs.data||[]).forEach(function(x){if(DATA[x.area])DATA[x.area].push(x);});
+    var st=await sb.from('staff').select('*').order('created_at',{ascending:true});
+    STAFF=st.error?[]:(st.data||[]);
+    Object.keys(AREAS).forEach(function(a){$('c-'+a).textContent=DATA[a].length;});
+    var pend=STAFF.filter(function(s){return s.status==='pending';}).length;
+    var c=$('c-staff');c.textContent=pend;c.classList.toggle('alert',pend>0);
+    $('waitCnt').textContent='('+pend+')';
+    renderAssigneeOpts();
+    renderList();
+    if($('viewStaff').classList.contains('hide')===false)renderStaff();
+    if(manual)toast('새로고침 완료');
+  };
+  function staffName(id){var s=STAFF.filter(function(x){return x.id===id;})[0];return s?(s.name||s.email):null;}
+  function renderAssigneeOpts(){
+    var sel=$('d_assignee'),h='<option value="">담당자 미배정</option>';
+    STAFF.filter(function(s){return s.status==='approved';}).forEach(function(s){
+      h+='<option value="'+esc(s.id)+'">'+esc(s.name||s.email)+'</option>';
+    });
+    sel.innerHTML=h;
+  }
+
+  /* ---------- 리스트 ---------- */
+  document.querySelectorAll('.navb[data-nav]').forEach(function(b){
+    b.addEventListener('click',function(){
+      var k=b.getAttribute('data-nav');
+      document.querySelectorAll('.navb[data-nav]').forEach(function(x){x.classList.remove('on');});
+      b.classList.add('on');
+      if(k==='staff'){$('viewList').classList.add('hide');$('viewStaff').classList.remove('hide');renderStaff();return;}
+      $('viewStaff').classList.add('hide');$('viewList').classList.remove('hide');
+      CUR=k;$('listTitle').textContent=AREAS[k]+' 의뢰';
+      renderList();
+    });
+  });
+
+  window.renderList=function(){
+    var rows=DATA[CUR]||[];
+    var q=($('q').value||'').trim().toLowerCase();
+    var fs=$('fStatus').value, fm=$('fMine').value;
+    var view=rows.filter(function(r){
+      if(fs&&normStatus(r.status)!==fs)return false;
+      if(fm==='__me'&&r.assignee_id!==ME.id)return false;
+      if(fm==='__none'&&r.assignee_id)return false;
+      if(q){
+        var hay=[r.academy_name,r.manager_name,r.work_type,r.memo,staffName(r.assignee_id)].join(' ').toLowerCase();
+        if(hay.indexOf(q)<0)return false;
+      }
+      return true;
+    });
+    $('s-all').textContent=rows.length;
+    $('s-new').textContent=rows.filter(function(r){return normStatus(r.status)==='접수';}).length;
+    $('s-ing').textContent=rows.filter(function(r){return normStatus(r.status)==='진행중';}).length;
+    $('s-done').textContent=rows.filter(function(r){return normStatus(r.status)==='완료';}).length;
+
+    var h='';
+    view.forEach(function(r,i){
+      var todos=Array.isArray(r.todos)?r.todos:[];
+      var done=todos.filter(function(t){return t.done;}).length;
+      var pct=todos.length?Math.round(done/todos.length*100):0;
+      var st=normStatus(r.status);
+      h+='<tr onclick="openDetail(\''+r.id+'\')">'
+       +'<td class="num tnum">'+(i+1)+'</td>'
+       +'<td><span class="nm">'+esc(r.academy_name||'-')+'</span>'+(r.is_premium?' <span class="badge b-prem">프리미엄</span>':'')+'<span class="sub">'+esc(r.manager_name||'')+(r.phone?' · '+esc(r.phone):'')+'</span></td>'
+       +'<td>'+(r.work_type?esc(r.work_type):'<span class="muted">-</span>')+'</td>'
+       +'<td>'+(r.assignee_id?esc(staffName(r.assignee_id)||'-'):'<span class="muted">미배정</span>')+'</td>'
+       +'<td class="muted" style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+(r.memo?esc(r.memo):'-')+'</td>'
+       +'<td>'+(todos.length?'<div class="prog"><div class="bar"><i style="width:'+pct+'%"></i></div><span class="muted tnum" style="font-size:.78rem">'+done+'/'+todos.length+'</span></div>':'<span class="muted">-</span>')+'</td>'
+       +'<td><span class="badge b-'+st+'">'+st+'</span></td>'
+       +'<td class="muted tnum" style="font-size:.82rem">'+fdate(r.created_at)+'</td>'
+       +'</tr>';
+    });
+    $('rows').innerHTML=h;
+    $('listEmpty').classList.toggle('hide',view.length>0);
+    if(!view.length&&rows.length)$('listEmpty').innerHTML='<b>조건에 맞는 의뢰가 없습니다</b>검색어나 필터를 바꿔보세요.';
+    else $('listEmpty').innerHTML='<b>아직 신청이 없습니다</b>홈페이지에서 신청이 들어오면 여기에 표시됩니다.';
+  };
+
+  /* ---------- 상세 ---------- */
+  window.openDetail=function(id){
+    var r=(DATA[CUR]||[]).filter(function(x){return x.id===id;})[0];
+    if(!r)return;
+    CURROW=r;
+    $('d_title').textContent=r.academy_name||'-';
+    $('d_meta').textContent=AREAS[r.area]+' · 접수 '+fdatetime(r.created_at)+(r.is_premium?' · 프리미엄 회원':'');
+    var sh='';STATUSES.forEach(function(s){sh+='<button class="pill'+(normStatus(r.status)===s?' on':'')+'" type="button" onclick="setStatus(\''+s+'\')">'+s+'</button>';});
+    $('d_status').innerHTML=sh;
+    $('workOpts').innerHTML=(WORK_OPTS[r.area]||[]).map(function(o){return '<option value="'+esc(o)+'">';}).join('');
+    $('d_work').value=r.work_type||'';
+    $('d_assignee').value=r.assignee_id||'';
+    $('d_memo').value=r.memo||'';
+    renderTodos();
+    renderInfo(r);
+    $('d_del').classList.toggle('hide',!can('delete_request'));
+    $('detail').classList.add('open');
+  };
+  window.closeDetail=function(){$('detail').classList.remove('open');CURROW=null;};
+  $('detail').addEventListener('click',function(e){if(e.target===this)closeDetail();});
+
+  function renderInfo(r){
+    var h='';
+    var add=function(k,v){if(v===undefined||v===null||v==='')return;h+='<div class="irow"><span class="k">'+esc(k)+'</span><span>'+esc(v)+'</span></div>';};
+    add('학원명',r.academy_name);add('담당자',r.manager_name);add('연락처',r.phone);add('이메일',r.email);
+    add('회원',r.user_id?(r.is_premium?'프리미엄 회원':'일반 회원(로그인)'):'비회원');
+    if(r.message)add('전체적으로 원하시는 것',r.message);
+    var d=r.details||{};
+    Object.keys(d).forEach(function(k){
+      var v=d[k];add(k,Array.isArray(v)?v.join(', '):v);
+    });
+    $('d_info').innerHTML=h||'<div class="irow"><span class="k">-</span><span class="muted">추가 정보 없음</span></div>';
+  }
+
+  function renderTodos(){
+    var r=CURROW;var todos=Array.isArray(r.todos)?r.todos:[];
+    var h='';
+    todos.forEach(function(t,i){
+      h+='<div class="todo'+(t.done?' done':'')+'">'
+       +'<input type="checkbox" '+(t.done?'checked':'')+' onchange="toggleTodo('+i+',this.checked)">'
+       +'<span class="t">'+esc(t.t)+'</span>'
+       +'<input class="due" type="date" value="'+esc(t.due||'')+'" onchange="setTodoDue('+i+',this.value)">'
+       +'<button class="del" type="button" onclick="delTodo('+i+')">✕</button>'
+       +'</div>';
+    });
+    $('d_todos').innerHTML=h;
+    var done=todos.filter(function(t){return t.done;}).length;
+    $('d_progtxt').textContent=todos.length?('('+done+'/'+todos.length+' · '+Math.round(done/todos.length*100)+'%)'):'';
+  }
+  window.addTodo=function(){
+    var el=$('d_newtodo'),v=el.value.trim();if(!v)return;
+    var todos=Array.isArray(CURROW.todos)?CURROW.todos.slice():[];
+    todos.push({t:v,done:false,due:''});el.value='';
+    saveField('todos',todos);
+  };
+  window.toggleTodo=function(i,v){var t=CURROW.todos.slice();t[i]=Object.assign({},t[i],{done:v});saveField('todos',t);};
+  window.setTodoDue=function(i,v){var t=CURROW.todos.slice();t[i]=Object.assign({},t[i],{due:v});saveField('todos',t);};
+  window.delTodo=function(i){var t=CURROW.todos.slice();t.splice(i,1);saveField('todos',t);};
+  window.setStatus=function(s){saveField('status',s);};
+
+  window.saveField=async function(field,value){
+    if(!CURROW)return;
+    var patch={};patch[field]=value;
+    var r=await sb.from('requests').update(patch).eq('id',CURROW.id).select().maybeSingle();
+    if(r.error){toast('저장 실패: '+r.error.message);return;}
+    CURROW=r.data;
+    var arr=DATA[CURROW.area]||[];
+    for(var i=0;i<arr.length;i++){if(arr[i].id===CURROW.id){arr[i]=CURROW;break;}}
+    if(field==='todos')renderTodos();
+    if(field==='status'){
+      var sh='';STATUSES.forEach(function(s){sh+='<button class="pill'+(normStatus(CURROW.status)===s?' on':'')+'" type="button" onclick="setStatus(\''+s+'\')">'+s+'</button>';});
+      $('d_status').innerHTML=sh;
+    }
+    renderList();
+    var sv=$('d_saved');sv.classList.add('on');setTimeout(function(){sv.classList.remove('on');},1200);
+  };
+  window.deleteRequest=async function(){
+    if(!CURROW)return;
+    if(!confirm('이 의뢰를 삭제할까요? 되돌릴 수 없습니다.\n\n'+(CURROW.academy_name||'')))return;
+    var r=await sb.from('requests').delete().eq('id',CURROW.id);
+    if(r.error){toast('삭제 실패: '+r.error.message);return;}
+    closeDetail();toast('삭제했습니다');loadAll();
+  };
+
+  /* ---------- 관리자 목록 ---------- */
+  window.staffTab=function(t){
+    STTAB=t;
+    $('stTabWait').classList.toggle('on',t==='wait');
+    $('stTabOk').classList.toggle('on',t==='ok');
+    renderStaff();
+  };
+  function renderStaff(){
+    var list=STAFF.filter(function(s){return STTAB==='wait'?s.status==='pending':s.status==='approved';});
+    if(!list.length){
+      $('staffWrap').innerHTML='<div class="empty"><b>'+(STTAB==='wait'?'대기 중인 요청이 없습니다':'승인된 직원이 없습니다')+'</b>'+(STTAB==='wait'?'새 직원이 계정을 만들면 여기에 표시됩니다.':'')+'</div>';
+      return;
+    }
+    var h='<table><thead><tr><th class="num">#</th><th>이름</th><th>이메일</th><th>연락처</th><th>'+(STTAB==='wait'?'요청일':'직분 · 권한')+'</th><th style="text-align:right">관리</th></tr></thead><tbody>';
+    list.forEach(function(s,i){
+      h+='<tr style="cursor:default"><td class="num tnum">'+(i+1)+'</td>'
+        +'<td><span class="nm">'+esc(s.name||'-')+'</span></td>'
+        +'<td class="muted">'+esc(s.email||'-')+'</td>'
+        +'<td class="muted">'+esc(s.phone||'-')+'</td>';
+      if(STTAB==='wait'){
+        h+='<td class="muted tnum" style="font-size:.82rem">'+fdatetime(s.created_at)+'</td>'
+          +'<td style="text-align:right;white-space:nowrap">'
+          +'<button class="btn btn-primary" style="padding:7px 14px" type="button" onclick="approve(\''+s.id+'\')">승인</button> '
+          +'<button class="btn btn-danger" style="padding:7px 14px" type="button" onclick="reject(\''+s.id+'\')">거절</button></td>';
+      }else{
+        var isMeOwner=(s.role==='owner');
+        h+='<td><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">'
+          +'<span class="badge b-'+s.role+'">'+ROLE_KO[s.role]+'</span>'
+          +(isMeOwner?'':'<select class="inp" style="width:auto;padding:5px 9px;font-size:.82rem" onchange="setRole(\''+s.id+'\',this.value)">'
+              +'<option value="staff"'+(s.role==='staff'?' selected':'')+'>직원</option>'
+              +'<option value="admin"'+(s.role==='admin'?' selected':'')+'>관리자</option>'
+              +(ME.role==='owner'?'<option value="owner">최고관리자</option>':'')+'</select>')
+          +'</div><div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:7px">'
+          +Object.keys(PERM_KO).map(function(k){
+             var on=(s.role==='owner')||(s.perms&&s.perms[k]===true);
+             return '<label style="font-size:.8rem;color:var(--muted);font-weight:600;display:inline-flex;gap:5px;align-items:center">'
+               +'<input type="checkbox" '+(on?'checked ':'')+(s.role==='owner'?'disabled ':'')+'style="accent-color:var(--accent)" onchange="setPerm(\''+s.id+'\',\''+k+'\',this.checked)">'+PERM_KO[k]+'</label>';
+           }).join('')
+          +'</div></td>'
+          +'<td style="text-align:right;white-space:nowrap">'+(isMeOwner?'<span class="muted" style="font-size:.8rem">본인/최고관리자</span>':'<button class="btn btn-danger" style="padding:7px 14px" type="button" onclick="reject(\''+s.id+'\')">권한 해제</button>')+'</td>';
+      }
+      h+='</tr>';
+    });
+    h+='</tbody></table>';
+    $('staffWrap').innerHTML=h;
+  }
+  async function updStaff(id,patch,msg){
+    var r=await sb.from('staff').update(patch).eq('id',id);
+    if(r.error){toast('실패: '+r.error.message);return;}
+    toast(msg||'저장했습니다');
+    await loadAll();renderStaff();
+  }
+  window.approve=function(id){updStaff(id,{status:'approved',approved_at:new Date().toISOString(),approved_by:ME.id},'승인했습니다');};
+  window.reject=function(id){if(!confirm('이 계정의 접근 권한을 해제할까요?'))return;updStaff(id,{status:'rejected'},'해제했습니다');};
+  window.setRole=function(id,role){updStaff(id,{role:role},'직분을 변경했습니다');};
+  window.setPerm=function(id,k,v){
+    var s=STAFF.filter(function(x){return x.id===id;})[0];if(!s)return;
+    var p=Object.assign({},s.perms||{});p[k]=v;
+    updStaff(id,{perms:p},'권한을 변경했습니다');
+  };
+
+  boot();
+})();
+</script>
+</body>
+</html>

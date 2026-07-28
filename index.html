@@ -183,6 +183,8 @@
   .pick .ic svg{width:18px;height:18px}
   .pick b{font-size:.97rem;font-weight:800}
   .pick span{font-size:.77rem;color:var(--muted)}
+  .pick .ext{display:inline-flex;align-items:center;gap:4px;font-size:.7rem;font-weight:800;color:var(--gold);background:color-mix(in srgb,var(--gold) 14%,var(--surface));border:1px solid color-mix(in srgb,var(--gold) 35%,var(--line));padding:3px 8px;border-radius:999px;width:max-content}
+  .pick.link:hover{border-color:var(--gold)}
   .fields h4{margin:0 0 6px;font-size:.92rem;font-weight:800}
   .fields .cap{font-size:.82rem;color:var(--muted);margin-bottom:14px}
   .chips{display:flex;flex-wrap:wrap;gap:8px}
@@ -566,18 +568,19 @@
         <div class="form-step">
           <div class="fs-lab"><span class="dot">1</span>어떤 지원이 필요하세요?</div>
           <div class="picker" id="picker">
-            <button class="pick on" data-k="doc" type="button"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M3 9h18M8 21h8"/></svg></span><b>자료제작</b><span>홈페이지·디자인</span></button>
+            <button class="pick link" data-k="doc" type="button"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M3 9h18M8 21h8"/></svg></span><b>자료제작</b><span>홈페이지·디자인</span><span class="ext">제작 신청서로 이동 ↗</span></button>
             <button class="pick" data-k="hr" type="button"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 19c.6-3 2.9-4.6 5.5-4.6S13.9 16 14.5 19M16 8.2a3 3 0 0 1 0 5.4M18 19c-.3-1.6-1-2.8-2-3.6"/></svg></span><b>인력지원</b><span>원어민 매칭</span></button>
             <button class="pick" data-k="cnt" type="button"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H12v16H6.5A2.5 2.5 0 0 0 4 21.5zM20 5.5A2.5 2.5 0 0 0 17.5 3H12v16h5.5A2.5 2.5 0 0 1 20 21.5z"/></svg></span><b>컨텐츠지원</b><span>유학·SAT·VOCA</span></button>
             <button class="pick" data-k="mkt" type="button"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 15v-4h4l7-4v12l-7-4H4zM19 9a4 4 0 0 1 0 6"/></svg></span><b>마케팅·광고</b><span>블로그 대행</span></button>
           </div>
+          <div class="cnote" id="pickHint" style="margin-top:18px">👆 위에서 <b>필요한 지원을 선택</b>하시면 신청 항목이 이어서 나타납니다. <b>자료제작</b>은 제작 전문 파트너 <b>@IM</b>의 제작 신청서로 연결됩니다.</div>
         </div>
-        <div class="form-step">
+        <div class="form-step" id="fstep2" style="display:none">
           <div class="fs-lab"><span class="dot">2</span>세부 항목 <span style="color:var(--muted);font-weight:600;font-size:.8rem">(선택한 지원에 따라 달라집니다)</span></div>
           <div class="fields" id="fields"></div>
           <div class="ff" style="margin-top:24px"><span class="fflabel">전체적으로 원하시는 것 (자유롭게)</span><textarea class="inp" id="f_message" placeholder="큰 그림을 자유롭게 적어주세요. 예: 어떤 목적으로 · 어떤 느낌으로 · 특별히 신경 쓰고 싶은 점 등"></textarea></div>
         </div>
-        <div class="form-step">
+        <div class="form-step" id="fstep3" style="display:none">
           <div class="fs-lab"><span class="dot">3</span>기본 정보</div>
           <div class="common">
             <input class="inp" id="f_academy" placeholder="학원명 *" autocomplete="organization">
@@ -588,7 +591,7 @@
           <div class="ff" style="margin-top:16px"><span class="fflabel">기타 요청사항</span><textarea class="inp" id="f_extra" placeholder="작은 바람이라도 좋습니다." style="min-height:70px"></textarea></div>
           <label class="consent"><input type="checkbox" id="f_consent" style="width:18px;height:18px;accent-color:var(--accent);margin-top:2px;flex:0 0 auto"><span>개인정보 수집·이용에 동의합니다. 수집한 정보는 상담·견적 목적 외에는 사용하지 않습니다. <a onclick="scrollId('contact')">개인정보처리방침 보기</a></span></label>
         </div>
-        <div class="form-actions">
+        <div class="form-actions" id="fstepActions" style="display:none">
           <button class="btn btn-primary" type="button" id="submitBtn" onclick="submitRequest()">신청서 제출</button>
           <span class="hint" id="formHint">제출하면 담당자가 배정되어 1~2일 내 연락드립니다.</span>
         </div>
@@ -618,6 +621,7 @@
       <span class="eyebrow">지원사업 · 자료제작</span>
       <h1>자료제작 지원</h1>
       <p class="lead">홈페이지, 앱, 프로그램부터 포스터·브로셔·명함까지. 학원에 필요한 모든 자료를 외주가 아닌 전담팀이 직접 만듭니다.</p>
+      <p class="microcopy" style="margin-top:14px">📨 자료제작 신청은 제작 전담 파트너 <b>@IM</b>의 제작 신청서에서 접수됩니다. 아래 신청 버튼을 누르면 신청서로 이동합니다.</p>
     </div>
   </section>
   <section class="sec">
@@ -680,7 +684,7 @@
           <figure class="folio-card"><div class="shot"><span class="chrome"><i></i><i></i><i></i></span><div class="shotbody"><b>OO입시학원</b><span>온라인 수강신청 · 관리</span></div></div><figcaption><b>OO입시학원</b><span>3단계 · 신청형</span></figcaption></figure>
         </div>
         <div class="cnote">🖼️ <b>실제 작업물로 교체 예정:</b> 만드신 홈페이지의 스크린샷이나 주소(URL)를 주시면 이 자리에 진짜 결과물로 넣어 드립니다. (앱·프로그램·디자인 탭에도 동일하게 넣을 수 있어요.)</div>
-        <div class="area-cta"><a class="btn btn-primary" onclick="applyWith('doc')">홈페이지 제작 신청하기 →</a><a class="btn btn-ghost" onclick="go('home','price')">관리비 안내 보기</a></div>
+        <div class="area-cta"><a class="btn btn-primary" onclick="applyWith('doc')">홈페이지 제작 신청하기 ↗</a><a class="btn btn-ghost" onclick="go('home','price')">관리비 안내 보기</a></div>
       </div>
 
       <!-- 앱 -->
@@ -710,7 +714,7 @@
           <figure class="folio-card"><div class="shot"><div class="shotbody"><b>OO입시학원 앱</b><span>공지 · 일정 · 결제</span></div></div><figcaption><b>OO입시학원 앱</b><span>공지 · 일정 관리</span></figcaption></figure>
         </div>
         <div class="cnote">🖼️ <b>실제 작업물로 교체 예정:</b> 만드신 앱의 스크린샷을 주시면 이 자리에 진짜 결과물로 넣어 드립니다.</div>
-        <div class="area-cta"><a class="btn btn-primary" onclick="applyWith('doc')">앱 제작 문의하기 →</a></div>
+        <div class="area-cta"><a class="btn btn-primary" onclick="applyWith('doc')">앱 제작 문의하기 ↗</a></div>
       </div>
 
       <!-- 프로그램 -->
@@ -733,7 +737,7 @@
           <div class="fstep"><div class="n">STEP 08</div><h4>관리</h4><p>도입 후 개선을 지원합니다.</p></div>
         </div>
         <div class="tzbox"><b>📝 의뢰 전에 알려주세요</b><ul><li>어떤 업무를, 어떻게 도와드릴 프로그램인지 구체적으로 적어주세요.</li><li>학원의 업무 흐름과 불편한 점을 정확히 알아야 진짜 효율적인 자동화를 설계할 수 있습니다.</li><li>신청서에 자세히 적으실수록 정확한 설계와 견적이 가능합니다.</li></ul></div>
-        <div class="area-cta"><a class="btn btn-primary" onclick="applyWith('doc')">프로그램 문의하기 →</a></div>
+        <div class="area-cta"><a class="btn btn-primary" onclick="applyWith('doc')">프로그램 문의하기 ↗</a></div>
       </div>
 
       <!-- 디자인 -->
@@ -768,7 +772,7 @@
           <figure class="folio-card"><div class="shot"><div class="shotbody"><b>명함</b><span>OO입시학원</span></div></div><figcaption><b>명함</b><span>원장·강사용 · OO입시학원</span></figcaption></figure>
         </div>
         <div class="cnote">🖼️ <b>실제 작업물로 교체 예정:</b> 만드신 홍보물 이미지를 주시면 이 자리에 진짜 결과물로 넣어 드립니다.</div>
-        <div class="area-cta"><a class="btn btn-primary" onclick="applyWith('doc')">디자인 문의하기 →</a></div>
+        <div class="area-cta"><a class="btn btn-primary" onclick="applyWith('doc')">디자인 문의하기 ↗</a></div>
       </div>
     </div>
   </section>
@@ -1131,7 +1135,7 @@
     </div>
     <div class="legal">
       <span>© 2026 ESC · Education Supporting Center · 인투유학. All rights reserved.</span>
-      <span><a>개인정보처리방침</a> · 파트너 학원 전용</span>
+      <span><a>개인정보처리방침</a> · 파트너 학원 전용 · <a href="admin.html">ESC 직원 로그인</a></span>
     </div>
   </div>
 </footer>
@@ -1241,23 +1245,16 @@
     setTimeout(function(){revealIn(document.getElementById('v-'+view));},60);
     if(history&&history.replaceState){history.replaceState(null,'','#'+view);}
   }
-  function applyWith(k){go('home','apply');setTimeout(function(){selectPick(k);},80);}
+  /* 자료제작 신청은 제작 파트너 @IM 신청서로 접수 */
+  var AIM_REQUEST_URL='https://koreayjk.github.io/aim/request.html';
+  function goAim(){location.href=AIM_REQUEST_URL;}
+  function applyWith(k){
+    if(k==='doc'){goAim();return;}
+    go('home','apply');setTimeout(function(){selectPick(k);},80);
+  }
 
   /* form picker */
   var FORM_SCHEMA={
-    doc:[
-      {t:'check',k:'제작 종류',req:1,opts:['홈페이지','앱','프로그램','디자인(포스터·브로셔·명함)']},
-      {t:'radio',k:'제작 방식',opts:['기존 것을 그대로 이전','비슷한 느낌으로 새로','완전히 새로 제작']},
-      {t:'radio',k:'홈페이지 단계 (홈페이지 선택 시)',opts:['1단계 단순 홍보형','2단계 소통형','3단계 신청·결제형','4단계 맞춤 제작형','잘 모르겠음']},
-      {t:'check',k:'필요한 메뉴',opts:['메인(홈)','소개·인사말','사업 안내','공지·소식','갤러리(사진)','오시는 길','문의하기','신청·예약','자주 묻는 질문']},
-      {t:'check',k:'가지고 계신 자료',opts:['로고','소개글/인사말','사진','영상','기존 인쇄물·홍보물']},
-      {t:'check',k:'원하는 디자인 느낌',opts:['깔끔·심플','따뜻·친근','전문·신뢰','고급·세련','활기·밝음']},
-      {t:'text',k:'좋아하는 색 / 피하고 싶은 색'},
-      {t:'text',k:'참고하고 싶은 사이트 (1~2개)'},
-      {t:'radio',k:'유료 도메인',opts:['이미 있음','새로 필요함','잘 모르겠음']},
-      {t:'text',k:'희망 완료 시기'},
-      {t:'text',k:'생각하시는 예산'}
-    ],
     hr:[
       {t:'check',k:'원하는 국적',req:1,opts:['필리핀','미국','무관']},
       {t:'check',k:'수업 형태',opts:['줌(화상)','대면']},
@@ -1327,12 +1324,14 @@
     return d;
   }
   function selectPick(k){
+    if(k==='doc'){location.href=AIM_REQUEST_URL;return;}
     var picks=document.querySelectorAll('#picker .pick');
     picks.forEach(function(x){x.classList.toggle('on',x.getAttribute('data-k')===k);});
     renderFields(k);
+    document.getElementById('pickHint').style.display='none';
+    ['fstep2','fstep3','fstepActions'].forEach(function(id){var el=document.getElementById(id);if(el)el.style.display='';});
   }
   document.querySelectorAll('#picker .pick').forEach(function(b){b.addEventListener('click',function(){selectPick(b.getAttribute('data-k'));});});
-  renderFields('doc');
 
   /* sub pills */
   document.querySelectorAll('.subpills').forEach(function(row){
@@ -1371,7 +1370,9 @@
     var hint=document.getElementById('formHint');
     var setErr=function(m){hint.textContent=m;hint.style.color="#c0392b";};
     var pick=document.querySelector('#picker .pick.on');
-    var area=pick?pick.getAttribute('data-k'):'doc';
+    if(!pick)return setErr('먼저 필요한 지원을 선택해 주세요.');
+    var area=pick.getAttribute('data-k');
+    if(area==='doc')return goAim();
     var academy=document.getElementById('f_academy').value.trim();
     var manager=document.getElementById('f_manager').value.trim();
     var phone=document.getElementById('f_phone').value.trim();
