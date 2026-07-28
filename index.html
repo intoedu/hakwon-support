@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ESC 학원지원센터 · 홈페이지 디자인 시안</title>
 </head>
 <body>
-<title>ESC 학원지원센터 · 홈페이지 디자인 시안</title>
 <style>
   :root{
     --paper:#FBFCFE; --surface:#FFFFFF; --surface-2:#F3F6FB;
@@ -28,7 +28,7 @@
   @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
   a{color:inherit;text-decoration:none}
   .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
-  h1,h2,h3,h4{margin:0;text-wrap:balance;letter-spacing:-.01em;line-height:1.25}
+  h1,h2,h3,h4{margin:0;text-wrap:balance;letter-spacing:-.01em;line-height:1.25;word-break:keep-all}
   p{margin:0}
   .tnum{font-variant-numeric:tabular-nums}
   section{scroll-margin-top:120px}
@@ -274,8 +274,10 @@
   .simple{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:34px}
   .simple h3{font-size:1.4rem;font-weight:800;margin-bottom:10px}
   .simple .st{color:var(--muted);font-size:1.02rem;max-width:60ch}
-  .simple .feat{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:26px}
-  @media(max-width:720px){.simple .feat{grid-template-columns:1fr}}
+  .feat{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:26px}
+  .feat.f4{grid-template-columns:repeat(4,1fr)}
+  @media(max-width:980px){.feat,.feat.f4{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:720px){.feat,.feat.f4{grid-template-columns:1fr}}
   .fcard{background:var(--surface-2);border:1px solid var(--line);border-radius:12px;padding:18px}
   .fcard b{font-weight:800;font-size:.98rem}
   .fcard p{color:var(--muted);font-size:.86rem;margin-top:6px}
@@ -789,45 +791,82 @@
         <button class="sp" data-t="us" type="button">미국 원어민</button>
         <button class="sp" data-t="flow" type="button">진행 절차</button>
       </div>
+      <!-- 필리핀 원어민 -->
       <div class="subpanel on" id="hr-ph">
-        <div class="simple reveal">
-          <div class="kicker">필리핀 원어민</div>
-          <h3>합리적인 비용의 화상 영어</h3>
-          <p class="st">부담 없는 비용으로 꾸준한 화상 영어 수업을 운영할 수 있습니다. 회화·기초 학습에 적합하며, 줌으로 진행됩니다.</p>
-          <div class="feat">
-            <div class="fcard"><b>시차 1시간</b><p>한국보다 1시간 느려 수업 시간 잡기 편합니다.</p></div>
-            <div class="fcard"><b>화상 수업</b><p>줌 기반 1:1·그룹 수업 운영.</p></div>
-            <div class="fcard"><b>합리적 비용</b><p>지속 운영에 부담이 적습니다.</p></div>
-          </div>
-          <div class="area-cta"><a class="btn btn-primary" onclick="applyWith('hr')">구인공고 등록하기 →</a></div>
+        <div class="panel-intro reveal">
+          <div><div class="kicker">필리핀 원어민</div><h2>부담 없는 비용으로, 자주 하는 화상 영어</h2><p>영어는 주 1회로 늘지 않습니다. 필리핀 원어민은 합리적인 비용이라 학원이 <b>꾸준한 수업</b>을 설계할 수 있습니다.</p></div>
         </div>
+
+        <div class="benefits">
+          <div class="benefit reveal"><div class="bn">01</div><div><h3>자주 해도 부담이 적은 비용</h3><p>주 1회 수업으로는 실력이 쌓이기 어렵습니다. 필리핀 원어민 수업은 비용 부담이 적어 주 3~5회처럼 자주 하는 커리큘럼을 학원이 실제로 운영할 수 있습니다.</p><div class="bt"><span class="tag">주 3~5회 운영</span><span class="tag">지속 가능한 비용</span></div></div></div>
+          <div class="benefit reveal"><div class="bn">02</div><div><h3>말하는 시간을 채우는 회화 수업</h3><p>문법·독해 중심 수업에서 늘 부족한 것이 학생이 직접 말하는 시간입니다. 1:1 화상 수업은 한 시간 내내 학생이 말하게 만들어, 회화와 기초를 다지는 데 적합합니다.</p><div class="bt"><span class="tag">1:1 회화</span><span class="tag">기초 다지기</span></div></div></div>
+          <div class="benefit reveal"><div class="bn">03</div><div><h3>시차 1시간, 방과 후 시간을 그대로</h3><p>필리핀은 한국보다 1시간 느립니다. 학원이 실제로 쓰는 방과 후·저녁 시간대를 그대로 쓸 수 있어, 시간표를 억지로 바꿀 필요가 없습니다.</p><div class="bt"><span class="tag">방과 후 가능</span><span class="tag">저녁·주말 가능</span></div></div></div>
+          <div class="benefit reveal"><div class="bn">04</div><div><h3>사람 구하는 일은 우리가</h3><p>학원이 직접 채용하고 검증하는 데 드는 시간을 우리가 대신 씁니다. 우리가 확인한 선생님만 연결하고, 수업이 맞지 않으면 교체까지 지원합니다.</p><div class="bt"><span class="tag">사전 검증</span><span class="tag">교체 지원</span></div></div></div>
+        </div>
+
+        <div class="panel-intro reveal" style="margin-top:48px"><div><div class="kicker">수업 운영</div><h2>이렇게 운영합니다</h2></div></div>
+        <div class="feat f4 reveal">
+          <div class="fcard"><b>1:1 수업</b><p>학생 한 명에 선생님 한 명. 말하기 시간이 가장 많습니다.</p></div>
+          <div class="fcard"><b>그룹 수업</b><p>소수 그룹으로도 운영 가능. 비용을 나눠 부담합니다.</p></div>
+          <div class="fcard"><b>줌(화상)</b><p>학원 교실·태블릿에서 바로 접속해 진행합니다.</p></div>
+          <div class="fcard"><b>교재·레벨 협의</b><p>학원이 쓰는 교재와 학생 레벨에 맞춰 조정합니다.</p></div>
+        </div>
+        <div class="tzbox"><b>⏰ 시차 안내</b><ul><li>필리핀은 한국보다 <b style="color:inherit">1시간</b> 느립니다.</li><li>원하는 시간은 <b style="color:inherit">한국시간 기준</b>으로 적어주세요.</li></ul></div>
+        <div class="cnote">💰 <b>비용:</b> 수업 형태(1:1·그룹)와 주당 횟수에 따라 달라져 <b>신청 시 견적으로 안내</b>합니다.</div>
+        <div class="area-cta"><a class="btn btn-primary" onclick="applyWith('hr')">구인공고 등록하기 →</a><a class="btn btn-ghost" onclick="document.querySelector('#v-hr .sp[data-t=flow]').click()">진행 절차 보기</a></div>
       </div>
+
+      <!-- 미국 원어민 -->
       <div class="subpanel" id="hr-us">
-        <div class="simple reveal">
-          <div class="kicker">미국 원어민</div>
-          <h3>정통 발음과 커리큘럼</h3>
-          <p class="st">원어 발음과 정통 커리큘럼이 필요한 수업에 적합합니다. 프리미엄 화상 수업으로 운영됩니다.</p>
-          <div class="tzbox" style="margin-bottom:22px"><b>⏰ 시차 안내</b><ul><li>미국은 한국보다 14시간 느립니다.</li><li>원하는 시간은 <b style="color:inherit">한국시간 기준</b>으로 적어주세요.</li><li>미국 선생님은 한국시간 <b style="color:inherit">오후 1시~오후 8시</b> 수업이 어렵습니다(현지 심야).</li></ul></div>
-          <div class="feat">
-            <div class="fcard"><b>원어 발음</b><p>정통 미국식 발음·표현.</p></div>
-            <div class="fcard"><b>프리미엄</b><p>고급 커리큘럼 수업.</p></div>
-            <div class="fcard"><b>시차 14시간</b><p>가능 시간대는 매칭 시 안내.</p></div>
-          </div>
-          <div class="area-cta"><a class="btn btn-primary" onclick="applyWith('hr')">구인공고 등록하기 →</a></div>
+        <div class="panel-intro reveal">
+          <div><div class="kicker">미국 원어민</div><h2>원어민 수업이 있는 학원이라는 신뢰</h2><p>정통 발음과 표현이 필요한 수업, 그리고 유학·상위권 학생을 위한 프리미엄 수업에 적합합니다.</p></div>
         </div>
+
+        <div class="benefits">
+          <div class="benefit reveal"><div class="bn">01</div><div><h3>정통 발음과 실제 쓰는 표현</h3><p>교재에는 없는 실제 표현과 억양을 그대로 배웁니다. 발음·스피킹 완성도가 중요한 학생에게는 차이가 분명하게 드러납니다.</p><div class="bt"><span class="tag">발음·억양</span><span class="tag">실사용 표현</span></div></div></div>
+          <div class="benefit reveal"><div class="bn">02</div><div><h3>유학·상위권 학생에게 맞는 수업</h3><p>해외 진학을 준비하거나 이미 상위권인 학생에게는 회화를 넘어선 수업이 필요합니다. 에세이·토론처럼 요구 수준이 높은 수업을 요청하실 수 있습니다.</p><div class="bt"><span class="tag">유학 준비</span><span class="tag">상위권 심화</span></div></div></div>
+          <div class="benefit reveal"><div class="bn">03</div><div><h3>모집과 상담에서 쓰이는 차별점</h3><p>"미국 원어민 수업을 운영하는 학원"은 그 자체로 홍보 문구가 됩니다. 상담에서 다른 학원과 확실히 구분되는 카드가 하나 늘어납니다.</p><div class="bt"><span class="tag">모집 차별점</span><span class="tag">브랜딩</span></div></div></div>
+          <div class="benefit reveal"><div class="bn">04</div><div><h3>시차 14시간, 시간대만 맞추면 됩니다</h3><p>미국은 한국보다 14시간 느려 가능한 시간대가 정해져 있습니다. 아래 안내를 참고해 희망 시간을 적어주시면, 가능한 선생님으로 매칭합니다.</p><div class="bt"><span class="tag">오전 수업 권장</span><span class="tag">한국시간 기준</span></div></div></div>
+        </div>
+
+        <div class="panel-intro reveal" style="margin-top:48px"><div><div class="kicker">수업 가능 시간</div><h2>한국시간 기준으로 보세요</h2></div></div>
+        <div class="feat reveal">
+          <div class="fcard"><b>👍 권장</b><p>한국시간 <b>오전 7시~낮 12시</b> — 미국 현지 저녁 시간이라 가장 안정적입니다.</p></div>
+          <div class="fcard"><b>🤝 협의 가능</b><p>한국시간 <b>밤 9시 이후</b> — 선생님 지역·일정에 따라 가능한 경우가 있습니다.</p></div>
+          <div class="fcard"><b>🚫 어려움</b><p>한국시간 <b>오후 1시~오후 8시</b> — 미국 현지 심야로 수업이 불가합니다.</p></div>
+        </div>
+        <div class="tzbox"><b>⏰ 시차 안내</b><ul><li>미국은 한국보다 <b style="color:inherit">14시간</b> 느립니다.</li><li>원하는 시간은 <b style="color:inherit">한국시간 기준</b>으로 적어주세요.</li><li>미국 선생님은 한국시간 <b style="color:inherit">오후 1시~오후 8시</b> 수업이 어렵습니다(현지 심야).</li><li>방과 후 시간대가 꼭 필요하다면 <b style="color:inherit">필리핀 원어민</b>을 함께 검토해 보세요.</li></ul></div>
+        <div class="cnote">💰 <b>비용:</b> 미국 원어민은 필리핀 원어민보다 비용이 높습니다. 수업 형태·횟수에 따라 <b>신청 시 견적으로 안내</b>합니다.</div>
+        <div class="area-cta"><a class="btn btn-primary" onclick="applyWith('hr')">구인공고 등록하기 →</a><a class="btn btn-ghost" onclick="document.querySelector('#v-hr .sp[data-t=ph]').click()">필리핀 원어민 비교</a></div>
       </div>
+
+      <!-- 진행 절차 -->
       <div class="subpanel" id="hr-flow">
-        <div class="simple reveal">
-          <div class="kicker">진행 절차</div>
-          <h3>구인공고 하나로 시작합니다</h3>
-          <p class="st">학원은 원하는 조건(국적·과목·시간대·비용)으로 구인공고만 보내주시면 됩니다. 나머지는 우리가 진행합니다.</p>
-          <div class="feat">
-            <div class="fcard"><b>1. 구인 접수</b><p>원하는 조건으로 공고 등록.</p></div>
-            <div class="fcard"><b>2. 선생님 매칭</b><p>검증된 인력풀에서 매칭.</p></div>
-            <div class="fcard"><b>3. 수업 시작·관리</b><p>수업 개시 후 지속 관리.</p></div>
-          </div>
-          <div class="area-cta"><a class="btn btn-primary" onclick="applyWith('hr')">구인공고 등록하기 →</a></div>
+        <div class="panel-intro reveal">
+          <div><div class="kicker">진행 절차</div><h2>구인공고 하나로 시작합니다</h2><p>학원은 원하는 조건만 보내주시면 됩니다. 채용·검증·시간표 조정·사후 관리는 우리가 진행합니다.</p></div>
         </div>
+        <div class="flow reveal">
+          <div class="fstep"><div class="n">STEP 01</div><h4>구인 접수</h4><p>신청서에 원하는 조건을 담아 접수합니다.</p></div>
+          <div class="fstep"><div class="n">STEP 02</div><h4>조건 정리</h4><p>담당자가 과목·시간대·인원을 함께 정리합니다.</p></div>
+          <div class="fstep"><div class="n">STEP 03</div><h4>선생님 매칭</h4><p>검증된 인력풀에서 조건에 맞는 후보를 찾습니다.</p></div>
+          <div class="fstep"><div class="n">STEP 04</div><h4>확인·시범수업</h4><p>프로필을 보시고, 필요하면 시범수업으로 확인합니다.</p></div>
+          <div class="fstep"><div class="n">STEP 05</div><h4>시간표·비용 확정</h4><p>수업 시간과 비용을 확정합니다.</p></div>
+          <div class="fstep"><div class="n">STEP 06</div><h4>수업 시작</h4><p>줌 연결을 안내하고 수업을 시작합니다.</p></div>
+          <div class="fstep"><div class="n">STEP 07</div><h4>지속 관리</h4><p>진행 상황을 확인하고, 필요하면 교체를 지원합니다.</p></div>
+        </div>
+
+        <div class="panel-intro reveal" style="margin-top:48px"><div><div class="kicker">이런 정보를 주세요</div><h2>조건이 구체적일수록 매칭이 빨라집니다</h2><p>신청서에 아래 항목이 들어갑니다. 미리 정리해 두시면 한 번에 진행됩니다.</p></div></div>
+        <div class="feat reveal">
+          <div class="fcard"><b>원하는 국적</b><p>필리핀 · 미국 · 무관.</p></div>
+          <div class="fcard"><b>과목·레벨</b><p>회화, 문법, 에세이 등과 학생 수준.</p></div>
+          <div class="fcard"><b>시간대·요일</b><p>한국시간 기준으로 적어주세요.</p></div>
+          <div class="fcard"><b>주당 횟수</b><p>주 1회부터 주 5회까지.</p></div>
+          <div class="fcard"><b>학생 연령·인원</b><p>1:1인지 그룹인지 판단합니다.</p></div>
+          <div class="fcard"><b>시작 희망일</b><p>언제부터 수업이 필요한지.</p></div>
+        </div>
+        <div class="tzbox"><b>⏰ 시차 안내</b><ul><li>필리핀은 한국보다 1시간, 미국은 14시간 느립니다.</li><li>원하는 시간은 <b style="color:inherit">한국시간 기준</b>으로 적어주세요.</li><li>미국 선생님은 한국시간 오후 1시~오후 8시 수업이 어렵습니다.</li></ul></div>
+        <div class="cnote">🔁 <b>맞지 않으면 교체해 드립니다.</b> 수업이 학원·학생과 맞지 않을 경우 담당자에게 알려주시면 다른 선생님으로 다시 매칭합니다.</div>
+        <div class="area-cta"><a class="btn btn-primary" onclick="applyWith('hr')">구인공고 등록하기 →</a></div>
       </div>
     </div>
   </section>
@@ -850,29 +889,105 @@
         <button class="sp" data-t="sat" type="button">SAT</button>
         <button class="sp" data-t="voca" type="button">IM VOCA</button>
       </div>
+      <!-- 유학자료 -->
       <div class="subpanel on" id="content-study">
-        <div class="simple reveal">
-          <div class="kicker">유학자료</div>
-          <h3>유학 준비 콘텐츠</h3>
-          <p class="st">유학 파트너 학원에 제공하는 유학 준비 자료와 콘텐츠입니다. 기존 유학 허브와 연결해 필요한 자료를 바로 받아보실 수 있습니다.</p>
-          <div class="area-cta"><a class="btn btn-primary" onclick="applyWith('cnt')">콘텐츠 요청하기 →</a></div>
+        <div class="panel-intro reveal">
+          <div><div class="kicker">유학자료</div><h2>유학 상담까지 되는 학원</h2><p>유학은 학원이 혼자 준비하기 어려운 영역입니다. 유학 업무를 실제로 하는 <b>인투유학</b>의 자료를 파트너 학원에 그대로 제공합니다.</p></div>
         </div>
+
+        <div class="benefits">
+          <div class="benefit reveal"><div class="bn">01</div><div><h3>유학 문의에 그 자리에서 답하기</h3><p>"유학은 어떻게 준비하나요?"라는 질문에 "알아보고 연락드리겠습니다"라고 답하면 상담은 그대로 끝납니다. 자료가 있으면 상담 자리에서 바로 설명할 수 있습니다.</p><div class="bt"><span class="tag">상담 대응</span><span class="tag">이탈 방지</span></div></div></div>
+          <div class="benefit reveal"><div class="bn">02</div><div><h3>실무에서 쓰는 자료를 그대로</h3><p>학원 홍보용으로 만든 자료가 아니라, 유학 업무에서 실제로 쓰는 자료입니다. 내용의 정확도가 다릅니다.</p><div class="bt"><span class="tag">인투유학 제공</span><span class="tag">실무 자료</span></div></div></div>
+          <div class="benefit reveal"><div class="bn">03</div><div><h3>학부모에게 보여줄 수 있는 형태</h3><p>원장님이 읽고 이해하는 자료를 넘어, 학부모 상담에서 그대로 펼쳐 보여줄 수 있는 형태로 드립니다.</p><div class="bt"><span class="tag">상담 설명자료</span></div></div></div>
+          <div class="benefit reveal"><div class="bn">04</div><div><h3>바뀌는 정보는 다시 전달합니다</h3><p>학교·전형·비용 정보는 해마다 달라집니다. 한 번 주고 끝내지 않고, 변경된 내용을 파트너 학원에 다시 전달합니다.</p><div class="bt"><span class="tag">업데이트 제공</span></div></div></div>
+        </div>
+
+        <div class="panel-intro reveal" style="margin-top:48px"><div><div class="kicker">제공 자료</div><h2>이런 자료를 받으실 수 있습니다</h2></div></div>
+        <div class="feat reveal">
+          <div class="fcard"><b>국가별 유학 가이드</b><p>준비 흐름과 일정을 국가별로 정리한 자료.</p></div>
+          <div class="fcard"><b>학교·전형 정보</b><p>학교 종류와 지원 조건 안내.</p></div>
+          <div class="fcard"><b>절차·서류 체크리스트</b><p>무엇을 언제까지 준비해야 하는지.</p></div>
+          <div class="fcard"><b>비용·장학 안내</b><p>학비·생활비 등 비용 구조 설명자료.</p></div>
+          <div class="fcard"><b>학부모 상담자료</b><p>상담 자리에서 바로 쓰는 설명자료.</p></div>
+          <div class="fcard"><b>유학 담당자 연결</b><p>학원이 답하기 어려운 건은 담당자로 연결.</p></div>
+        </div>
+        <div class="cnote">📝 <b>내용 확인 필요(시안):</b> 위 제공 자료 목록은 예시입니다. 실제로 파트너 학원에 드릴 자료 항목을 알려주시면 그대로 교체합니다.</div>
+
+        <div class="panel-intro reveal" style="margin-top:48px"><div><div class="kicker">진행 절차</div><h2>요청부터 업데이트까지</h2></div></div>
+        <div class="flow reveal">
+          <div class="fstep"><div class="n">STEP 01</div><h4>요청</h4><p>필요한 자료와 대상 학생을 접수합니다.</p></div>
+          <div class="fstep"><div class="n">STEP 02</div><h4>목적 확인</h4><p>상담용인지 수업용인지 확인합니다.</p></div>
+          <div class="fstep"><div class="n">STEP 03</div><h4>자료 제공</h4><p>학원에 맞는 자료를 정리해 전달합니다.</p></div>
+          <div class="fstep"><div class="n">STEP 04</div><h4>활용 안내</h4><p>어떻게 쓰는지 담당자가 안내합니다.</p></div>
+          <div class="fstep"><div class="n">STEP 05</div><h4>업데이트</h4><p>정보가 바뀌면 다시 전달합니다.</p></div>
+        </div>
+        <div class="area-cta"><a class="btn btn-primary" onclick="applyWith('cnt')">유학자료 요청하기 →</a></div>
       </div>
+
+      <!-- SAT -->
       <div class="subpanel" id="content-sat">
-        <div class="simple reveal">
-          <div class="kicker">SAT</div>
-          <h3>앱으로 관리하는 SAT</h3>
-          <p class="st">직접 가르치는 대신 앱으로 SAT 학습을 관리합니다. 제공 요청 → 비용 협의 → 콘텐츠 제공 순으로 진행됩니다.</p>
-          <div class="area-cta"><a class="btn btn-primary" onclick="applyWith('cnt')">콘텐츠 요청하기 →</a></div>
+        <div class="panel-intro reveal">
+          <div><div class="kicker">SAT</div><h2>SAT 강사 없이 SAT반을 운영합니다</h2><p>직접 가르치는 대신, 앱으로 학습을 진행하고 학원은 <b>관리</b>를 맡습니다. 콘텐츠는 우리가 제공합니다.</p></div>
         </div>
+
+        <div class="benefits">
+          <div class="benefit reveal"><div class="bn">01</div><div><h3>가르칠 사람이 없어서 못 하던 수업</h3><p>SAT는 강사 구하기가 가장 어려운 과목입니다. 앱으로 학습을 돌리면 학원은 진도와 출결만 관리해도 반이 굴러갑니다.</p><div class="bt"><span class="tag">강사 부담 없음</span><span class="tag">관리형 운영</span></div></div></div>
+          <div class="benefit reveal"><div class="bn">02</div><div><h3>공부한 만큼 데이터로 남습니다</h3><p>학생이 무엇을 얼마나 풀었는지 기록으로 남아, 상담 때 "열심히 하고 있어요" 대신 근거를 보여줄 수 있습니다.</p><div class="bt"><span class="tag">진도 확인</span><span class="tag">상담 근거</span></div></div></div>
+          <div class="benefit reveal"><div class="bn">03</div><div><h3>상위권·유학 준비 학생을 붙잡는 카드</h3><p>SAT가 필요해지는 순간 학생은 다른 학원을 찾습니다. 우리 학원에서 이어서 준비할 수 있으면 이탈을 막을 수 있습니다.</p><div class="bt"><span class="tag">이탈 방지</span><span class="tag">상위권 유지</span></div></div></div>
+        </div>
+
+        <div class="panel-intro reveal" style="margin-top:48px"><div><div class="kicker">제공 범위</div><h2>무엇을 드리나요</h2></div></div>
+        <div class="feat f4 reveal">
+          <div class="fcard"><b>SAT 학습 콘텐츠</b><p>학생이 앱으로 학습할 문제·자료.</p></div>
+          <div class="fcard"><b>앱 학습 관리</b><p>학생별 학습을 앱에서 진행·기록.</p></div>
+          <div class="fcard"><b>진도 확인</b><p>학원이 학생 진행 상황을 확인.</p></div>
+          <div class="fcard"><b>학생 수 단위 운영</b><p>인원에 맞춰 규모를 정합니다.</p></div>
+        </div>
+        <div class="cnote">📝 <b>내용 확인 필요(시안):</b> 제공 범위(모의고사 포함 여부, 리포트 형태 등)는 실제 기준을 알려주시면 정확히 반영합니다.</div>
+
+        <div class="panel-intro reveal" style="margin-top:48px"><div><div class="kicker">진행 절차</div><h2>요청 → 협의 → 제공</h2></div></div>
+        <div class="flow reveal">
+          <div class="fstep"><div class="n">STEP 01</div><h4>제공 요청</h4><p>신청서로 필요를 접수합니다.</p></div>
+          <div class="fstep"><div class="n">STEP 02</div><h4>대상·인원 확인</h4><p>학년·레벨·학생 수를 확인합니다.</p></div>
+          <div class="fstep"><div class="n">STEP 03</div><h4>비용 협의</h4><p>인원·기간에 맞춰 비용을 협의합니다.</p></div>
+          <div class="fstep"><div class="n">STEP 04</div><h4>콘텐츠 제공</h4><p>앱·콘텐츠 사용을 열어드립니다.</p></div>
+          <div class="fstep"><div class="n">STEP 05</div><h4>운영 지원</h4><p>운영 중 문의를 담당자가 지원합니다.</p></div>
+        </div>
+        <div class="cnote">💰 <b>비용:</b> 학생 수와 기간에 따라 협의합니다. 신청 시 견적으로 안내드립니다.</div>
+        <div class="area-cta"><a class="btn btn-primary" onclick="applyWith('cnt')">SAT 콘텐츠 요청하기 →</a></div>
       </div>
+
+      <!-- IM VOCA -->
       <div class="subpanel" id="content-voca">
-        <div class="simple reveal">
-          <div class="kicker">IM VOCA</div>
-          <h3>학생 영어 단어 관리</h3>
-          <p class="st">학생들의 영어 단어 학습을 관리하는 앱입니다. 학생 수에 맞춰 운영할 수 있습니다.</p>
-          <div class="area-cta"><a class="btn btn-primary" onclick="applyWith('cnt')">콘텐츠 요청하기 →</a></div>
+        <div class="panel-intro reveal">
+          <div><div class="kicker">IM VOCA</div><h2>단어 관리를 사람 손에서 시스템으로</h2><p>단어 시험 만들고 채점하고 다시 외우게 하는 일. 강사가 가장 많이 쓰면서 가장 남지 않는 시간을 앱이 대신합니다.</p></div>
         </div>
+
+        <div class="benefits">
+          <div class="benefit reveal"><div class="bn">01</div><div><h3>출제와 채점에서 손을 뗍니다</h3><p>매주 단어 시험지를 만들고 채점하던 일을 앱이 대신합니다. 강사는 결과를 보고 학생을 챙기는 데 시간을 씁니다.</p><div class="bt"><span class="tag">자동 출제</span><span class="tag">자동 채점</span></div></div></div>
+          <div class="benefit reveal"><div class="bn">02</div><div><h3>못 외운 단어는 다시 나옵니다</h3><p>한 번 틀린 단어가 그냥 지나가면 학생은 계속 모릅니다. 틀린 단어를 다시 반복하게 만들어 실제로 외우게 합니다.</p><div class="bt"><span class="tag">반복 학습</span><span class="tag">오답 관리</span></div></div></div>
+          <div class="benefit reveal"><div class="bn">03</div><div><h3>누가 안 하고 있는지 바로 보입니다</h3><p>학생별 진행 상황이 기록으로 남아, 손이 필요한 학생을 빨리 찾을 수 있습니다. 학부모 상담에서도 그대로 근거가 됩니다.</p><div class="bt"><span class="tag">학습 현황</span><span class="tag">상담 근거</span></div></div></div>
+          <div class="benefit reveal"><div class="bn">04</div><div><h3>학원 규모에 맞춰 운영</h3><p>학생 수 단위로 운영하므로 소규모 학원도 부담 없이 시작할 수 있습니다.</p><div class="bt"><span class="tag">학생 수 단위</span></div></div></div>
+        </div>
+
+        <div class="panel-intro reveal" style="margin-top:48px"><div><div class="kicker">주요 기능</div><h2>이렇게 씁니다</h2></div></div>
+        <div class="feat f4 reveal">
+          <div class="fcard"><b>단어장 배정</b><p>학생·반별로 외울 단어를 정해 내려줍니다.</p></div>
+          <div class="fcard"><b>테스트</b><p>배정한 단어로 시험을 진행합니다.</p></div>
+          <div class="fcard"><b>미암기 반복</b><p>틀린 단어를 다시 학습·재출제합니다.</p></div>
+          <div class="fcard"><b>학습 현황 확인</b><p>학생별 진행과 결과를 확인합니다.</p></div>
+        </div>
+        <div class="cnote">📝 <b>내용 확인 필요(시안):</b> IM VOCA의 실제 기능·화면을 알려주시면 위 설명과 스크린샷을 진짜 앱 기준으로 교체합니다.</div>
+
+        <div class="panel-intro reveal" style="margin-top:48px"><div><div class="kicker">진행 절차</div><h2>요청 → 협의 → 사용</h2></div></div>
+        <div class="flow reveal">
+          <div class="fstep"><div class="n">STEP 01</div><h4>제공 요청</h4><p>신청서로 필요를 접수합니다.</p></div>
+          <div class="fstep"><div class="n">STEP 02</div><h4>대상·인원 확인</h4><p>학년·레벨·학생 수를 확인합니다.</p></div>
+          <div class="fstep"><div class="n">STEP 03</div><h4>비용 협의</h4><p>학생 수에 맞춰 비용을 협의합니다.</p></div>
+          <div class="fstep"><div class="n">STEP 04</div><h4>계정 제공</h4><p>학원·학생 사용을 열어드립니다.</p></div>
+          <div class="fstep"><div class="n">STEP 05</div><h4>운영 지원</h4><p>사용 중 문의를 담당자가 지원합니다.</p></div>
+        </div>
+        <div class="area-cta"><a class="btn btn-primary" onclick="applyWith('cnt')">IM VOCA 요청하기 →</a></div>
       </div>
     </div>
   </section>
