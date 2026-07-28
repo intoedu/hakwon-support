@@ -564,9 +564,9 @@
         <h2>지원 신청</h2>
         <p>필요한 지원을 고르면 그에 맞는 항목만 나타납니다. <b style="color:var(--gold)">프리미엄 회원</b>은 로그인 후 신청하시면 회원가로 견적을 받으실 수 있습니다.</p>
       </div>
-      <div class="form reveal">
+      <div class="form reveal" id="applyForm">
         <div class="form-step">
-          <div class="fs-lab"><span class="dot">1</span>어떤 지원이 필요하세요?</div>
+          <div class="fs-lab"><span class="dot">1</span>어떤 지원이 필요하세요? <span style="color:var(--muted);font-weight:600;font-size:.78rem">(선택한 항목을 다시 누르면 접힙니다)</span></div>
           <div class="picker" id="picker">
             <button class="pick link" data-k="doc" type="button"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M3 9h18M8 21h8"/></svg></span><b>자료제작</b><span>홈페이지·디자인</span><span class="ext">제작 신청서로 이동 ↗</span></button>
             <button class="pick" data-k="hr" type="button"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 19c.6-3 2.9-4.6 5.5-4.6S13.9 16 14.5 19M16 8.2a3 3 0 0 1 0 5.4M18 19c-.3-1.6-1-2.8-2-3.6"/></svg></span><b>인력지원</b><span>원어민 매칭</span></button>
@@ -594,6 +594,19 @@
         <div class="form-actions" id="fstepActions" style="display:none">
           <button class="btn btn-primary" type="button" id="submitBtn" onclick="submitRequest()">신청서 제출</button>
           <span class="hint" id="formHint">제출하면 담당자가 배정되어 1~2일 내 연락드립니다.</span>
+        </div>
+      </div>
+      <div class="form reveal in" id="formDone" style="display:none">
+        <div style="padding:52px 28px 44px;text-align:center">
+          <div style="font-size:2.6rem">✅</div>
+          <h3 style="font-size:1.4rem;font-weight:800;margin:14px 0 8px">신청이 접수되었습니다</h3>
+          <p style="color:var(--muted);max-width:44ch;margin:0 auto">담당자가 배정되어 1~2일 내에 연락드리겠습니다. 감사합니다.</p>
+          <p id="doneWhat" style="color:var(--muted);font-size:.86rem;margin-top:12px"></p>
+          <div style="margin-top:26px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+            <button class="btn btn-primary" type="button" onclick="applyAgain()">+ 추가 신청하기</button>
+            <a class="btn btn-ghost" onclick="go('board')">공지·문의 보기</a>
+          </div>
+          <p style="color:var(--muted);font-size:.82rem;margin-top:16px">필요한 지원이 여러 개라면 <b>영역별로 각각 신청</b>하실 수 있습니다.</p>
         </div>
       </div>
     </div>
@@ -1250,7 +1263,7 @@
   function goAim(){location.href=AIM_REQUEST_URL;}
   function applyWith(k){
     if(k==='doc'){goAim();return;}
-    go('home','apply');setTimeout(function(){selectPick(k);},80);
+    go('home','apply');setTimeout(function(){applyAgain(true);selectPick(k,true);},80);
   }
 
   /* form picker */
@@ -1258,10 +1271,10 @@
     hr:[
       {t:'check',k:'원하는 국적',req:1,opts:['필리핀','미국','무관']},
       {t:'check',k:'수업 형태',opts:['줌(화상)','대면']},
-      {t:'text',k:'과목·레벨',req:1},
-      {t:'text',k:'원하는 시간대·요일 (한국시간 기준)',req:1},
+      {t:'text',k:'과목·레벨',req:1,ph:'예: 초등 회화 기초 / 중등 문법 / 고등 에세이·토론'},
+      {t:'text',k:'원하는 시간대·요일 (한국시간 기준)',req:1,ph:'예: 평일 오후 4~6시 (월·수·금) / 토요일 오전'},
       {t:'text',k:'주당 수업 횟수'},
-      {t:'text',k:'학생 연령·인원'},
+      {t:'text',k:'학생 연령·인원',ph:'예: 초3~초5 8명 (1:1 희망) / 중2 4명 그룹'},
       {t:'text',k:'예상 비용'},
       {t:'text',k:'시작 희망일'},
       {t:'note',note:'tz'}
@@ -1300,9 +1313,9 @@
         }
         h+='</div>';
       }else if(f.t==='textarea'){
-        h+='<textarea class="inp ffinput" data-k="'+esc(f.k)+'" style="min-height:90px"></textarea>';
+        h+='<textarea class="inp ffinput" data-k="'+esc(f.k)+'" style="min-height:90px"'+(f.ph?' placeholder="'+esc(f.ph)+'"':'')+'></textarea>';
       }else{
-        h+='<input class="inp ffinput" data-k="'+esc(f.k)+'">';
+        h+='<input class="inp ffinput" data-k="'+esc(f.k)+'"'+(f.ph?' placeholder="'+esc(f.ph)+'"':'')+'>';
       }
       h+='</div>';
     }
@@ -1323,13 +1336,22 @@
     });
     return d;
   }
-  function selectPick(k){
-    if(k==='doc'){location.href=AIM_REQUEST_URL;return;}
-    var picks=document.querySelectorAll('#picker .pick');
-    picks.forEach(function(x){x.classList.toggle('on',x.getAttribute('data-k')===k);});
+  function stepsShow(on){
+    document.getElementById('pickHint').style.display=on?'none':'';
+    ['fstep2','fstep3','fstepActions'].forEach(function(id){var el=document.getElementById(id);if(el)el.style.display=on?'':'none';});
+  }
+  function collapsePicks(){
+    document.querySelectorAll('#picker .pick').forEach(function(x){x.classList.remove('on');});
+    document.getElementById('fields').innerHTML='';
+    stepsShow(false);
+  }
+  function selectPick(k,force){
+    if(k==='doc'){goAim();return;}
+    var btn=document.querySelector('#picker .pick[data-k="'+k+'"]');
+    if(!force&&btn&&btn.classList.contains('on')){collapsePicks();return;} /* 같은 항목 다시 누르면 접기 */
+    document.querySelectorAll('#picker .pick').forEach(function(x){x.classList.toggle('on',x.getAttribute('data-k')===k);});
     renderFields(k);
-    document.getElementById('pickHint').style.display='none';
-    ['fstep2','fstep3','fstepActions'].forEach(function(id){var el=document.getElementById(id);if(el)el.style.display='';});
+    stepsShow(true);
   }
   document.querySelectorAll('#picker .pick').forEach(function(b){b.addEventListener('click',function(){selectPick(b.getAttribute('data-k'));});});
 
@@ -1389,7 +1411,21 @@
     if(extra)details['기타 요청사항']=extra;
     var res=await sb.from('requests').insert({area:AREA_KO[area]||area,academy_name:academy,manager_name:manager,phone:phone,email:email,message:message,details:details,consent:consent});
     if(res.error){btn.disabled=false;btn.textContent='신청서 제출';setErr('제출 실패: '+res.error.message);return;}
-    document.querySelector('#apply .form').innerHTML='<div style="padding:56px 28px;text-align:center"><div style="font-size:2.6rem">✅</div><h3 style="font-size:1.4rem;font-weight:800;margin:14px 0 8px">신청이 접수되었습니다</h3><p style="color:var(--muted);max-width:44ch;margin:0 auto">담당자가 배정되어 1~2일 내에 연락드리겠습니다. 감사합니다.</p></div>';
+    document.getElementById('doneWhat').textContent='접수 내용 · '+(AREA_KO[area]||area)+' 지원 · '+academy;
+    document.getElementById('applyForm').style.display='none';
+    document.getElementById('formDone').style.display='';
+    document.getElementById('apply').scrollIntoView({behavior:'smooth',block:'start'});
+  }
+  /* 완료 화면 → 다시 신청 가능하게 초기화 */
+  function applyAgain(silent){
+    ['f_academy','f_manager','f_phone','f_email','f_message','f_extra'].forEach(function(id){var el=document.getElementById(id);if(el)el.value='';});
+    var cs=document.getElementById('f_consent');if(cs)cs.checked=false;
+    var btn=document.getElementById('submitBtn');if(btn){btn.disabled=false;btn.textContent='신청서 제출';}
+    var hint=document.getElementById('formHint');if(hint){hint.textContent='제출하면 담당자가 배정되어 1~2일 내 연락드립니다.';hint.style.color='';}
+    collapsePicks();
+    document.getElementById('formDone').style.display='none';
+    document.getElementById('applyForm').style.display='';
+    if(!silent)document.getElementById('apply').scrollIntoView({behavior:'smooth',block:'start'});
   }
 
   /* ===== 로그인 / 회원가입 ===== */
