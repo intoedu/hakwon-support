@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ESC 학원지원센터 · 홈페이지 디자인 시안</title>
+<title>ESC 학원지원센터 · 학원 경영 B2B 종합 지원</title>
 </head>
 <body>
 <style>
@@ -251,6 +251,16 @@
   .fstep .n{font-size:.72rem;font-weight:800;color:var(--accent);letter-spacing:.04em}
   .fstep h4{font-size:.95rem;font-weight:700;margin-top:8px}
   .fstep p{font-size:.8rem;color:var(--muted);margin-top:5px}
+  .bprice{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:8px}
+  @media(max-width:720px){.bprice{grid-template-columns:1fr}}
+  .bcard{border:1.5px solid var(--line);border-radius:14px;padding:22px 24px;background:var(--surface)}
+  .bcard.on{border-color:var(--gold);background:color-mix(in srgb,var(--gold) 8%,var(--surface));box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--gold) 40%,transparent)}
+  .bcard .bl{font-size:.8rem;font-weight:800;color:var(--muted);letter-spacing:.02em;display:flex;align-items:center;gap:7px}
+  .bcard.on .bl{color:var(--gold)}
+  .bcard .bv{font-size:1.9rem;font-weight:800;letter-spacing:-.02em;margin-top:8px;line-height:1.1}
+  .bcard .bv small{font-size:.92rem;font-weight:700;color:var(--muted);margin-left:3px}
+  .bcard .bd{font-size:.84rem;color:var(--muted);margin-top:8px}
+  .bcard .bnow{font-size:.72rem;font-weight:800;background:var(--gold);color:#fff;padding:2px 8px;border-radius:999px}
   .cnote{margin-top:20px;font-size:.83rem;color:var(--muted);background:var(--surface-2);border:1px dashed var(--line);border-radius:10px;padding:13px 15px}
   .cnote b{color:var(--ink)}
   @media(max-width:640px){.benefit{grid-template-columns:56px 1fr;gap:16px}}
@@ -395,7 +405,6 @@
   .legal a{color:var(--band-gold);cursor:pointer}
 </style>
 
-<div class="strip"><div class="wrap">🎨 <span><b>홈페이지 디자인 시안</b> — 구조·색감·문구 검토용입니다. "지원사업" 메뉴와 각 카드의 <b>자세히 보기</b>를 눌러 페이지 이동을 확인해 보세요.</span></div></div>
 
 <header>
   <div class="wrap nav">
@@ -452,10 +461,10 @@
       <aside class="side" aria-label="지원 요약">
         <div class="side-h">지원 영역 <span>4</span></div>
         <ul>
-          <li onclick="go('doc')"><span class="k"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M3 9h18M8 21h8"/></svg></span><span><span class="t">자료제작</span><span class="d">홈페이지·디자인 직접 제작</span></span><span class="p">관리비 3만~</span></li>
+          <li onclick="go('doc')"><span class="k"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M3 9h18M8 21h8"/></svg></span><span><span class="t">자료제작</span><span class="d">홈페이지·디자인 직접 제작</span></span><span class="p" id="sidePriceDoc">관리비 5만~</span></li>
           <li onclick="go('hr')"><span class="k"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 19c.6-3 2.9-4.6 5.5-4.6S13.9 16 14.5 19M16 8.2a3 3 0 0 1 0 5.4M18 19c-.3-1.6-1-2.8-2-3.6"/></svg></span><span><span class="t">인력지원</span><span class="d">원어민 선생님 매칭</span></span><span class="p">구인 접수</span></li>
           <li onclick="go('content')"><span class="k"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H12v16H6.5A2.5 2.5 0 0 0 4 21.5zM20 5.5A2.5 2.5 0 0 0 17.5 3H12v16h5.5A2.5 2.5 0 0 1 20 21.5z"/></svg></span><span><span class="t">컨텐츠지원</span><span class="d">유학·SAT·IM VOCA</span></span><span class="p">콘텐츠 공급</span></li>
-          <li onclick="go('mkt')"><span class="k"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 15v-4h4l7-4v12l-7-4H4zM19 9a4 4 0 0 1 0 6"/></svg></span><span><span class="t">마케팅·광고</span><span class="d">블로그 대행 · 모객</span></span><span class="p">견적 안내</span></li>
+          <li onclick="go('mkt')"><span class="k"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 15v-4h4l7-4v12l-7-4H4zM19 9a4 4 0 0 1 0 6"/></svg></span><span><span class="t">마케팅·광고</span><span class="d">블로그 대행 · 모객</span></span><span class="p" id="sidePriceMkt">편당 9,900원</span></li>
         </ul>
       </aside>
     </div>
@@ -566,7 +575,7 @@
       </div>
       <div class="form reveal" id="applyForm">
         <div class="form-step">
-          <div class="fs-lab"><span class="dot">1</span>어떤 지원이 필요하세요? <span style="color:var(--muted);font-weight:600;font-size:.78rem">(선택한 항목을 다시 누르면 접힙니다)</span></div>
+          <div class="fs-lab"><span class="dot">1</span>어떤 지원이 필요하세요?</div>
           <div class="picker" id="picker">
             <button class="pick link" data-k="doc" type="button"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M3 9h18M8 21h8"/></svg></span><b>자료제작</b><span>홈페이지·디자인</span><span class="ext">제작 신청서로 이동 ↗</span></button>
             <button class="pick" data-k="hr" type="button"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 19c.6-3 2.9-4.6 5.5-4.6S13.9 16 14.5 19M16 8.2a3 3 0 0 1 0 5.4M18 19c-.3-1.6-1-2.8-2-3.6"/></svg></span><b>인력지원</b><span>원어민 매칭</span></button>
@@ -1045,7 +1054,9 @@
           <div class="fcard"><b>사진·후기</b><p>있으면 글의 신뢰가 커집니다.</p></div>
           <div class="fcard"><b>블로그 URL</b><p>기존 블로그가 있다면.</p></div>
         </div>
-        <div class="area-cta"><a class="btn btn-primary" onclick="applyWith('mkt')">블로그 신청하기 →</a><a class="btn btn-ghost" onclick="document.querySelector('#v-mkt .sp[data-t=flow]').click()">진행 절차·비용 보기</a></div>
+        <div class="panel-intro reveal" style="margin-top:48px"><div><div class="kicker">비용</div><h2>글 한 편당 비용</h2><p>발행한 만큼만 결제합니다. 약정 기간이나 기본료는 없습니다.</p></div></div>
+        <div class="bprice reveal" id="blogPrice"></div>
+        <div class="area-cta"><a class="btn btn-primary" onclick="applyWith('mkt')">블로그 신청하기 →</a><a class="btn btn-ghost" onclick="document.querySelector('#v-mkt .sp[data-t=flow]').click()">진행 절차 보기</a></div>
       </div>
 
       <!-- 성공 사례 -->
@@ -1077,7 +1088,8 @@
           <div class="fstep"><div class="n">STEP 05</div><h4>관리</h4><p>발행 이후 성과를 관리.</p></div>
         </div>
         <div class="cnote">💡 <b>노하우:</b> 무작정 유명 블로그가 아니라, 검색 <b>알고리즘에 맞는 꾸준한 발행</b>이 노출을 만듭니다. (실제 사례는 <b>성공 사례</b> 탭에서 확인하세요.)</div>
-        <div class="cnote" style="border-style:solid">💰 <b>비용:</b> 한 달 발행 횟수에 따라 결제합니다. 정확한 편당 비용은 신청 시 견적으로 안내드립니다.</div>
+        <div class="panel-intro reveal" style="margin-top:48px"><div><div class="kicker">비용</div><h2>글 한 편당 비용</h2><p>한 달 발행 횟수만큼 결제합니다. 회원 종류에 따라 편당 비용이 다릅니다.</p></div></div>
+        <div class="bprice reveal" id="blogPrice2"></div>
         <div class="area-cta"><a class="btn btn-primary" onclick="applyWith('mkt')">블로그 신청하기 →</a></div>
       </div>
     </div>
@@ -1467,6 +1479,15 @@
     updateAuthUI();
   }
   async function doLogout(){if(sb){await sb.auth.signOut();}updateAuthUI();}
+  /* 관리자 전용: 내 계정 프리미엄 켜기/끄기 (표시 확인용) */
+  async function togglePremiumSelf(){
+    if(!sb||!window.__uid||!window.__isAdmin)return;
+    var next=!window.__isPremium;
+    var r=await sb.from('profiles').update({is_premium:next,premium_since:next?new Date().toISOString():null}).eq('id',window.__uid).select('is_premium');
+    if(r.error){alert('변경 실패: '+r.error.message);return;}
+    if(!r.data||!r.data.length){alert('권한이 없어 변경되지 않았습니다.');return;}
+    await updateAuthUI();
+  }
   async function updateAuthUI(){
     var area=document.getElementById('authArea');if(!area||!sb)return;
     var res=await sb.auth.getUser();
@@ -1482,6 +1503,8 @@
       renderPricing(premium);
       if(typeof loadBoard==='function'&&document.getElementById('v-board')&&document.getElementById('v-board').classList.contains('active')){loadBoard();}
       var tail=premium?'<span class="pbadge">프리미엄</span>':'<button class="up" type="button" onclick="openPremium()">프리미엄 전환</button>';
+      /* 관리자 계정 전용: 프리미엄 화면을 껐다 켜며 확인 */
+      if(window.__isAdmin){tail+='<button class="lg" type="button" title="관리자 전용 · 프리미엄 표시 확인용" onclick="togglePremiumSelf()">프리미엄 '+(premium?'OFF':'ON')+'</button>';}
       area.innerHTML='<span class="me" title="'+name+'">'+name+' 님</span>'+tail+'<button class="lg" type="button" onclick="doLogout()">로그아웃</button>';
       if(ma){ma.textContent='로그아웃';ma.setAttribute('onclick','doLogout()');}
     }else{
@@ -1529,6 +1552,27 @@
     rowsEl.innerHTML=h;
     var tag=document.getElementById('priceTag');
     if(tag){tag.innerHTML=premium?'<span class="ptag on">✓ 프리미엄 회원가로 표시 중</span>':'<span class="ptag">일반 가격입니다 · <b>프리미엄(파트너) 회원</b>은 회원가로 더 저렴합니다</span>';}
+    var sd=document.getElementById('sidePriceDoc');if(sd)sd.textContent=premium?'관리비 3만~':'관리비 5만~';
+    var sm=document.getElementById('sidePriceMkt');if(sm)sm.textContent=premium?'편당 5,000원':'편당 9,900원';
+    renderBlogPrice(premium);
+  }
+  /* 블로그 대행 회원별 가격 */
+  var BLOG_PRICE={general:'9,900',premium:'5,000'};
+  function renderBlogPrice(premium){
+    var h='<div class="bcard'+(premium?'':' on')+'">'
+      +'<div class="bl">일반 회원'+(premium?'':' <span class="bnow">지금 적용</span>')+'</div>'
+      +'<div class="bv">'+BLOG_PRICE.general+'원<small>/ 글 1편</small></div>'
+      +'<div class="bd">회원가입만 하신 경우 적용되는 가격입니다.</div></div>'
+      +'<div class="bcard'+(premium?' on':'')+'">'
+      +'<div class="bl">프리미엄(파트너) 회원'+(premium?' <span class="bnow">지금 적용</span>':'')+'</div>'
+      +'<div class="bv">'+BLOG_PRICE.premium+'원<small>/ 글 1편</small></div>'
+      +'<div class="bd">파트너 코드로 전환하신 회원에게 적용됩니다.</div></div>';
+    var note='<div class="cnote" style="grid-column:1/-1">'
+      +(premium
+        ? '✓ <b>프리미엄 회원가</b>로 표시 중입니다. 월 발행 횟수 × 편당 5,000원으로 정산합니다.'
+        : '💡 <b>로그인하면</b> 회원 종류에 맞는 가격이 표시됩니다. 프리미엄(파트너) 회원은 <b>편당 5,000원</b>으로 절반 가까이 저렴합니다.')
+      +' 사진·후기 등 자료를 주시면 추가 비용 없이 반영합니다.</div>';
+    ['blogPrice','blogPrice2'].forEach(function(id){var el=document.getElementById(id);if(el)el.innerHTML=h+note;});
   }
   renderPricing(false);
 

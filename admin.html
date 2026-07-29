@@ -140,6 +140,63 @@
   .saved{font-size:.82rem;color:var(--ok);font-weight:700;opacity:0;transition:.2s}
   .saved.on{opacity:1}
 
+  /* ---------- 견적서 ---------- */
+  .qbox{border:1px solid var(--line);border-radius:12px;padding:14px 16px;background:var(--surface-2);display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+  .qbox b{font-size:.9rem}
+  .qbox .qno{font-weight:800;color:var(--brand)}
+  .sheet.wide{max-width:880px}
+  .qtable{width:100%;border-collapse:collapse;margin-top:6px}
+  .qtable th{background:var(--band-bg);color:#fff;font-size:.76rem;padding:10px;border:0;white-space:nowrap}
+  .qtable td{padding:6px;border-bottom:1px solid var(--line);vertical-align:middle}
+  .qtable .qi{width:100%;border:1px solid transparent;background:transparent;border-radius:8px;padding:7px 8px}
+  .qtable .qi:hover{border-color:var(--line)}
+  .qtable .qi:focus{border-color:var(--accent);background:var(--surface);outline:none}
+  .qtable input[type=number]{text-align:right}
+  .qtable .qdel{border:0;background:none;color:var(--muted);cursor:pointer;padding:0 6px}
+  .qtable .qdel:hover{color:var(--bad)}
+  .qsum{margin-top:16px;margin-left:auto;max-width:380px}
+  .qsum .r{display:flex;justify-content:space-between;gap:16px;padding:8px 0;border-bottom:1px solid var(--line);font-size:.9rem}
+  .qsum .r.total{border-bottom:0;border-top:2px solid var(--ink);margin-top:6px;padding-top:12px;font-size:1.05rem;font-weight:800}
+  .qsum .r .dis{color:var(--bad)}
+  .qsum .r span:last-child{font-weight:700;font-variant-numeric:tabular-nums}
+
+  /* A4 견적서 */
+  .paper{background:#fff;color:#111;max-width:820px;margin:0 auto;padding:46px 52px;border-radius:6px}
+  .paper *{color:inherit}
+  .p-h{display:flex;justify-content:space-between;align-items:flex-start;gap:20px}
+  .p-h h1{font-size:2rem;font-weight:800;letter-spacing:.22em}
+  .p-h .qsub{font-size:.72rem;letter-spacing:.3em;color:#888;margin-top:2px}
+  .p-from{text-align:right;font-size:.82rem;line-height:1.7;color:#333}
+  .p-from b{font-size:.95rem}
+  .p-line{height:3px;background:#12294D;margin:18px 0 22px}
+  .p-cols{display:grid;grid-template-columns:1fr 1fr;gap:34px;margin-bottom:26px}
+  .p-cols h4{font-size:.82rem;font-weight:800;letter-spacing:.06em;color:#12294D;border-bottom:1px solid #ccd4e2;padding-bottom:7px;margin-bottom:10px}
+  .p-cols .pr{display:grid;grid-template-columns:80px 1fr;gap:10px;font-size:.86rem;padding:4px 0}
+  .p-cols .pr span:first-child{color:#777}
+  table.p-t{width:100%;border-collapse:collapse;font-size:.88rem}
+  table.p-t th{background:#12294D;color:#fff;padding:11px 12px;font-weight:700;font-size:.82rem;text-align:left}
+  table.p-t th.r,table.p-t td.r{text-align:right}
+  table.p-t td{padding:11px 12px;border-bottom:1px solid #e3e8f0}
+  table.p-t td.num{color:#999;width:34px}
+  .p-sum{margin-left:auto;width:340px;margin-top:18px}
+  .p-sum .r{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid #e3e8f0;font-size:.9rem}
+  .p-sum .r.tot{border-bottom:0;border-top:2px solid #12294D;font-weight:800;font-size:1.05rem;padding-top:12px;margin-top:4px}
+  .p-sum .dis{color:#c0392b}
+  .p-note{font-size:.78rem;color:#777;text-align:right;margin-top:8px}
+  .p-sec{margin-top:30px}
+  .p-sec h4{font-size:.82rem;font-weight:800;letter-spacing:.06em;color:#12294D;margin-bottom:9px}
+  .p-sec .box{border:1px solid #dce3ee;border-radius:8px;padding:14px 16px;font-size:.85rem;white-space:pre-wrap;line-height:1.75;color:#333}
+  .p-f{margin-top:34px;padding-top:16px;border-top:1px solid #e3e8f0;text-align:center;font-size:.78rem;color:#888;line-height:1.7}
+  @media print{
+    body{background:#fff}
+    .app,.modal:not(#paperModal),.toast{display:none!important}
+    #paperModal{position:static;display:block!important;background:#fff;padding:0;overflow:visible}
+    #paperModal .sheet{max-width:none;box-shadow:none;border-radius:0}
+    #paperModal .sheet-h,#paperModal .sheet-f{display:none!important}
+    #paperModal .sheet-b{padding:0}
+    .paper{max-width:none;padding:0}
+  }
+
   .toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(12px);background:var(--band-bg);color:#fff;padding:11px 20px;border-radius:999px;font-size:.86rem;font-weight:700;opacity:0;pointer-events:none;transition:.22s;z-index:90}
   .toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
 
@@ -231,6 +288,7 @@
     <button class="navb" data-nav="마케팅" type="button">마케팅지원 <span class="cnt" id="c-마케팅">0</span></button>
     <div class="side-sep"></div>
     <button class="navb hide" data-nav="staff" id="navStaff" type="button">관리자 목록 <span class="cnt" id="c-staff">0</span></button>
+    <button class="navb hide" data-nav="set" id="navSet" type="button">견적서 설정</button>
     <div class="side-foot">
       <div class="whoami"><b id="meName">-</b><span id="meRole">-</span></div>
       <button class="navb" type="button" onclick="loadAll(true)">↻ 새로고침</button>
@@ -282,6 +340,32 @@
       <div class="card" id="staffWrap"></div>
       <div class="empty hide" id="staffEmpty"></div>
     </section>
+
+    <!-- 견적서 설정 -->
+    <section id="viewSet" class="hide">
+      <div class="head"><div><h1>견적서 설정</h1><p>견적서에 찍히는 우리 쪽 정보입니다. 여기서 고치면 이후 발행하는 모든 견적서에 반영됩니다.</p></div></div>
+      <div class="card" style="padding:24px;max-width:760px">
+        <div class="grid2">
+          <div class="fld"><label>상호(견적서 표기)</label><input class="inp" id="st_company" placeholder="ESC 학원지원센터"></div>
+          <div class="fld"><label>사업자/운영 주체</label><input class="inp" id="st_legal" placeholder="인투유학"></div>
+        </div>
+        <div class="fld"><label>주소</label><input class="inp" id="st_addr" placeholder="예: 대전광역시 ○○구 ○○로 00, 3층"></div>
+        <div class="grid2">
+          <div class="fld"><label>연락처</label><input class="inp" id="st_phone" placeholder="010-0000-0000"></div>
+          <div class="fld"><label>이메일</label><input class="inp" id="st_email" placeholder="name@example.com"></div>
+        </div>
+        <div class="fld"><label>입금 계좌</label><input class="inp" id="st_bank" placeholder="예: 국민은행 000000-00-000000 (예금주: 이은총)"></div>
+        <div class="fld"><label>결제 조건 안내문</label><textarea class="inp" id="st_paynote" placeholder="아래 계좌로 입금해 주시면 확인 후 진행됩니다."></textarea></div>
+        <div class="grid2">
+          <div class="fld"><label>기본 유효기간 (일)</label><input class="inp" id="st_valid" type="number" min="1" value="30"></div>
+          <div class="fld"><label>하단 문구</label><input class="inp" id="st_foot" placeholder="본 견적서는 발행일로부터 30일간 유효합니다."></div>
+        </div>
+        <div style="display:flex;gap:9px;align-items:center;margin-top:8px">
+          <button class="btn btn-primary" type="button" onclick="saveSettings()">저장</button>
+          <span class="muted" style="font-size:.82rem">최고관리자·직원 승인 권한이 있는 사람만 수정할 수 있습니다.</span>
+        </div>
+      </div>
+    </section>
   </main>
 </div>
 
@@ -311,6 +395,9 @@
       <button class="btn btn-ghost" type="button" onclick="addTodo()">추가</button>
     </div>
 
+    <div class="sec-t">견적서</div>
+    <div class="qbox" id="d_quote"></div>
+
     <div class="sec-t">의뢰처 정보</div>
     <div class="info" id="d_info"></div>
   </div>
@@ -319,6 +406,61 @@
     <button class="btn btn-danger hide" id="d_del" type="button" onclick="deleteRequest()">🗑 의뢰 삭제</button>
     <span class="muted hide" id="d_delnote" style="font-size:.78rem">최고관리자만 삭제할 수 있습니다</span>
     <span class="saved" id="d_saved" style="margin-left:auto">저장됨 ✓</span>
+  </div>
+</div></div>
+
+<!-- 견적서 편집 -->
+<div class="modal" id="quoteModal"><div class="sheet wide">
+  <div class="sheet-h">
+    <div><h3>견적서 작성</h3><div class="meta" id="q_meta">-</div></div>
+    <button class="x" type="button" onclick="closeModal('quoteModal')">✕</button>
+  </div>
+  <div class="sheet-b">
+    <div class="sec-t">받는 곳</div>
+    <div class="grid2">
+      <div class="fld"><label>단체/회사</label><input class="inp" id="q_to_company"></div>
+      <div class="fld"><label>담당자</label><input class="inp" id="q_to_manager"></div>
+      <div class="fld"><label>연락처</label><input class="inp" id="q_to_phone"></div>
+      <div class="fld"><label>이메일</label><input class="inp" id="q_to_email"></div>
+    </div>
+    <div class="grid2">
+      <div class="fld"><label>프로젝트명</label><input class="inp" id="q_project" placeholder="예: 인력지원 · 필리핀 원어민 매칭"></div>
+      <div class="fld"><label>유효기간 (일)</label><input class="inp" id="q_valid" type="number" min="1" value="30"></div>
+    </div>
+
+    <div class="sec-t">견적 항목</div>
+    <table class="qtable"><thead><tr>
+      <th style="width:34px">#</th><th>항목</th><th style="width:110px">결제주기</th>
+      <th style="width:130px" class="r">기존 비용</th><th style="width:130px" class="r">할인가(청구)</th><th style="width:34px"></th>
+    </tr></thead><tbody id="q_rows"></tbody></table>
+    <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn btn-ghost" type="button" onclick="addQuoteRow()">+ 항목 추가</button>
+      <button class="btn btn-ghost" type="button" onclick="presetQuote()">기본 항목 넣기</button>
+    </div>
+    <div class="qsum" id="q_sum"></div>
+
+    <div class="sec-t">비고</div>
+    <textarea class="inp" id="q_note" placeholder="작업 범위, 수정 횟수, 기타 안내사항 등을 적어 주세요."></textarea>
+  </div>
+  <div class="sheet-f">
+    <button class="btn btn-primary" type="button" onclick="saveQuote(true)">저장하고 미리보기</button>
+    <button class="btn btn-ghost" type="button" onclick="saveQuote(false)">저장만</button>
+    <button class="btn btn-ghost" type="button" onclick="closeModal('quoteModal')">닫기</button>
+  </div>
+</div></div>
+
+<!-- 견적서 미리보기(인쇄용) -->
+<div class="modal" id="paperModal"><div class="sheet wide">
+  <div class="sheet-h">
+    <div><h3>견적서 미리보기</h3><div class="meta">인쇄 창에서 <b>대상을 "PDF로 저장"</b>으로 고르면 PDF 파일이 됩니다.</div></div>
+    <button class="x" type="button" onclick="closeModal('paperModal')">✕</button>
+  </div>
+  <div class="sheet-b" style="background:#eef1f7"><div id="paper"></div></div>
+  <div class="sheet-f">
+    <button class="btn btn-primary" type="button" onclick="window.print()">🖨 인쇄 · PDF 저장</button>
+    <button class="btn btn-ghost" type="button" onclick="mailQuote()">✉️ 메일로 보내기</button>
+    <button class="btn btn-ghost" type="button" onclick="copyQuoteText()">📋 내용 복사</button>
+    <button class="btn btn-ghost" type="button" onclick="closeModal('paperModal')">닫기</button>
   </div>
 </div></div>
 
@@ -341,7 +483,7 @@
   var ROLE_KO={owner:'최고관리자',admin:'관리자',staff:'직원'};
   var PERM_KO={site_board:'홈페이지 게시판 관리',manage_staff:'직원 승인·권한 관리'};
 
-  var ME=null, STAFF=[], DATA={'인력':[],'컨텐츠':[],'마케팅':[]}, CUR='인력', CURROW=null, STTAB='wait';
+  var ME=null, STAFF=[], DATA={'인력':[],'컨텐츠':[],'마케팅':[]}, CUR='인력', CURROW=null, STTAB='wait', SET={}, QD=null;
 
   function $(id){return document.getElementById(id);}
   function esc(s){return (s==null?'':(''+s)).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
@@ -349,6 +491,7 @@
   function fdatetime(s){if(!s)return '-';var d=new Date(s);return fdate(s)+' '+('0'+d.getHours()).slice(-2)+':'+('0'+d.getMinutes()).slice(-2);}
   function normStatus(s){if(!s)return '접수';if(s==='신청접수'||s==='접수·견적')return '접수';return STATUSES.indexOf(s)>=0?s:'접수';}
   function toast(m){var t=$('toast');t.textContent=m;t.classList.add('on');setTimeout(function(){t.classList.remove('on');},1800);}
+  window.closeModal=function(id){var el=$(id);if(el)el.classList.remove('open');};
   function can(k){return !!ME&&(ME.role==='owner'||(ME.perms&&ME.perms[k]===true));}
 
   /* ---------- 게이트 ---------- */
@@ -424,7 +567,8 @@
     $('gate').classList.add('hide');$('app').classList.remove('hide');
     $('meName').textContent=(me.name||me.email||'-');
     $('meRole').textContent=ROLE_KO[me.role]||'직원';
-    if(me.role==='owner'||can('manage_staff'))$('navStaff').classList.remove('hide');
+    if(me.role==='owner'||can('manage_staff')){$('navStaff').classList.remove('hide');$('navSet').classList.remove('hide');}
+    await loadSettings();
     loadAll();
   }
 
@@ -460,8 +604,10 @@
       var k=b.getAttribute('data-nav');
       document.querySelectorAll('.navb[data-nav]').forEach(function(x){x.classList.remove('on');});
       b.classList.add('on');
-      if(k==='staff'){$('viewList').classList.add('hide');$('viewStaff').classList.remove('hide');renderStaff();return;}
-      $('viewStaff').classList.add('hide');$('viewList').classList.remove('hide');
+      ['viewList','viewStaff','viewSet'].forEach(function(v){$(v).classList.add('hide');});
+      if(k==='staff'){$('viewStaff').classList.remove('hide');renderStaff();return;}
+      if(k==='set'){$('viewSet').classList.remove('hide');fillSettings();return;}
+      $('viewList').classList.remove('hide');
       CUR=k;$('listTitle').textContent=AREAS[k]+' 의뢰';
       renderList();
     });
@@ -499,7 +645,7 @@
        +'<td>'+(r.assignee_id?esc(staffName(r.assignee_id)||'-'):'<span class="muted">미배정</span>')+'</td>'
        +'<td class="muted" style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+(r.memo?esc(r.memo):'-')+'</td>'
        +'<td>'+(todos.length?'<div class="prog"><div class="bar"><i style="width:'+pct+'%"></i></div><span class="muted tnum" style="font-size:.78rem">'+done+'/'+todos.length+'</span></div>':'<span class="muted">-</span>')+'</td>'
-       +'<td><span class="badge b-'+st+'">'+st+'</span></td>'
+       +'<td><span class="badge b-'+st+'">'+st+'</span>'+(r.quote_no?'<span class="sub" style="font-size:.7rem">📄 '+esc(r.quote_no)+'</span>':'')+'</td>'
        +'<td class="muted tnum" style="font-size:.82rem">'+fdate(r.created_at)+'</td>'
        +'</tr>';
     });
@@ -523,6 +669,7 @@
     $('d_assignee').value=r.assignee_id||'';
     $('d_memo').value=r.memo||'';
     renderTodos();
+    renderQuoteBox();
     renderInfo(r);
     var isOwner=(ME.role==='owner');
     $('d_del').classList.toggle('hide',!isOwner);
@@ -599,6 +746,224 @@
     if(r.error){toast('삭제 실패: '+r.error.message);return;}
     if(!r.data||!r.data.length){toast('삭제 권한이 없습니다 (최고관리자만 가능)');return;}
     closeDetail();toast('삭제했습니다');loadAll();
+  };
+
+  /* ---------- 견적서 ---------- */
+  var CYCLES=['1회','매월','매년'];
+  function won(n){n=Number(n)||0;return '₩'+n.toLocaleString('ko-KR');}
+  function defaultQuote(r){
+    return {
+      to:{company:r.academy_name||'',manager:r.manager_name||'',phone:r.phone||'',email:r.email||''},
+      project:(AREAS[r.area]||r.area)+(r.work_type?(' · '+r.work_type):''),
+      items:[],note:'',valid_days:Number(SET.valid_days)||30
+    };
+  }
+  function renderQuoteBox(){
+    var r=CURROW,el=$('d_quote');
+    if(r.quote_no){
+      el.innerHTML='<span class="qno">'+esc(r.quote_no)+'</span>'
+        +'<b class="muted" style="font-weight:600;font-size:.84rem">발행 '+fdate(r.quote_issued_at)+' · 청구 '+won(quoteTotals(r.quote).firstPay)+'</b>'
+        +'<span style="margin-left:auto;display:flex;gap:8px;flex-wrap:wrap">'
+        +'<button class="btn btn-ghost" style="padding:7px 13px" type="button" onclick="openQuote()">✏️ 편집</button>'
+        +'<button class="btn btn-primary" style="padding:7px 13px" type="button" onclick="previewQuote()">📄 미리보기 · PDF</button>'
+        +'<button class="btn btn-ghost" style="padding:7px 13px" type="button" onclick="mailQuote()">✉️ 메일</button></span>';
+    }else{
+      el.innerHTML='<b>아직 견적서를 만들지 않았습니다.</b>'
+        +'<span style="margin-left:auto"><button class="btn btn-primary" style="padding:7px 14px" type="button" onclick="openQuote()">📋 견적서 만들기</button></span>';
+    }
+  }
+  window.openQuote=function(){
+    var r=CURROW;QD=r.quote?JSON.parse(JSON.stringify(r.quote)):defaultQuote(r);
+    if(!QD.items||!QD.items.length)QD.items=[{name:'',cycle:'1회',before:'',price:''}];
+    $('q_meta').textContent=(r.academy_name||'')+' · '+(r.quote_no?('견적번호 '+r.quote_no):'새 견적서');
+    $('q_to_company').value=QD.to.company||'';$('q_to_manager').value=QD.to.manager||'';
+    $('q_to_phone').value=QD.to.phone||'';$('q_to_email').value=QD.to.email||'';
+    $('q_project').value=QD.project||'';$('q_valid').value=QD.valid_days||30;$('q_note').value=QD.note||'';
+    renderQuoteRows();
+    $('quoteModal').classList.add('open');
+  };
+  function renderQuoteRows(){
+    var h='';
+    QD.items.forEach(function(it,i){
+      h+='<tr><td class="num muted tnum">'+(i+1)+'</td>'
+       +'<td><input class="qi" value="'+esc(it.name)+'" placeholder="예: 홈페이지 제작비 / 원어민 수업료" oninput="qEdit('+i+',\'name\',this.value)"></td>'
+       +'<td><select class="qi" onchange="qEdit('+i+',\'cycle\',this.value)">'
+       +CYCLES.map(function(c){return '<option'+(it.cycle===c?' selected':'')+'>'+c+'</option>';}).join('')
+       +'</select></td>'
+       +'<td><input class="qi" type="number" min="0" step="1000" value="'+esc(it.before)+'" placeholder="0" oninput="qEdit('+i+',\'before\',this.value)"></td>'
+       +'<td><input class="qi" type="number" min="0" step="1000" value="'+esc(it.price)+'" placeholder="0" oninput="qEdit('+i+',\'price\',this.value)"></td>'
+       +'<td><button class="qdel" type="button" onclick="qDel('+i+')">✕</button></td></tr>';
+    });
+    $('q_rows').innerHTML=h;
+    renderQuoteSum();
+  }
+  window.qEdit=function(i,k,v){QD.items[i][k]=v;if(k!=='name')renderQuoteSum();else renderQuoteSum();};
+  window.qDel=function(i){QD.items.splice(i,1);if(!QD.items.length)QD.items=[{name:'',cycle:'1회',before:'',price:''}];renderQuoteRows();};
+  window.addQuoteRow=function(){QD.items.push({name:'',cycle:'1회',before:'',price:''});renderQuoteRows();};
+  window.presetQuote=function(){
+    var r=CURROW,pre=[];
+    if(r.area==='마케팅')pre=[{name:'블로그 대행 (글 1편 기준)',cycle:'매월',before:'',price:''}];
+    else if(r.area==='인력')pre=[{name:'원어민 수업료 (주 O회)',cycle:'매월',before:'',price:''},{name:'매칭·세팅 비용',cycle:'1회',before:'',price:''}];
+    else pre=[{name:'콘텐츠 제공료',cycle:'매월',before:'',price:''},{name:'초기 세팅 비용',cycle:'1회',before:'',price:''}];
+    QD.items=QD.items.filter(function(x){return x.name||x.price;}).concat(pre);
+    renderQuoteRows();
+  };
+  function quoteTotals(q){
+    var t={once:0,month:0,year:0,before:0,price:0};
+    (q&&q.items?q.items:[]).forEach(function(it){
+      var b=Number(it.before)||0,p=Number(it.price)||0;
+      if(!it.name&&!b&&!p)return;
+      t.before+=b;t.price+=p;
+      if(it.cycle==='매월')t.month+=p;else if(it.cycle==='매년')t.year+=p;else t.once+=p;
+    });
+    t.discount=Math.max(0,t.before-t.price);
+    t.firstPay=t.once+t.month+t.year;
+    return t;
+  }
+  function renderQuoteSum(){
+    var t=quoteTotals(QD),h='';
+    h+='<div class="r"><span>기존 비용 합계</span><span>'+won(t.before)+'</span></div>';
+    h+='<div class="r"><span>할인 금액</span><span class="dis">- '+won(t.discount)+'</span></div>';
+    if(t.once)h+='<div class="r"><span>1회성 비용</span><span>'+won(t.once)+'</span></div>';
+    if(t.month)h+='<div class="r"><span>매월 청구</span><span>'+won(t.month)+' / 월</span></div>';
+    if(t.year)h+='<div class="r"><span>매년 청구</span><span>'+won(t.year)+' / 년</span></div>';
+    h+='<div class="r total"><span>최초 청구액</span><span>'+won(t.firstPay)+'</span></div>';
+    $('q_sum').innerHTML=h;
+  }
+  window.saveQuote=async function(preview){
+    QD.to={company:$('q_to_company').value.trim(),manager:$('q_to_manager').value.trim(),phone:$('q_to_phone').value.trim(),email:$('q_to_email').value.trim()};
+    QD.project=$('q_project').value.trim();
+    QD.valid_days=Number($('q_valid').value)||30;
+    QD.note=$('q_note').value;
+    QD.items=QD.items.filter(function(it){return it.name||Number(it.before)||Number(it.price);});
+    if(!QD.items.length){toast('견적 항목을 한 줄 이상 입력해 주세요');return;}
+    var patch={quote:QD};
+    if(!CURROW.quote_no){
+      var no=await sb.rpc('next_quote_no');
+      if(no.error){toast('견적번호 생성 실패: '+no.error.message);return;}
+      patch.quote_no=no.data;patch.quote_issued_at=new Date().toISOString();
+    }
+    var r=await sb.from('requests').update(patch).eq('id',CURROW.id).select().maybeSingle();
+    if(r.error){toast('저장 실패: '+r.error.message);return;}
+    if(!r.data){toast('권한이 없어 저장되지 않았습니다');return;}
+    CURROW=r.data;
+    var arr=DATA[CURROW.area]||[];
+    for(var i=0;i<arr.length;i++){if(arr[i].id===CURROW.id){arr[i]=CURROW;break;}}
+    renderQuoteBox();renderList();
+    closeModal('quoteModal');
+    toast('견적서를 저장했습니다 · '+CURROW.quote_no);
+    if(preview)previewQuote();
+  };
+  function paperHTML(){
+    var r=CURROW,q=r.quote||{},t=quoteTotals(q);
+    var issued=r.quote_issued_at?new Date(r.quote_issued_at):new Date();
+    var rows='';
+    var n=Math.max(5,(q.items||[]).length);
+    for(var i=0;i<n;i++){
+      var it=(q.items||[])[i];
+      rows+='<tr><td class="num">'+(i+1)+'</td>'
+        +'<td>'+(it?esc(it.name):'')+'</td>'
+        +'<td>'+(it?esc(it.cycle||'1회'):'')+'</td>'
+        +'<td class="r">'+(it&&Number(it.before)?Number(it.before).toLocaleString('ko-KR'):'')+'</td>'
+        +'<td class="r"><b>'+(it&&Number(it.price)?Number(it.price).toLocaleString('ko-KR'):'')+'</b></td></tr>';
+    }
+    var cyc='';
+    if(t.once)cyc+='<div class="r"><span>1회성 비용</span><span>'+won(t.once)+'</span></div>';
+    if(t.month)cyc+='<div class="r"><span>매월 청구</span><span>'+won(t.month)+' / 월</span></div>';
+    if(t.year)cyc+='<div class="r"><span>매년 청구</span><span>'+won(t.year)+' / 년</span></div>';
+    return '<div class="paper" id="paperBody">'
+     +'<div class="p-h"><div><h1>견 적 서</h1><div class="qsub">QUOTATION</div></div>'
+     +'<div class="p-from"><b>'+esc(SET.company||'ESC 학원지원센터')+'</b><br>'
+       +(SET.legal?esc(SET.legal)+'<br>':'')
+       +(SET.addr?esc(SET.addr)+'<br>':'')
+       +(SET.phone?esc(SET.phone)+'<br>':'')
+       +(SET.email?esc(SET.email):'')+'</div></div>'
+     +'<div class="p-line"></div>'
+     +'<div class="p-cols">'
+       +'<div><h4>받는 곳 / TO</h4>'
+         +'<div class="pr"><span>단체/학원</span><span>'+esc((q.to&&q.to.company)||r.academy_name||'')+'</span></div>'
+         +'<div class="pr"><span>담당자</span><span>'+esc((q.to&&q.to.manager)||'')+'</span></div>'
+         +'<div class="pr"><span>연락처</span><span>'+esc((q.to&&q.to.phone)||'')+'</span></div>'
+         +'<div class="pr"><span>이메일</span><span>'+esc((q.to&&q.to.email)||'')+'</span></div></div>'
+       +'<div><h4>견적 정보 / INFO</h4>'
+         +'<div class="pr"><span>견적번호</span><span>'+esc(r.quote_no||'-')+'</span></div>'
+         +'<div class="pr"><span>작성일</span><span>'+issued.getFullYear()+'. '+('0'+(issued.getMonth()+1)).slice(-2)+'. '+('0'+issued.getDate()).slice(-2)+'.</span></div>'
+         +'<div class="pr"><span>유효기간</span><span>발행일로부터 '+(q.valid_days||30)+'일</span></div>'
+         +'<div class="pr"><span>프로젝트</span><span>'+esc(q.project||'')+'</span></div></div>'
+     +'</div>'
+     +'<table class="p-t"><thead><tr><th></th><th>항목</th><th>결제주기</th><th class="r">기존 비용</th><th class="r">할인가</th></tr></thead><tbody>'+rows+'</tbody></table>'
+     +'<div class="p-sum">'
+       +'<div class="r"><span>기존 비용 합계</span><span>'+won(t.before)+'</span></div>'
+       +'<div class="r"><span>할인 금액</span><span class="dis">- '+won(t.discount)+'</span></div>'
+       +cyc
+       +'<div class="r tot"><span>최종 청구액</span><span>'+won(t.firstPay)+'</span></div>'
+     +'</div>'
+     +'<div class="p-note">'+(t.month||t.year?'※ 매월·매년 항목은 주기마다 청구됩니다. 최종 청구액은 최초 결제 기준입니다.':'※ 표시된 금액은 부가세 포함 금액입니다.')+'</div>'
+     +'<div class="p-sec"><h4>결제 조건 / PAYMENT</h4><div class="box">'
+       +esc(SET.pay_note||'')+(SET.bank?('\n[ 입금 계좌 ] '+SET.bank):'')+'</div></div>'
+     +(q.note?'<div class="p-sec"><h4>비고 / NOTES</h4><div class="box">'+esc(q.note)+'</div></div>':'')
+     +'<div class="p-f">'+esc(SET.foot_note||'')+'<br>'+esc(SET.company||'')+(SET.legal?' · '+esc(SET.legal):'')+(SET.email?' · '+esc(SET.email):'')+'</div>'
+     +'</div>';
+  }
+  window.previewQuote=function(){
+    if(!CURROW||!CURROW.quote){toast('먼저 견적서를 작성해 주세요');return;}
+    $('paper').innerHTML=paperHTML();
+    $('paperModal').classList.add('open');
+  };
+  function quoteText(){
+    var r=CURROW,q=r.quote||{},t=quoteTotals(q);
+    var lines=[];
+    lines.push((q.to&&q.to.manager?q.to.manager+' 님, ':'')+'안녕하세요. '+(SET.company||'ESC 학원지원센터')+'입니다.');
+    lines.push('요청하신 '+(q.project||'지원')+' 건의 견적서를 보내드립니다.');
+    lines.push('');
+    lines.push('[ 견적 요약 ]');
+    lines.push('· 견적번호: '+(r.quote_no||''));
+    (q.items||[]).forEach(function(it){
+      lines.push('· '+it.name+' ('+(it.cycle||'1회')+') : '+won(it.price)+(Number(it.before)>Number(it.price)?(' (기존 '+won(it.before)+')'):''));
+    });
+    if(t.once)lines.push('· 1회성 비용 합계: '+won(t.once));
+    if(t.month)lines.push('· 매월 청구: '+won(t.month)+' / 월');
+    if(t.year)lines.push('· 매년 청구: '+won(t.year)+' / 년');
+    lines.push('· 최초 청구액: '+won(t.firstPay));
+    lines.push('');
+    if(SET.pay_note)lines.push(SET.pay_note);
+    if(SET.bank)lines.push('[ 입금 계좌 ] '+SET.bank);
+    if(q.note){lines.push('');lines.push('[ 비고 ]');lines.push(q.note);}
+    lines.push('');
+    lines.push('본 견적은 발행일로부터 '+(q.valid_days||30)+'일간 유효합니다. 궁금한 점은 편하게 회신 주세요.');
+    lines.push((SET.company||'')+(SET.phone?' · '+SET.phone:'')+(SET.email?' · '+SET.email:''));
+    return lines.join('\n');
+  }
+  window.mailQuote=function(){
+    if(!CURROW||!CURROW.quote){toast('먼저 견적서를 작성해 주세요');return;}
+    var q=CURROW.quote,to=(q.to&&q.to.email)||CURROW.email||'';
+    if(!to){toast('고객 이메일이 없습니다. 견적서 편집에서 이메일을 입력해 주세요');return;}
+    var subj='['+(SET.company||'ESC')+'] '+(CURROW.academy_name||'')+' 견적서 안내 ('+(CURROW.quote_no||'')+')';
+    location.href='mailto:'+encodeURIComponent(to)+'?subject='+encodeURIComponent(subj)+'&body='+encodeURIComponent(quoteText());
+    toast('메일 앱이 열립니다 · PDF를 저장해 첨부해 주세요');
+  };
+  window.copyQuoteText=function(){
+    navigator.clipboard.writeText(quoteText()).then(function(){toast('견적 내용을 복사했습니다');},function(){toast('복사에 실패했습니다');});
+  };
+
+  /* ---------- 견적서 설정 ---------- */
+  async function loadSettings(){
+    var r=await sb.from('settings').select('value').eq('key','quote').maybeSingle();
+    SET=(r.data&&r.data.value)?r.data.value:{};
+  }
+  window.fillSettings=function(){
+    $('st_company').value=SET.company||'';$('st_legal').value=SET.legal||'';$('st_addr').value=SET.addr||'';
+    $('st_phone').value=SET.phone||'';$('st_email').value=SET.email||'';$('st_bank').value=SET.bank||'';
+    $('st_paynote').value=SET.pay_note||'';$('st_valid').value=SET.valid_days||30;$('st_foot').value=SET.foot_note||'';
+  };
+  window.saveSettings=async function(){
+    var v={company:$('st_company').value.trim(),legal:$('st_legal').value.trim(),addr:$('st_addr').value.trim(),
+      phone:$('st_phone').value.trim(),email:$('st_email').value.trim(),bank:$('st_bank').value.trim(),
+      pay_note:$('st_paynote').value,valid_days:Number($('st_valid').value)||30,foot_note:$('st_foot').value.trim()};
+    var r=await sb.from('settings').update({value:v,updated_at:new Date().toISOString(),updated_by:ME.id}).eq('key','quote').select('key');
+    if(r.error){toast('저장 실패: '+r.error.message);return;}
+    if(!r.data||!r.data.length){toast('권한이 없어 저장되지 않았습니다');return;}
+    SET=v;toast('설정을 저장했습니다');
   };
 
   /* ---------- 관리자 목록 ---------- */
