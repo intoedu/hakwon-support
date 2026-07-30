@@ -452,15 +452,16 @@
 <!-- 견적서 미리보기(인쇄용) -->
 <div class="modal" id="paperModal"><div class="sheet wide">
   <div class="sheet-h">
-    <div><h3>견적서 미리보기</h3><div class="meta">인쇄 창에서 <b>대상을 "PDF로 저장"</b>으로 고르면 PDF 파일이 됩니다.</div></div>
-    <button class="x" type="button" onclick="closeModal('paperModal')">✕</button>
+    <div><h3>견적서 미리보기</h3><div class="meta">① <b>PDF로 저장</b> → ② 메일 작성 창에서 저장한 <b>PDF를 첨부</b> → ③ 전송. 브라우저에서는 파일을 자동으로 첨부할 수 없어 두 단계로 나뉩니다.</div></div>
+    <button class="x" type="button" onclick="closePaper()">✕</button>
   </div>
   <div class="sheet-b" style="background:#eef1f7"><div id="paper"></div></div>
-  <div class="sheet-f">
-    <button class="btn btn-primary" type="button" onclick="window.print()">🖨 인쇄 · PDF 저장</button>
-    <button class="btn btn-ghost" type="button" onclick="mailQuote()">✉️ 메일로 보내기</button>
-    <button class="btn btn-ghost" type="button" onclick="copyQuoteText()">📋 내용 복사</button>
-    <button class="btn btn-ghost" type="button" onclick="closeModal('paperModal')">닫기</button>
+  <div class="sheet-f" style="flex-wrap:wrap">
+    <button class="btn btn-primary" type="button" onclick="window.print()">① 🖨 PDF로 저장</button>
+    <button class="btn btn-ghost" type="button" onclick="mailQuoteGmail()">② 📧 Gmail로 작성</button>
+    <button class="btn btn-ghost" type="button" onclick="mailQuote()">② ✉️ 메일 앱으로 작성</button>
+    <button class="btn btn-ghost" type="button" onclick="copyQuoteText()">📋 상세 내용 복사</button>
+    <button class="btn btn-ghost" type="button" onclick="closePaper()">닫기</button>
   </div>
 </div></div>
 
@@ -766,7 +767,7 @@
         +'<span style="margin-left:auto;display:flex;gap:8px;flex-wrap:wrap">'
         +'<button class="btn btn-ghost" style="padding:7px 13px" type="button" onclick="openQuote()">✏️ 편집</button>'
         +'<button class="btn btn-primary" style="padding:7px 13px" type="button" onclick="previewQuote()">📄 미리보기 · PDF</button>'
-        +'<button class="btn btn-ghost" style="padding:7px 13px" type="button" onclick="mailQuote()">✉️ 메일</button></span>';
+        +'<button class="btn btn-ghost" style="padding:7px 13px" type="button" onclick="previewQuote()">✉️ 메일 보내기</button></span>';
     }else{
       el.innerHTML='<b>아직 견적서를 만들지 않았습니다.</b>'
         +'<span style="margin-left:auto"><button class="btn btn-primary" style="padding:7px 14px" type="button" onclick="openQuote()">📋 견적서 만들기</button></span>';
@@ -905,10 +906,18 @@
      +'<div class="p-f">'+esc(SET.foot_note||'')+'<br>'+esc(SET.company||'')+(SET.legal?' · '+esc(SET.legal):'')+(SET.email?' · '+esc(SET.email):'')+'</div>'
      +'</div>';
   }
+  var PAPER_TITLE_PREV=null;
   window.previewQuote=function(){
     if(!CURROW||!CURROW.quote){toast('먼저 견적서를 작성해 주세요');return;}
     $('paper').innerHTML=paperHTML();
+    /* "PDF로 저장" 시 브라우저가 문서 제목을 파일명으로 제안하므로, 나중에 메일에 첨부할 파일을 알아보기 쉽게 임시로 바꿔둠 */
+    PAPER_TITLE_PREV=document.title;
+    document.title=('견적서_'+(CURROW.academy_name||'')+'_'+(CURROW.quote_no||'')).replace(/\s+/g,'');
     $('paperModal').classList.add('open');
+  };
+  window.closePaper=function(){
+    $('paperModal').classList.remove('open');
+    if(PAPER_TITLE_PREV!=null){document.title=PAPER_TITLE_PREV;PAPER_TITLE_PREV=null;}
   };
   function quoteText(){
     var r=CURROW,q=r.quote||{},t=quoteTotals(q);
@@ -934,12 +943,41 @@
     lines.push((SET.company||'')+(SET.phone?' · '+SET.phone:'')+(SET.email?' · '+SET.email:''));
     return lines.join('\n');
   }
-  window.mailQuote=function(){
-    if(!CURROW||!CURROW.quote){toast('먼저 견적서를 작성해 주세요');return;}
+  /* 메일 본문은 짧게: 항목을 전부 넣으면 URL이 길어져 일부 안드로이드 기기에서
+     메일 작성창이 열리지 않거나 내용이 비는 문제가 있었음(모바일 인텐트 길이 제한).
+     자세한 내역은 PDF 첨부와 "상세 내용 복사"로 대신함. */
+  function quoteTextShort(){
+    var r=CURROW,q=r.quote||{},t=quoteTotals(q);
+    var lines=[];
+    lines.push((q.to&&q.to.manager?q.to.manager+' 님, ':'')+'안녕하세요. '+(SET.company||'ESC 학원지원센터')+'입니다.');
+    lines.push('요청하신 '+(q.project||'지원')+' 건의 견적서를 첨부 파일(PDF)로 보내드립니다.');
+    lines.push('');
+    lines.push('· 견적번호: '+(r.quote_no||''));
+    var due='최초 청구액: '+won(t.firstPay);
+    if(t.month)due+=' (매월 '+won(t.month)+' 포함)';
+    if(t.year)due+=' (매년 '+won(t.year)+' 포함)';
+    lines.push('· '+due);
+    lines.push('· 유효기간: 발행일로부터 '+(q.valid_days||30)+'일');
+    lines.push('');
+    lines.push('자세한 항목은 첨부된 PDF를 확인해 주세요. 궁금한 점은 편하게 회신 주세요.');
+    lines.push((SET.company||'')+(SET.phone?' · '+SET.phone:'')+(SET.email?' · '+SET.email:''));
+    return lines.join('\n');
+  }
+  function quoteMailParts(){
+    if(!CURROW||!CURROW.quote){toast('먼저 견적서를 작성해 주세요');return null;}
     var q=CURROW.quote,to=(q.to&&q.to.email)||CURROW.email||'';
-    if(!to){toast('고객 이메일이 없습니다. 견적서 편집에서 이메일을 입력해 주세요');return;}
-    var subj='['+(SET.company||'ESC')+'] '+(CURROW.academy_name||'')+' 견적서 안내 ('+(CURROW.quote_no||'')+')';
-    location.href='mailto:'+encodeURIComponent(to)+'?subject='+encodeURIComponent(subj)+'&body='+encodeURIComponent(quoteText());
+    if(!to){toast('고객 이메일이 없습니다. 견적서 편집에서 이메일을 입력해 주세요');return null;}
+    return {to:to, subject:'['+(SET.company||'ESC')+'] '+(CURROW.academy_name||'')+' 견적서 안내 ('+(CURROW.quote_no||'')+')', body:quoteTextShort()};
+  }
+  window.mailQuoteGmail=function(){
+    var p=quoteMailParts();if(!p)return;
+    var url='https://mail.google.com/mail/?view=cm&fs=1&to='+encodeURIComponent(p.to)+'&su='+encodeURIComponent(p.subject)+'&body='+encodeURIComponent(p.body);
+    window.open(url,'_blank');
+    toast('Gmail 작성 창을 엽니다 · 저장한 PDF를 첨부해 주세요');
+  };
+  window.mailQuote=function(){
+    var p=quoteMailParts();if(!p)return;
+    location.href='mailto:'+encodeURIComponent(p.to)+'?subject='+encodeURIComponent(p.subject)+'&body='+encodeURIComponent(p.body);
     toast('메일 앱이 열립니다 · PDF를 저장해 첨부해 주세요');
   };
   window.copyQuoteText=function(){
