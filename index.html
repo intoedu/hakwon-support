@@ -1481,7 +1481,7 @@
   async function doLogout(){if(sb){await sb.auth.signOut();}updateAuthUI();}
   /* 관리자 전용: 내 계정 프리미엄 켜기/끄기 (표시 확인용) */
   async function togglePremiumSelf(){
-    if(!sb||!window.__uid||!window.__isAdmin)return;
+    if(!sb||!window.__uid||!window.__isOwner)return;
     var next=!window.__isPremium;
     var r=await sb.from('profiles').update({is_premium:next,premium_since:next?new Date().toISOString():null}).eq('id',window.__uid).select('is_premium');
     if(r.error){alert('변경 실패: '+r.error.message);return;}
@@ -1498,17 +1498,23 @@
       var name=meta.academy_name||user.email;
       window.__uid=user.id;window.__academy=name;
       var premium=false;
-      try{var p=await sb.from('profiles').select('is_premium,is_admin').eq('id',user.id).single();if(p.data){premium=!!p.data.is_premium;window.__isAdmin=!!p.data.is_admin;}}catch(e){}
+      try{var p=await sb.from('profiles').select('is_premium').eq('id',user.id).single();if(p.data){premium=!!p.data.is_premium;}}catch(e){}
+      /* 게시판 관리 권한은 서버 판단을 그대로 따름
+         (회원 is_admin 또는 직원 권한 '홈페이지 게시판 관리') */
+      var isAdmin=false,isOwner=false;
+      try{var ia=await sb.rpc('is_admin');if(!ia.error)isAdmin=!!ia.data;}catch(e){}
+      try{var io=await sb.rpc('is_owner');if(!io.error)isOwner=!!io.data;}catch(e){}
+      window.__isAdmin=isAdmin;window.__isOwner=isOwner;
       window.__isPremium=premium;
       renderPricing(premium);
       if(typeof loadBoard==='function'&&document.getElementById('v-board')&&document.getElementById('v-board').classList.contains('active')){loadBoard();}
       var tail=premium?'<span class="pbadge">프리미엄</span>':'<button class="up" type="button" onclick="openPremium()">프리미엄 전환</button>';
       /* 관리자 계정 전용: 프리미엄 화면을 껐다 켜며 확인 */
-      if(window.__isAdmin){tail+='<button class="lg" type="button" title="관리자 전용 · 프리미엄 표시 확인용" onclick="togglePremiumSelf()">프리미엄 '+(premium?'OFF':'ON')+'</button>';}
+      if(window.__isOwner){tail+='<button class="lg" type="button" title="최고관리자 전용 · 프리미엄 표시 확인용" onclick="togglePremiumSelf()">프리미엄 '+(premium?'OFF':'ON')+'</button>';}
       area.innerHTML='<span class="me" title="'+name+'">'+name+' 님</span>'+tail+'<button class="lg" type="button" onclick="doLogout()">로그아웃</button>';
       if(ma){ma.textContent='로그아웃';ma.setAttribute('onclick','doLogout()');}
     }else{
-      window.__uid=null;window.__isPremium=false;window.__isAdmin=false;window.__academy=null;
+      window.__uid=null;window.__isPremium=false;window.__isAdmin=false;window.__isOwner=false;window.__academy=null;
       renderPricing(false);
       if(typeof loadBoard==='function'&&document.getElementById('v-board')&&document.getElementById('v-board').classList.contains('active')){loadBoard();}
       area.innerHTML='<button class="lg" type="button" onclick="openAuth(\'login\')">로그인</button>';
