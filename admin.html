@@ -991,21 +991,28 @@
           +'<button class="btn btn-primary" style="padding:7px 14px" type="button" onclick="approve(\''+s.id+'\')">승인</button> '
           +'<button class="btn btn-danger" style="padding:7px 14px" type="button" onclick="reject(\''+s.id+'\')">거절</button></td>';
       }else{
-        var isMeOwner=(s.role==='owner');
+        /* 본인 행은 항상 잠금(스스로 권한을 잃는 사고 방지).
+           최고관리자는 다른 최고관리자까지 내릴 수 있고, 그 외 관리자는 최고관리자 행을 못 건드림. */
+        var isMe=(s.id===ME.id);
+        var canEdit=isMe?false:(ME.role==='owner'?true:s.role!=='owner');
         h+='<td><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">'
           +'<span class="badge b-'+s.role+'">'+ROLE_KO[s.role]+'</span>'
-          +(isMeOwner?'':'<select class="inp" style="width:auto;padding:5px 9px;font-size:.82rem" onchange="setRole(\''+s.id+'\',this.value)">'
+          +(canEdit?'<select class="inp" style="width:auto;padding:5px 9px;font-size:.82rem" onchange="setRole(\''+s.id+'\',this.value)">'
               +'<option value="staff"'+(s.role==='staff'?' selected':'')+'>직원</option>'
               +'<option value="admin"'+(s.role==='admin'?' selected':'')+'>관리자</option>'
-              +(ME.role==='owner'?'<option value="owner">최고관리자</option>':'')+'</select>')
+              +(ME.role==='owner'?'<option value="owner"'+(s.role==='owner'?' selected':'')+'>최고관리자</option>':'')+'</select>':'')
           +'</div><div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:7px">'
           +Object.keys(PERM_KO).map(function(k){
              var on=(s.role==='owner')||(s.perms&&s.perms[k]===true);
              return '<label style="font-size:.8rem;color:var(--muted);font-weight:600;display:inline-flex;gap:5px;align-items:center">'
-               +'<input type="checkbox" '+(on?'checked ':'')+(s.role==='owner'?'disabled ':'')+'style="accent-color:var(--accent)" onchange="setPerm(\''+s.id+'\',\''+k+'\',this.checked)">'+PERM_KO[k]+'</label>';
+               +'<input type="checkbox" '+(on?'checked ':'')+((s.role==='owner'||!canEdit)?'disabled ':'')+'style="accent-color:var(--accent)" onchange="setPerm(\''+s.id+'\',\''+k+'\',this.checked)">'+PERM_KO[k]+'</label>';
            }).join('')
           +'</div></td>'
-          +'<td style="text-align:right;white-space:nowrap">'+(isMeOwner?'<span class="muted" style="font-size:.8rem">본인/최고관리자</span>':'<button class="btn btn-danger" style="padding:7px 14px" type="button" onclick="reject(\''+s.id+'\')">권한 해제</button>')+'</td>';
+          +'<td style="text-align:right;white-space:nowrap">'
+          +(isMe?'<span class="muted" style="font-size:.8rem">본인 계정</span>'
+                :(canEdit?'<button class="btn btn-danger" style="padding:7px 14px" type="button" onclick="reject(\''+s.id+'\')">권한 해제</button>'
+                        :'<span class="muted" style="font-size:.8rem">최고관리자</span>'))
+          +'</td>';
       }
       h+='</tr>';
     });
