@@ -251,6 +251,21 @@
   .fstep .n{font-size:.72rem;font-weight:800;color:var(--accent);letter-spacing:.04em}
   .fstep h4{font-size:.95rem;font-weight:700;margin-top:8px}
   .fstep p{font-size:.8rem;color:var(--muted);margin-top:5px}
+  /* 앱 화면(폰 목업) — 실제 스크린샷을 넣으면 img가 자리를 채움 */
+  .phones{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:8px}
+  @media(max-width:900px){.phones{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:520px){.phones{grid-template-columns:1fr}}
+  .phone{margin:0}
+  .phone .frame{position:relative;aspect-ratio:9/18;border:7px solid #16233c;border-radius:24px;background:#F7F2E9;overflow:hidden;box-shadow:0 12px 28px -14px rgba(10,20,40,.55)}
+  /* 스크린샷 파일이 있으면 그 위를 덮고, 없으면(onerror로 제거) 아래 안내 화면이 보임 */
+  .phone .frame img{position:absolute;inset:0;z-index:1;width:100%;height:100%;object-fit:cover;object-position:top center;display:block}
+  .phone .ph{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;padding:16px 12px;text-align:center}
+  .phone .ph .ico{font-size:1.7rem;line-height:1}
+  .phone .ph b{font-size:.9rem;font-weight:800;color:var(--brand)}
+  .phone .ph span{font-size:.72rem;color:var(--muted);line-height:1.5}
+  .phone figcaption{margin-top:11px;text-align:center}
+  .phone figcaption b{display:block;font-size:.9rem;font-weight:800}
+  .phone figcaption span{font-size:.78rem;color:var(--muted)}
   .bprice{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:8px}
   @media(max-width:720px){.bprice{grid-template-columns:1fr}}
   .bcard{border:1.5px solid var(--line);border-radius:14px;padding:22px 24px;background:var(--surface)}
@@ -416,7 +431,7 @@
         <div class="drop">
           <a onclick="go('doc')">자료제작 지원<small>홈페이지 · 앱 · 프로그램 · 디자인</small></a>
           <a onclick="go('hr')">인력 지원<small>필리핀 · 미국 원어민 매칭</small></a>
-          <a onclick="go('content')">컨텐츠 지원<small>유학자료 · SAT · IM VOCA</small></a>
+          <a onclick="go('content')">컨텐츠 지원<small>유학자료 · SAT · IM VOCA · 오피스</small></a>
           <a onclick="go('mkt')">마케팅·광고 지원<small>블로그 대행 · 모객</small></a>
         </div>
       </div>
@@ -461,7 +476,7 @@
         <ul>
           <li onclick="go('doc')"><span class="k"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M3 9h18M8 21h8"/></svg></span><span><span class="t">자료제작</span><span class="d">홈페이지·디자인 직접 제작</span></span><span class="p" id="sidePriceDoc">관리비 5만~</span></li>
           <li onclick="go('hr')"><span class="k"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 19c.6-3 2.9-4.6 5.5-4.6S13.9 16 14.5 19M16 8.2a3 3 0 0 1 0 5.4M18 19c-.3-1.6-1-2.8-2-3.6"/></svg></span><span><span class="t">인력지원</span><span class="d">원어민 선생님 매칭</span></span><span class="p">구인 접수</span></li>
-          <li onclick="go('content')"><span class="k"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H12v16H6.5A2.5 2.5 0 0 0 4 21.5zM20 5.5A2.5 2.5 0 0 0 17.5 3H12v16h5.5A2.5 2.5 0 0 1 20 21.5z"/></svg></span><span><span class="t">컨텐츠지원</span><span class="d">유학·SAT·IM VOCA</span></span><span class="p">콘텐츠 공급</span></li>
+          <li onclick="go('content')"><span class="k"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H12v16H6.5A2.5 2.5 0 0 0 4 21.5zM20 5.5A2.5 2.5 0 0 0 17.5 3H12v16h5.5A2.5 2.5 0 0 1 20 21.5z"/></svg></span><span><span class="t">컨텐츠지원</span><span class="d">유학·SAT·VOCA·오피스</span></span><span class="p">콘텐츠 공급</span></li>
           <li onclick="go('mkt')"><span class="k"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 15v-4h4l7-4v12l-7-4H4zM19 9a4 4 0 0 1 0 6"/></svg></span><span><span class="t">마케팅·광고</span><span class="d">블로그 대행 · 모객</span></span><span class="p" id="sidePriceMkt">편당 9,900원</span></li>
         </ul>
       </aside>
@@ -493,8 +508,8 @@
         <article class="card reveal" onclick="go('content')">
           <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H12v16H6.5A2.5 2.5 0 0 0 4 21.5zM20 5.5A2.5 2.5 0 0 0 17.5 3H12v16h5.5A2.5 2.5 0 0 1 20 21.5z"/></svg></div>
           <h3>컨텐츠 지원</h3>
-          <p class="desc">유학자료·SAT·IM VOCA 등 학습 콘텐츠와 전용 앱을 공급합니다.</p>
-          <div class="tags"><span class="tag">유학자료</span><span class="tag">SAT</span><span class="tag">IM VOCA</span></div>
+          <p class="desc">유학자료·SAT·IM VOCA 등 학습 콘텐츠와 전자서명(인투 오피스)까지 공급합니다.</p>
+          <div class="tags"><span class="tag">유학자료</span><span class="tag">SAT</span><span class="tag">IM VOCA</span><span class="tag">인투 오피스</span></div>
           <div class="cardlink">자세히 보기 <span>→</span></div>
         </article>
         <article class="card reveal" onclick="go('mkt')">
@@ -577,7 +592,7 @@
           <div class="picker" id="picker">
             <button class="pick link" data-k="doc" type="button"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M3 9h18M8 21h8"/></svg></span><b>자료제작</b><span>홈페이지·디자인</span><span class="ext">제작 신청서로 이동 ↗</span></button>
             <button class="pick" data-k="hr" type="button"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 19c.6-3 2.9-4.6 5.5-4.6S13.9 16 14.5 19M16 8.2a3 3 0 0 1 0 5.4M18 19c-.3-1.6-1-2.8-2-3.6"/></svg></span><b>인력지원</b><span>원어민 매칭</span></button>
-            <button class="pick" data-k="cnt" type="button"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H12v16H6.5A2.5 2.5 0 0 0 4 21.5zM20 5.5A2.5 2.5 0 0 0 17.5 3H12v16h5.5A2.5 2.5 0 0 1 20 21.5z"/></svg></span><b>컨텐츠지원</b><span>유학·SAT·VOCA</span></button>
+            <button class="pick" data-k="cnt" type="button"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H12v16H6.5A2.5 2.5 0 0 0 4 21.5zM20 5.5A2.5 2.5 0 0 0 17.5 3H12v16h5.5A2.5 2.5 0 0 1 20 21.5z"/></svg></span><b>컨텐츠지원</b><span>유학·VOCA·오피스</span></button>
             <button class="pick" data-k="mkt" type="button"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 15v-4h4l7-4v12l-7-4H4zM19 9a4 4 0 0 1 0 6"/></svg></span><b>마케팅·광고</b><span>블로그 대행</span></button>
           </div>
           <div class="cnote" id="pickHint" style="margin-top:18px">👆 위에서 <b>필요한 지원을 선택</b>하시면 신청 항목이 이어서 나타납니다. <b>자료제작</b>은 제작 전문 파트너 <b>@IM</b>의 제작 신청서로 연결됩니다.</div>
@@ -903,7 +918,7 @@
       <span class="back" onclick="go('home')">← 전체 지원사업</span>
       <span class="eyebrow">지원사업 · 컨텐츠</span>
       <h1>컨텐츠 지원</h1>
-      <p class="lead">유학 자료, SAT, IM VOCA까지. 직접 가르치지 않아도 앱과 콘텐츠로 학생을 관리할 수 있습니다.</p>
+      <p class="lead">유학 자료, SAT, IM VOCA부터 전자서명 인투 오피스까지. 직접 가르치지 않아도 앱과 콘텐츠로 학생을 관리하고, 서류 업무까지 줄입니다.</p>
     </div>
   </section>
   <section class="sec">
@@ -912,6 +927,7 @@
         <button class="sp on" data-t="study" type="button">유학자료</button>
         <button class="sp" data-t="sat" type="button">SAT</button>
         <button class="sp" data-t="voca" type="button">IM VOCA</button>
+        <button class="sp" data-t="office" type="button">인투 오피스</button>
       </div>
       <!-- 유학자료 -->
       <div class="subpanel on" id="content-study">
@@ -984,24 +1000,34 @@
       <!-- IM VOCA -->
       <div class="subpanel" id="content-voca">
         <div class="panel-intro reveal">
-          <div><div class="kicker">IM VOCA</div><h2>단어 관리를 사람 손에서 시스템으로</h2><p>단어 시험 만들고 채점하고 다시 외우게 하는 일. 강사가 가장 많이 쓰면서 가장 남지 않는 시간을 앱이 대신합니다.</p></div>
+          <div><div class="kicker">IM VOCA</div><h2>단어는 앱이 시키고, 학원은 확인만</h2><p>단어장을 만들고, 시험을 내고, 채점하고, 다시 외우게 하는 일. 강사 시간을 가장 많이 쓰면서 가장 티가 안 나는 일을 앱이 대신합니다. <b>특허출원 기술</b>로 만든 학원용 단어 앱입니다.</p></div>
         </div>
 
         <div class="benefits">
-          <div class="benefit reveal"><div class="bn">01</div><div><h3>출제와 채점에서 손을 뗍니다</h3><p>매주 단어 시험지를 만들고 채점하던 일을 앱이 대신합니다. 강사는 결과를 보고 학생을 챙기는 데 시간을 씁니다.</p><div class="bt"><span class="tag">자동 출제</span><span class="tag">자동 채점</span></div></div></div>
-          <div class="benefit reveal"><div class="bn">02</div><div><h3>못 외운 단어는 다시 나옵니다</h3><p>한 번 틀린 단어가 그냥 지나가면 학생은 계속 모릅니다. 틀린 단어를 다시 반복하게 만들어 실제로 외우게 합니다.</p><div class="bt"><span class="tag">반복 학습</span><span class="tag">오답 관리</span></div></div></div>
-          <div class="benefit reveal"><div class="bn">03</div><div><h3>누가 안 하고 있는지 바로 보입니다</h3><p>학생별 진행 상황이 기록으로 남아, 손이 필요한 학생을 빨리 찾을 수 있습니다. 학부모 상담에서도 그대로 근거가 됩니다.</p><div class="bt"><span class="tag">학습 현황</span><span class="tag">상담 근거</span></div></div></div>
-          <div class="benefit reveal"><div class="bn">04</div><div><h3>학원 규모에 맞춰 운영</h3><p>학생 수 단위로 운영하므로 소규모 학원도 부담 없이 시작할 수 있습니다.</p><div class="bt"><span class="tag">학생 수 단위</span></div></div></div>
+          <div class="benefit reveal"><div class="bn">01</div><div><h3>교재를 찍으면 단어장이 됩니다</h3><p>원서나 교재 페이지를 사진으로 찍으면 <b style="color:inherit">AI가 외울 단어를 뽑아 자동으로 등록</b>합니다. 학원이 쓰는 어떤 책이든 그대로 단어장이 되고, 직접 추가·수정도 됩니다.</p><div class="bt"><span class="tag">AI 자동 추출</span><span class="tag">원서·교재 그대로</span></div></div></div>
+          <div class="benefit reveal"><div class="bn">02</div><div><h3>외운 다음이 진짜입니다</h3><p>한 번 외우고 끝나면 대부분 잊습니다. 에빙하우스 망각곡선에 맞춰 <b style="color:inherit">1·2·3·6·15·30일 뒤 복습이 자동으로 뜹니다.</b> 학생은 뜨는 것만 하면 되고, 강사는 챙길 필요가 없습니다.</p><div class="bt"><span class="tag">자동 복습</span><span class="tag">망각곡선</span></div></div></div>
+          <div class="benefit reveal"><div class="bn">03</div><div><h3>출제와 채점에서 손을 뗍니다</h3><p>암기카드로 외우고, 다 외우면 바로 테스트로 넘어갑니다. 시험지를 만들고 채점하던 시간이 사라지고, 강사는 결과만 보고 학생을 챙깁니다.</p><div class="bt"><span class="tag">암기카드</span><span class="tag">자동 채점</span></div></div></div>
+          <div class="benefit reveal"><div class="bn">04</div><div><h3>점수와 순위가 공부를 시킵니다</h3><p>단어를 외우면 점수가 쌓이고, 앱 전체 사용자와 순위가 매겨집니다. 개인전·단체전이 있어 <b style="color:inherit">학원끼리·반끼리 경쟁</b>이 되고, 시키지 않아도 학생이 먼저 켭니다.</p><div class="bt"><span class="tag">명예의 전당</span><span class="tag">개인전·단체전</span></div></div></div>
         </div>
 
-        <div class="panel-intro reveal" style="margin-top:48px"><div><div class="kicker">주요 기능</div><h2>이렇게 씁니다</h2></div></div>
-        <div class="feat f4 reveal">
-          <div class="fcard"><b>단어장 배정</b><p>학생·반별로 외울 단어를 정해 내려줍니다.</p></div>
-          <div class="fcard"><b>테스트</b><p>배정한 단어로 시험을 진행합니다.</p></div>
-          <div class="fcard"><b>미암기 반복</b><p>틀린 단어를 다시 학습·재출제합니다.</p></div>
-          <div class="fcard"><b>학습 현황 확인</b><p>학생별 진행과 결과를 확인합니다.</p></div>
+        <div class="panel-intro reveal" style="margin-top:48px"><div><div class="kicker">앱 구성</div><h2>다섯 개 메뉴가 전부입니다</h2><p>학생이 헤매지 않도록 단순하게 만들었습니다.</p></div></div>
+        <div class="feat reveal">
+          <div class="fcard"><b>📚 책장</b><p>수능 기초·심화·숙어·토익 등 기본 단어장이 들어 있고, 원하는 책을 직접 추가할 수 있습니다. DAY별로 나뉘어 단어·뜻·예문을 봅니다.</p></div>
+          <div class="fcard"><b>🃏 암기</b><p>책 전체를 한 번에 외우거나, 페이지(DAY)별로 끊어서 외웁니다. 암기카드로 넘기며 외우고 퀴즈로 확인합니다.</p></div>
+          <div class="fcard"><b>📅 복습</b><p>DAY 하나를 끝내면 1·2·3·6·15·30일 복습이 자동 등록됩니다. 오늘 할 복습이 몇 개인지 바로 뜹니다.</p></div>
+          <div class="fcard"><b>🏆 명예의 전당</b><p>외운 만큼 점수가 쌓입니다. 멤버 순위·개인전·단체전으로 나뉘어 경쟁하게 만듭니다.</p></div>
+          <div class="fcard"><b>🔍 검색</b><p>저장한 모든 단어를 영어 또는 뜻으로 찾습니다. 수업 중 바로 꺼내 쓸 수 있습니다.</p></div>
+          <div class="fcard"><b>📌 학원 과제</b><p>학원이 지정한 책은 <b>과제</b>로 표시되어 학생 화면 맨 위에 뜹니다. 진도와 완료 여부를 학원이 확인합니다.</p></div>
         </div>
-        <div class="cnote">📝 <b>내용 확인 필요(시안):</b> IM VOCA의 실제 기능·화면을 알려주시면 위 설명과 스크린샷을 진짜 앱 기준으로 교체합니다.</div>
+
+        <div class="panel-intro reveal" style="margin-top:48px"><div><div class="kicker">앱 화면</div><h2>학생이 보는 화면</h2></div></div>
+        <div class="phones reveal">
+          <figure class="phone"><div class="frame"><img src="img/imvoca-1.png" alt="IM VOCA 책장 화면" onerror="this.remove()"><div class="ph"><span class="ico">📚</span><b>책장</b><span>기본 단어장 +<br>내가 추가한 책</span></div></div><figcaption><b>책장</b><span>DAY별 단어 관리</span></figcaption></figure>
+          <figure class="phone"><div class="frame"><img src="img/imvoca-2.png" alt="IM VOCA 페이지 촬영 화면" onerror="this.remove()"><div class="ph"><span class="ico">📸</span><b>페이지 촬영</b><span>찍으면 AI가<br>단어 자동 등록</span></div></div><figcaption><b>AI 단어 추출</b><span>원서·교재 스캔</span></figcaption></figure>
+          <figure class="phone"><div class="frame"><img src="img/imvoca-3.png" alt="IM VOCA 암기카드 화면" onerror="this.remove()"><div class="ph"><span class="ico">🃏</span><b>암기카드</b><span>발음 듣기 ·<br>탭해서 뜻 보기</span></div></div><figcaption><b>암기 · 퀴즈</b><span>외우고 바로 테스트</span></figcaption></figure>
+          <figure class="phone"><div class="frame"><img src="img/imvoca-4.png" alt="IM VOCA 복습 현황 화면" onerror="this.remove()"><div class="ph"><span class="ico">📅</span><b>복습 현황</b><span>1·2·3·6·15·30일<br>자동 복습</span></div></div><figcaption><b>망각곡선 복습</b><span>오늘 할 복습만</span></figcaption></figure>
+        </div>
+        <div class="cnote">🖼️ <b>실제 앱 화면으로 교체 예정:</b> 스크린샷 4장을 <b>hakwon-site/img/</b> 폴더에 <b>imvoca-1.png ~ imvoca-4.png</b> 이름으로 넣으면 이 자리에 자동으로 들어갑니다.</div>
 
         <div class="panel-intro reveal" style="margin-top:48px"><div><div class="kicker">진행 절차</div><h2>요청 → 협의 → 사용</h2></div></div>
         <div class="flow reveal">
@@ -1012,6 +1038,44 @@
           <div class="fstep"><div class="n">STEP 05</div><h4>운영 지원</h4><p>사용 중 문의를 담당자가 지원합니다.</p></div>
         </div>
         <div class="area-cta"><a class="btn btn-primary" onclick="applyWith('cnt')">IM VOCA 요청하기 →</a></div>
+      </div>
+
+      <!-- 인투 오피스 -->
+      <div class="subpanel" id="content-office">
+        <div class="panel-intro reveal">
+          <div><div class="kicker">인투 오피스</div><h2>서류를 종이로 주고받지 않습니다</h2><p><b>법적 효력이 있는 전자서명</b> 프로그램입니다. 등록 계약서·동의서·근로계약서를 링크로 보내고 받으면, 원장님이 학원에 없어도 서류가 끝납니다.</p></div>
+        </div>
+
+        <div class="benefits">
+          <div class="benefit reveal"><div class="bn">01</div><div><h3>만나지 않아도 계약이 끝납니다</h3><p>등록하려는 학부모에게 링크만 보내면 휴대폰에서 바로 서명합니다. 서류 받으러 오라고 하거나, 원장님이 기다릴 필요가 없습니다.</p><div class="bt"><span class="tag">비대면 서명</span><span class="tag">모바일</span></div></div></div>
+          <div class="benefit reveal"><div class="bn">02</div><div><h3>법적 효력이 있는 전자서명</h3><p>단순한 사진·스캔 서명이 아니라 <b style="color:inherit">법적 효력이 인정되는 전자서명</b>입니다. 분쟁이 생겼을 때 근거로 쓸 수 있습니다.</p><div class="bt"><span class="tag">법적 효력</span><span class="tag">서명 기록</span></div></div></div>
+          <div class="benefit reveal"><div class="bn">03</div><div><h3>몇 건을 쓰든 요금은 같습니다</h3><p>건당 과금이 아니라 <b style="color:inherit">월 구독 하나로 횟수 제한 없이</b> 씁니다. 신학기처럼 계약이 몰리는 달에도 비용이 늘지 않습니다.</p><div class="bt"><span class="tag">무제한</span><span class="tag">월 구독</span></div></div></div>
+          <div class="benefit reveal"><div class="bn">04</div><div><h3>서류가 흩어지지 않습니다</h3><p>서명이 끝난 문서가 한 곳에 쌓입니다. 캐비닛을 뒤지거나 카톡을 거슬러 올라가지 않고 바로 찾습니다.</p><div class="bt"><span class="tag">문서 보관</span><span class="tag">바로 조회</span></div></div></div>
+        </div>
+
+        <div class="panel-intro reveal" style="margin-top:48px"><div><div class="kicker">이런 서류에 씁니다</div><h2>학원에서 매번 종이로 하던 것들</h2></div></div>
+        <div class="feat reveal">
+          <div class="fcard"><b>수강 등록 계약서</b><p>등록 조건·수강료·환불 규정 서명.</p></div>
+          <div class="fcard"><b>학부모 동의서</b><p>개인정보·사진 촬영·셔틀 이용 동의.</p></div>
+          <div class="fcard"><b>강사 근로계약서</b><p>채용 시 계약서를 원격으로 체결.</p></div>
+          <div class="fcard"><b>캠프·특강 신청서</b><p>참가 신청과 보호자 동의를 한 번에.</p></div>
+          <div class="fcard"><b>교재·물품 신청</b><p>구매 신청과 수령 확인 서명.</p></div>
+          <div class="fcard"><b>학원 내부 결재</b><p>지출·휴가 등 내부 문서 승인.</p></div>
+        </div>
+
+        <div class="panel-intro reveal" style="margin-top:48px"><div><div class="kicker">비용</div><h2>월 구독 하나로 무제한</h2><p>건당 추가 요금이 없습니다. 회원 종류에 따라 구독료가 다릅니다.</p></div></div>
+        <div class="bprice reveal" id="officePrice"></div>
+
+        <div class="panel-intro reveal" style="margin-top:48px"><div><div class="kicker">진행 절차</div><h2>신청부터 사용까지</h2></div></div>
+        <div class="flow reveal">
+          <div class="fstep"><div class="n">STEP 01</div><h4>신청</h4><p>신청서에 인투 오피스를 선택합니다.</p></div>
+          <div class="fstep"><div class="n">STEP 02</div><h4>계정 개설</h4><p>학원 계정을 만들어 드립니다.</p></div>
+          <div class="fstep"><div class="n">STEP 03</div><h4>양식 등록</h4><p>쓰시던 계약서·동의서를 그대로 올립니다.</p></div>
+          <div class="fstep"><div class="n">STEP 04</div><h4>발송·서명</h4><p>링크로 보내면 학부모가 서명합니다.</p></div>
+          <div class="fstep"><div class="n">STEP 05</div><h4>보관·관리</h4><p>완료된 문서를 한 곳에서 관리합니다.</p></div>
+        </div>
+        <div class="cnote">📝 <b>양식이 없어도 됩니다.</b> 쓰시던 종이 서류를 주시면 전자서명 양식으로 만들어 드립니다.</div>
+        <div class="area-cta"><a class="btn btn-primary" onclick="applyWith('cnt')">인투 오피스 신청하기 →</a></div>
       </div>
     </div>
   </section>
@@ -1290,7 +1354,7 @@
       {t:'note',note:'tz'}
     ],
     cnt:[
-      {t:'check',k:'유형',req:1,opts:['유학자료','SAT','IM VOCA','기타']},
+      {t:'check',k:'유형',req:1,opts:['유학자료','SAT','IM VOCA','인투 오피스(전자서명)','기타']},
       {t:'text',k:'대상 학생 (학년·레벨)',req:1},
       {t:'text',k:'학생 수'},
       {t:'text',k:'사용 목적'},
@@ -1559,6 +1623,26 @@
     var sd=document.getElementById('sidePriceDoc');if(sd)sd.textContent=premium?'관리비 3만~':'관리비 5만~';
     var sm=document.getElementById('sidePriceMkt');if(sm)sm.textContent=premium?'편당 5,000원':'편당 9,900원';
     renderBlogPrice(premium);
+    renderOfficePrice(premium);
+  }
+  /* 인투 오피스 회원별 구독료 */
+  var OFFICE_PRICE={general:'6,900',premium:'4,900'};
+  function renderOfficePrice(premium){
+    var el=document.getElementById('officePrice');if(!el)return;
+    var h='<div class="bcard'+(premium?'':' on')+'">'
+      +'<div class="bl">일반 회원'+(premium?'':' <span class="bnow">지금 적용</span>')+'</div>'
+      +'<div class="bv">'+OFFICE_PRICE.general+'원<small>/ 월</small></div>'
+      +'<div class="bd">횟수 제한 없이 무제한 사용.</div></div>'
+      +'<div class="bcard'+(premium?' on':'')+'">'
+      +'<div class="bl">프리미엄(파트너) 회원'+(premium?' <span class="bnow">지금 적용</span>':'')+'</div>'
+      +'<div class="bv">'+OFFICE_PRICE.premium+'원<small>/ 월</small></div>'
+      +'<div class="bd">파트너 코드로 전환하신 회원 가격.</div></div>'
+      +'<div class="cnote" style="grid-column:1/-1">'
+      +(premium
+        ? '✓ <b>프리미엄 회원가</b>로 표시 중입니다. 월 '+OFFICE_PRICE.premium+'원으로 서명 <b>횟수 제한 없이</b> 사용하실 수 있습니다.'
+        : '💡 <b>로그인하면</b> 회원 종류에 맞는 가격이 표시됩니다. 프리미엄(파트너) 회원은 <b>월 '+OFFICE_PRICE.premium+'원</b>입니다.')
+      +' 건당 추가 요금은 없습니다.</div>';
+    el.innerHTML=h;
   }
   /* 블로그 대행 회원별 가격 */
   var BLOG_PRICE={general:'9,900',premium:'5,000'};
