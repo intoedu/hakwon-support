@@ -478,7 +478,7 @@
   var WORK_OPTS={
     '인력':['필리핀 원어민','미국 원어민','필리핀+미국','기타'],
     '컨텐츠':['유학자료','SAT','IM VOCA','인투 오피스(전자서명)','기타'],
-    '마케팅':['블로그 대행','기타']
+    '마케팅':['블로그 홍보','기타']
   };
   var STATUSES=['접수','진행중','보류','완료'];
   var ROLE_KO={owner:'최고관리자',admin:'관리자',staff:'직원'};
@@ -803,7 +803,7 @@
   window.addQuoteRow=function(){QD.items.push({name:'',cycle:'1회',before:'',price:''});renderQuoteRows();};
   window.presetQuote=function(){
     var r=CURROW,pre=[];
-    if(r.area==='마케팅')pre=[{name:'블로그 대행 (글 1편 기준)',cycle:'매월',before:'',price:''}];
+    if(r.area==='마케팅')pre=[{name:'블로그 홍보 (글 1편 기준)',cycle:'매월',before:'',price:''}];
     else if(r.area==='인력')pre=[{name:'원어민 수업료 (주 O회)',cycle:'매월',before:'',price:''},{name:'매칭·세팅 비용',cycle:'1회',before:'',price:''}];
     else pre=[{name:'콘텐츠 제공료',cycle:'매월',before:'',price:''},{name:'초기 세팅 비용',cycle:'1회',before:'',price:''}];
     QD.items=QD.items.filter(function(x){return x.name||x.price;}).concat(pre);
