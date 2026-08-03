@@ -289,6 +289,7 @@
     <button class="navb on" data-nav="인력" type="button">인력지원 <span class="cnt" id="c-인력">0</span></button>
     <button class="navb" data-nav="컨텐츠" type="button">컨텐츠지원 <span class="cnt" id="c-컨텐츠">0</span></button>
     <button class="navb" data-nav="마케팅" type="button">마케팅지원 <span class="cnt" id="c-마케팅">0</span></button>
+    <button class="navb hide" id="navBlog" type="button" onclick="window.open(BLOG_URL,'_blank')">📝 블로그 센터 ↗</button>
     <div class="side-sep"></div>
     <button class="navb hide" data-nav="staff" id="navStaff" type="button">관리자 목록 <span class="cnt" id="c-staff">0</span></button>
     <button class="navb hide" data-nav="set" id="navSet" type="button">견적서 설정</button>
@@ -401,6 +402,9 @@
     <div class="sec-t">견적서</div>
     <div class="qbox" id="d_quote"></div>
 
+    <div class="sec-t hide" id="d_blogT">블로그 홍보</div>
+    <div class="qbox hide" id="d_blog"></div>
+
     <div class="sec-t">의뢰처 정보</div>
     <div class="info" id="d_info"></div>
     <div id="d_photos" class="hide"></div>
@@ -489,6 +493,7 @@
   var PERM_KO={site_board:'홈페이지 게시판 관리',manage_staff:'직원 승인·권한 관리'};
 
   var ME=null, STAFF=[], DATA={'인력':[],'컨텐츠':[],'마케팅':[]}, CUR='인력', CURROW=null, STTAB='wait', SET={}, QD=null;
+  window.BLOG_URL="https://intoedu.github.io/hakwon-blog/";  /* 인라인 onclick에서 쓰므로 전역 */
 
   function $(id){return document.getElementById(id);}
   function esc(s){return (s==null?'':(''+s)).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
@@ -573,6 +578,7 @@
     $('meName').textContent=(me.name||me.email||'-');
     $('meRole').textContent=ROLE_KO[me.role]||'직원';
     if(me.role==='owner'||can('manage_staff')){$('navStaff').classList.remove('hide');$('navSet').classList.remove('hide');}
+    if(can('blog_admin'))$('navBlog').classList.remove('hide');
     await loadSettings();
     loadAll();
   }
@@ -675,6 +681,7 @@
     $('d_memo').value=r.memo||'';
     renderTodos();
     renderQuoteBox();
+    renderBlogBox();
     renderInfo(r);
     var isOwner=(ME.role==='owner');
     $('d_del').classList.toggle('hide',!isOwner);
@@ -795,6 +802,62 @@
         +'<span style="margin-left:auto"><button class="btn btn-primary" style="padding:7px 14px" type="button" onclick="openQuote()">📋 견적서 만들기</button></span>';
     }
   }
+  /* ---------- 블로그 홍보 (블로그 센터 연결) ---------- */
+  async function renderBlogBox(){
+    var r=CURROW;
+    var show=!!r&&r.area==='마케팅'&&can('blog_admin');
+    $('d_blogT').classList.toggle('hide',!show);
+    $('d_blog').classList.toggle('hide',!show);
+    if(!show)return;
+    $('d_blog').innerHTML='<span class="muted">불러오는 중…</span>';
+
+    var res=await sb.rpc('request_blog_status',{p_request:r.id});
+    if(!CURROW||CURROW.id!==r.id)return;              /* 그 사이 다른 의뢰를 열었으면 무시 */
+    if(res.error){$('d_blog').innerHTML='<span class="muted">블로그 센터 조회 실패: '+esc(res.error.message)+'</span>';return;}
+    var s=(res.data&&res.data.order_id)?res.data:null;
+
+    if(!s){
+      var price=r.is_premium?3000:6000;
+      $('d_blog').innerHTML='<div style="width:100%">'
+        +'<b>아직 블로그 주문이 없습니다.</b>'
+        +'<div class="muted" style="font-size:.82rem;margin:6px 0 10px">편수와 마감일만 넣으면 신청서에 적은 '
+        +'지역·과목·대상·목적·사진이 그대로 블로그 센터로 넘어갑니다.</div>'
+        +'<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">'
+        +'<input class="inp" id="bo_qty" type="number" min="1" placeholder="편수 (예: 100)" style="width:140px">'
+        +'<input class="inp" id="bo_price" type="number" value="'+price+'" style="width:120px" title="편당 받는 돈">'
+        +'<input class="inp" id="bo_deadline" type="date" style="width:165px" title="마감일">'
+        +'<button class="btn btn-primary" style="padding:7px 14px" type="button" onclick="makeBlogOrder()">🖊 블로그 주문 만들기</button>'
+        +'</div></div>';
+      return;
+    }
+    $('d_blog').innerHTML='<b>'+s.total_qty+'편 주문 · '+s.done+'편 발행 완료</b>'
+      +'<span class="muted" style="font-weight:600;font-size:.84rem">만든 글 '+s.made+'편'
+      +(s.waiting?' · 검수 대기 '+s.waiting:'')
+      +(s.paid_at?'':' · 입금 대기')
+      +(s.deadline?' · 마감 '+s.deadline:'')+'</span>'
+      +'<span style="margin-left:auto"><button class="btn btn-ghost" style="padding:7px 13px" type="button" '
+      +'onclick="window.open(BLOG_URL+\'#order='+s.order_id+'\',\'_blank\')">블로그 센터에서 열기 ↗</button></span>';
+  }
+
+  window.makeBlogOrder=async function(){
+    var qty=Number($('bo_qty').value);
+    if(!qty||qty<1){toast('편수를 넣어 주세요');return;}
+    var btn=document.querySelector('#d_blog .btn-primary');if(btn){btn.disabled=true;btn.textContent='만드는 중…';}
+    var res=await sb.rpc('order_create',{
+      p_academy:CURROW.academy_name,
+      p_qty:qty,
+      p_sale:Number($('bo_price').value)||null,
+      p_deadline:$('bo_deadline').value||null,
+      p_region:null,
+      p_request:CURROW.id
+    });
+    if(res.error){toast('실패: '+res.error.message);if(btn){btn.disabled=false;btn.textContent='🖊 블로그 주문 만들기';}return;}
+    toast('블로그 주문을 만들었습니다');
+    if(!CURROW.work_type){$('d_work').value='블로그 홍보';saveField('work_type','블로그 홍보');}
+    window.open(BLOG_URL+'#order='+res.data.id,'_blank');
+    renderBlogBox();
+  };
+
   window.openQuote=function(){
     var r=CURROW;QD=r.quote?JSON.parse(JSON.stringify(r.quote)):defaultQuote(r);
     if(!QD.items||!QD.items.length)QD.items=[{name:'',cycle:'1회',before:'',price:''}];
