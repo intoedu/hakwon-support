@@ -136,6 +136,9 @@
   .irow{display:grid;grid-template-columns:150px 1fr;gap:14px;padding:11px 14px;border-bottom:1px solid var(--line);font-size:.88rem}
   .irow:last-child{border-bottom:0}
   .irow .k{color:var(--muted);font-weight:700;font-size:.82rem}
+  .pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr));gap:8px}
+  .pgrid img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:8px;border:1px solid var(--line);display:block;background:var(--surface-2)}
+  .pgrid a:hover img{border-color:var(--accent)}
   .sheet-f{padding:16px 24px;border-top:1px solid var(--line);display:flex;gap:9px;align-items:center;background:var(--surface-2)}
   .saved{font-size:.82rem;color:var(--ok);font-weight:700;opacity:0;transition:.2s}
   .saved.on{opacity:1}
@@ -400,6 +403,7 @@
 
     <div class="sec-t">의뢰처 정보</div>
     <div class="info" id="d_info"></div>
+    <div id="d_photos" class="hide"></div>
   </div>
   <div class="sheet-f">
     <button class="btn btn-ghost" type="button" onclick="closeDetail()">닫기</button>
@@ -688,9 +692,27 @@
     if(r.message)add('전체적으로 원하시는 것',r.message);
     var d=r.details||{};
     Object.keys(d).forEach(function(k){
+      if(k.charAt(0)==='_')return; /* _photos 등 내부 값은 아래에서 따로 처리 */
       var v=d[k];add(k,Array.isArray(v)?v.join(', '):v);
     });
     $('d_info').innerHTML=h||'<div class="irow"><span class="k">-</span><span class="muted">추가 정보 없음</span></div>';
+    renderPhotos(d._photos);
+  }
+  /* 신청서에 올린 사진 (비공개 버킷 → 서명 URL로 열람) */
+  async function renderPhotos(paths){
+    var box=$('d_photos');
+    if(!paths||!paths.length){box.classList.add('hide');box.innerHTML='';return;}
+    box.classList.remove('hide');
+    box.innerHTML='<div class="sec-t">신청서 사진 ('+paths.length+'장)</div><div class="muted" style="font-size:.84rem">불러오는 중…</div>';
+    var r=await sb.storage.from('request-photos').createSignedUrls(paths,60*60);
+    if(r.error){box.innerHTML='<div class="sec-t">신청서 사진</div><div class="muted" style="font-size:.84rem">사진을 불러오지 못했습니다: '+esc(r.error.message)+'</div>';return;}
+    var urls=(r.data||[]).filter(function(x){return x.signedUrl;});
+    var h='<div class="sec-t">신청서 사진 ('+urls.length+'장) <span class="muted" style="font-weight:600">· 클릭하면 원본이 열립니다</span></div><div class="pgrid">';
+    urls.forEach(function(x,i){
+      h+='<a href="'+esc(x.signedUrl)+'" target="_blank" rel="noopener"><img src="'+esc(x.signedUrl)+'" loading="lazy" alt="사진 '+(i+1)+'"></a>';
+    });
+    h+='</div>';
+    box.innerHTML=h;
   }
 
   function renderTodos(){

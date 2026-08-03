@@ -193,6 +193,22 @@
   .tzbox{margin-top:14px;background:color-mix(in srgb,var(--gold) 12%,var(--surface));border:1px solid color-mix(in srgb,var(--gold) 40%,var(--line));border-radius:10px;padding:14px 16px;font-size:.84rem}
   .tzbox b{color:var(--gold)}
   .tzbox ul{margin:8px 0 0;padding-left:18px;color:var(--muted)}
+  .ffhint{display:block;font-size:.82rem;color:var(--muted);margin:-4px 0 9px;line-height:1.5}
+  .guidebox{background:color-mix(in srgb,var(--accent) 7%,var(--surface));border:1px solid color-mix(in srgb,var(--accent) 28%,var(--line));border-radius:12px;padding:16px 18px;margin-bottom:22px}
+  .guidebox b{display:block;font-size:.92rem;margin-bottom:8px;color:var(--accent)}
+  .guidebox p{font-size:.86rem;color:var(--muted);line-height:1.65}
+  .guidebox p b{display:inline;color:var(--ink);font-size:inherit}
+  .guidebox.mini{background:var(--surface-2);border-color:var(--line)}
+  .guidebox.mini b{color:var(--ink)}
+  .gtbl{width:100%;margin-top:12px;border-collapse:collapse;font-size:.85rem}
+  .gtbl td{padding:6px 10px;border-bottom:1px solid color-mix(in srgb,var(--accent) 15%,var(--line))}
+  .gtbl tr:last-child td{border-bottom:0}
+  .gtbl td:first-child{width:64px;font-weight:800;color:var(--accent);white-space:nowrap}
+  .gtbl td:last-child{color:var(--muted)}
+  .fnote{font-size:.82rem;color:var(--muted);margin-top:8px}
+  .fnote.ok{color:var(--brand);font-weight:700}
+  .fnote.err{color:#c0392b;font-weight:700}
+  input[type=file].inp{padding:10px 12px;font-size:.86rem;cursor:pointer}
   .ff{margin-bottom:20px}
   .ff .fflabel{display:block;font-size:.88rem;font-weight:800;color:var(--ink);margin-bottom:10px}
   .ff .fflabel.req::after{content:' *';color:var(--accent)}
@@ -477,7 +493,7 @@
           <li onclick="go('doc')"><span class="k"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M3 9h18M8 21h8"/></svg></span><span><span class="t">자료제작</span><span class="d">홈페이지·디자인 직접 제작</span></span><span class="p" id="sidePriceDoc">관리비 5만~</span></li>
           <li onclick="go('hr')"><span class="k"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 19c.6-3 2.9-4.6 5.5-4.6S13.9 16 14.5 19M16 8.2a3 3 0 0 1 0 5.4M18 19c-.3-1.6-1-2.8-2-3.6"/></svg></span><span><span class="t">인력지원</span><span class="d">원어민 선생님 매칭</span></span><span class="p">구인 접수</span></li>
           <li onclick="go('content')"><span class="k"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H12v16H6.5A2.5 2.5 0 0 0 4 21.5zM20 5.5A2.5 2.5 0 0 0 17.5 3H12v16h5.5A2.5 2.5 0 0 1 20 21.5z"/></svg></span><span><span class="t">컨텐츠지원</span><span class="d">유학·SAT·VOCA·오피스</span></span><span class="p">콘텐츠 공급</span></li>
-          <li onclick="go('mkt')"><span class="k"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 15v-4h4l7-4v12l-7-4H4zM19 9a4 4 0 0 1 0 6"/></svg></span><span><span class="t">마케팅·광고</span><span class="d">블로그 홍보 · 모객</span></span><span class="p" id="sidePriceMkt">편당 9,900원</span></li>
+          <li onclick="go('mkt')"><span class="k"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 15v-4h4l7-4v12l-7-4H4zM19 9a4 4 0 0 1 0 6"/></svg></span><span><span class="t">마케팅·광고</span><span class="d">블로그 홍보 · 모객</span></span><span class="p" id="sidePriceMkt">편당 6,000원</span></li>
         </ul>
       </aside>
     </div>
@@ -1100,7 +1116,7 @@
       </div>
       <!-- 블로그 홍보 -->
       <div class="subpanel on" id="mkt-blog">
-        <div class="panel-intro reveal"><div><div class="kicker">블로그 홍보</div><h2>검색에서 모객으로</h2><p>학원 블로그를 대신 운영해 드리는 것이 아닙니다. <b>우리와 함께하는 블로거들이 각자의 블로그에</b> 학원 소개·홍보 글을 올려, 여러 곳에서 동시에 검색에 노출시킵니다.</p></div></div>
+        <div class="panel-intro reveal"><div><div class="kicker">블로그 홍보</div><h2>검색에서 모객으로</h2><p><b>100여 명의 블로거가 각자의 블로그에</b> 학원을 소개하는 글을 올립니다. 지역·과목 키워드로 검색했을 때 <b>학원이 여러 번 노출되게</b> 만드는 것이 목적입니다. 원하시는 편수만큼 주문하시면 됩니다.</p></div></div>
         <div class="cnote" style="margin-bottom:8px">✍️ <b>이렇게 진행됩니다:</b> 학원이 자료를 주시면 → 블로거를 배정해 → 블로거가 <b>자기 블로그에</b> 학원 홍보 글을 발행 → 발행된 글 주소를 학원에 전달드립니다. <b>학원 블로그 계정을 만들거나 넘겨주실 필요가 없습니다.</b></div>
         <div class="benefits">
           <div class="benefit reveal"><div class="bn">01</div><div><h3>검색에서 학원을 찾게</h3><p>"지역 + 과목"으로 검색하는 학부모에게 학원이 노출됩니다. 여러 블로거의 글이 각각 검색 결과에 잡히기 때문에, 노출되는 지점이 하나가 아니라 여러 개가 됩니다.</p><div class="bt"><span class="tag">지역 검색</span><span class="tag">다중 노출</span></div></div></div>
@@ -1108,15 +1124,16 @@
           <div class="benefit reveal"><div class="bn">03</div><div><h3>제3자가 소개해 주는 신뢰</h3><p>학원이 직접 하는 자랑보다, 다른 사람이 소개하는 글이 학부모에게 더 자연스럽게 닿습니다. 광고처럼 보이지 않으면서 학원을 알릴 수 있습니다.</p><div class="bt"><span class="tag">제3자 소개</span><span class="tag">자연스러운 홍보</span></div></div></div>
           <div class="benefit reveal"><div class="bn">04</div><div><h3>원장님 손이 가지 않습니다</h3><p>학원 블로그를 새로 만들거나 관리할 필요가 없습니다. 계정도, 글쓰기도, 발행도 우리 쪽에서 진행하고 학원은 자료만 주시면 됩니다.</p><div class="bt"><span class="tag">계정 불필요</span><span class="tag">자료만 제공</span></div></div></div>
         </div>
-        <div class="panel-intro reveal" style="margin-top:48px"><div><div class="kicker">이런 정보를 주세요</div><h2>좋은 글은 정보의 양에서 나옵니다</h2><p>같은 내용을 반복하면 글이 묻힙니다. 아래를 자세히 주실수록 노출이 잘 되는 글이 나옵니다.</p></div></div>
+        <div class="panel-intro reveal" style="margin-top:48px"><div><div class="kicker">이런 정보를 주세요</div><h2>검색어를 만드는 재료입니다</h2><p>글마다 <b>서로 다른 검색어</b>를 하나씩 배정합니다. 아래 네 가지를 쉼표로 나눠 적어주시면 "성수동 초등 영어 내신", "성수역 예비중 영어 레벨테스트" 처럼 학부모가 실제로 검색하는 말에 맞춘 글이 만들어집니다.</p></div></div>
         <div class="feat reveal">
-          <div class="fcard"><b>학원 소개·강점</b><p>어떤 학원인지, 무엇을 잘하는지.</p></div>
-          <div class="fcard"><b>시그니처</b><p>대표 프로그램·차별점.</p></div>
-          <div class="fcard"><b>홍보할 강좌·이벤트</b><p>이번에 알리고 싶은 것.</p></div>
-          <div class="fcard"><b>타깃</b><p>학년·학부모 등 대상.</p></div>
-          <div class="fcard"><b>사진·후기</b><p>있으면 글의 신뢰가 커집니다.</p></div>
-          <div class="fcard"><b>홈페이지·블로그 주소</b><p>있다면 글에서 함께 링크해 드립니다.</p></div>
+          <div class="fcard"><b>지역</b><p>성수동, 성수역, 뚝섬, 서울숲 — 동네·지하철역·큰 건물까지.</p></div>
+          <div class="fcard"><b>과목</b><p>영어, 영어회화, 영어독해 — 나눠 적을수록 좋습니다.</p></div>
+          <div class="fcard"><b>학년·대상</b><p>초등, 예비중, 중등, 고등.</p></div>
+          <div class="fcard"><b>검색 상황</b><p>내신, 학원 추천, 레벨테스트, 방학특강.</p></div>
+          <div class="fcard"><b>사진 30장 이상</b><p>글마다 다른 사진을 써야 검색에 잘 걸립니다. 학생 얼굴이 없는 사진이면 무엇이든.</p></div>
+          <div class="fcard"><b>학원 기본 정보</b><p>정식 명칭·주소·전화·수업 시간. 모든 글에 그대로 들어갑니다.</p></div>
         </div>
+        <div class="cnote">📣 관련 법(공정거래위원회 추천·보증 심사지침)에 따라 <b>모든 글 하단에는 광고임을 알리는 문구가 표기</b>됩니다.</div>
         <div class="panel-intro reveal" style="margin-top:48px"><div><div class="kicker">비용</div><h2>글 한 편당 비용</h2><p>발행한 만큼만 결제합니다. 약정 기간이나 기본료는 없습니다.</p></div></div>
         <div class="bprice reveal" id="blogPrice"></div>
         <div class="area-cta"><a class="btn btn-primary" onclick="applyWith('mkt')">블로그 홍보 신청하기 →</a><a class="btn btn-ghost" onclick="document.querySelector('#v-mkt .sp[data-t=flow]').click()">진행 절차 보기</a></div>
@@ -1363,14 +1380,25 @@
       {t:'text',k:'시작 희망일'}
     ],
     mkt:[
-      {t:'textarea',k:'학원 소개·강점·시그니처 (자세할수록 좋아요)',req:1},
-      {t:'check',k:'목표',opts:['모객','브랜딩','특정 강좌 홍보']},
-      {t:'text',k:'학원 홈페이지·블로그 주소 (있다면)'},
-      {t:'text',k:'홍보할 강좌·이벤트'},
-      {t:'text',k:'월 발행 희망 횟수'},
-      {t:'text',k:'타깃 (학년·학부모 등)'},
-      {t:'check',k:'사진·후기 제공',opts:['사진 있음','후기 있음','없음']},
-      {t:'text',k:'예상 예산'}
+      {t:'number',k:'원하시는 편수',req:1,ph:'예: 100',hint:'많을수록 검색에 걸리는 폭이 넓어집니다. 30편 이상을 권합니다.'},
+      {t:'date',k:'언제까지 필요하신가요',hint:'이 날짜 안에 모든 글이 올라갑니다.'},
+      {t:'note',note:'blogkeyword'},
+      {t:'text',k:'지역',req:1,ph:'예: 성수동, 성수역, 뚝섬, 서울숲',hint:'학부모가 검색할 만한 동네 이름을 다 적어 주세요. 학원 주변 지하철역·큰 건물도 좋습니다.'},
+      {t:'text',k:'과목',req:1,ph:'예: 영어, 영어회화, 영어독해',hint:'가르치시는 과목을 나눠 적어 주세요.'},
+      {t:'text',k:'학년·대상',req:1,ph:'예: 초등, 예비중, 중등, 고등',hint:'어떤 학생을 받으시는지 적어 주세요.'},
+      {t:'text',k:'어떤 걸 찾는 학부모에게 보이고 싶으신가요',req:1,ph:'예: 내신, 학원 추천, 레벨테스트, 방학특강, 원어민 수업',hint:'학부모가 검색할 만한 상황을 적어 주세요.'},
+      {t:'note',note:'blogfixed'},
+      {t:'text',k:'학원 정식 명칭',req:1,ph:'예: 성수영어학원'},
+      {t:'text',k:'주소',req:1,ph:'예: 서울 성동구 성수이로 00, 3층'},
+      {t:'text',k:'전화번호',req:1,ph:'예: 02-000-0000'},
+      {t:'text',k:'수업 시간',ph:'예: 평일 15:00~22:00 / 토 10:00~14:00'},
+      {t:'text',k:'홈페이지·블로그 주소',ph:'https://…  (없으면 비워두셔도 됩니다)'},
+      {t:'note',note:'blogphoto'},
+      {t:'files',k:'학원 사진'},
+      {t:'text',k:'사진 링크 (드라이브·MYBOX)',ph:'업로드가 어려우시면 링크를 적어 주세요'},
+      {t:'textarea',k:'꼭 알리고 싶은 점',ph:'다른 학원과 다른 점, 자랑하고 싶은 것을 적어 주세요. 글에 녹여 넣습니다.'},
+      {t:'textarea',k:'쓰지 말아야 할 것',ph:'언급을 피하고 싶은 내용이 있으면 적어 주세요 (예: 수강료, 특정 경쟁 학원)'},
+      {t:'note',note:'blogad'}
     ]
   };
   function renderFields(k){
@@ -1378,9 +1406,17 @@
     for(var i=0;i<schema.length;i++){var f=schema[i];
       if(f.t==='note'){
         if(f.note==='tz')h+='<div class="tzbox"><b>⏰ 시차 안내</b><ul><li>필리핀은 한국보다 1시간, 미국은 14시간 느립니다.</li><li>원하는 시간은 <b style="color:inherit">한국시간 기준</b>으로 적어주세요.</li><li>미국 선생님은 한국시간 오후 1시~오후 8시 수업이 어렵습니다.</li></ul></div>';
+        else if(f.note==='blogkeyword')h+='<div class="guidebox"><b>📌 이렇게 적어주시면 좋습니다</b>'
+          +'<p>저희는 블로거 100여 명이 각자의 블로그에 학원을 소개하는 글을 올립니다. 글마다 서로 다른 검색어를 하나씩 배정하기 때문에, 아래 네 가지를 <b>쉼표로 나눠</b> 적어주시면 <b>"성수동 초등 영어 내신"</b>, <b>"성수역 예비중 영어 레벨테스트"</b> 처럼 학부모가 실제로 검색하는 말에 맞춘 글이 만들어집니다.</p>'
+          +'<table class="gtbl"><tr><td>지역</td><td>성수동, 성수역, 뚝섬, 서울숲</td></tr><tr><td>과목</td><td>영어, 영어회화, 영어독해</td></tr><tr><td>대상</td><td>초등, 예비중, 중등, 고등</td></tr><tr><td>상황</td><td>내신, 학원 추천, 레벨테스트, 방학특강</td></tr></table>'
+          +'<p style="margin-top:10px">많이 적어주실수록 서로 다른 글이 많이 나오고, 검색에 걸리는 폭이 넓어집니다.</p></div>';
+        else if(f.note==='blogfixed')h+='<div class="guidebox mini"><b>📋 모든 글에 똑같이 들어갈 정보</b><p>이 내용은 모든 글에 그대로 들어갑니다. 정확하게 적어 주세요.</p></div>';
+        else if(f.note==='blogphoto')h+='<div class="guidebox mini"><b>📷 사진</b><p>사진이 많을수록 좋습니다. 글마다 다른 사진을 써야 검색에 잘 걸리기 때문입니다. <b>30장 이상을 권합니다.</b> 간판·건물 바깥, 강의실, 교재, 시간표, 안내문, 수업 자료 등 <b>학생 얼굴이 나오지 않는 사진</b>이면 무엇이든 좋습니다.</p></div>';
+        else if(f.note==='blogad')h+='<div class="cnote" style="margin-top:4px">📣 관련 법(공정거래위원회 추천·보증 심사지침)에 따라 <b>모든 글 하단에는 광고임을 알리는 문구가 표기</b>됩니다.</div>';
         continue;
       }
       h+='<div class="ff"><span class="fflabel'+(f.req?' req':'')+'">'+esc(f.k)+'</span>';
+      if(f.hint)h+='<span class="ffhint">'+esc(f.hint)+'</span>';
       if(f.t==='check'||f.t==='radio'){
         h+='<div class="ffopts">';
         for(var j=0;j<f.opts.length;j++){
@@ -1390,6 +1426,13 @@
         h+='</div>';
       }else if(f.t==='textarea'){
         h+='<textarea class="inp ffinput" data-k="'+esc(f.k)+'" style="min-height:90px"'+(f.ph?' placeholder="'+esc(f.ph)+'"':'')+'></textarea>';
+      }else if(f.t==='files'){
+        h+='<input type="file" class="inp ffinput ffiles" data-k="'+esc(f.k)+'" accept="image/*" multiple onchange="onPhotoPick(this)">'
+          +'<div class="fnote" id="photoInfo">아직 선택한 사진이 없습니다.</div>';
+      }else if(f.t==='number'){
+        h+='<input class="inp ffinput" type="number" min="1" inputmode="numeric" data-k="'+esc(f.k)+'"'+(f.ph?' placeholder="'+esc(f.ph)+'"':'')+'>';
+      }else if(f.t==='date'){
+        h+='<input class="inp ffinput" type="date" data-k="'+esc(f.k)+'">';
       }else{
         h+='<input class="inp ffinput" data-k="'+esc(f.k)+'"'+(f.ph?' placeholder="'+esc(f.ph)+'"':'')+'>';
       }
@@ -1401,6 +1444,7 @@
     var schema=FORM_SCHEMA[k]||[],d={};
     schema.forEach(function(f){
       if(f.t==='note')return;
+      if(f.t==='files')return; /* 사진은 업로드 후 별도로 넣음 */
       if(f.t==='check'||f.t==='radio'){
         var vals=[];
         document.querySelectorAll('#fields .ffopt[data-k="'+f.k+'"]').forEach(function(lab){if(lab.querySelector('input').checked)vals.push(lab.textContent.trim());});
@@ -1464,6 +1508,41 @@
   var SB_KEY="sb_publishable_Me_R6M540Fg60nmEVqByTg_p-zD8pxa";
   var sb=(window.supabase&&window.supabase.createClient)?window.supabase.createClient(SB_URL,SB_KEY):null;
   var AREA_KO={doc:"자료제작",hr:"인력",cnt:"컨텐츠",mkt:"마케팅"};
+  /* ===== 신청서 사진 업로드 ===== */
+  var PHOTO_MAX=10*1024*1024; /* 파일당 10MB (버킷 설정과 동일) */
+  function onPhotoPick(input){
+    var info=document.getElementById('photoInfo');if(!info)return;
+    var files=input.files?Array.prototype.slice.call(input.files):[];
+    if(!files.length){info.textContent='아직 선택한 사진이 없습니다.';info.className='fnote';return;}
+    var big=files.filter(function(f){return f.size>PHOTO_MAX;});
+    var mb=files.reduce(function(a,f){return a+f.size;},0)/1048576;
+    if(big.length){
+      info.className='fnote err';
+      info.textContent='⚠️ '+big.length+'장이 너무 큽니다(장당 10MB 이하). 큰 사진은 빼거나 링크로 남겨주세요.';
+    }else{
+      info.className='fnote ok';
+      info.textContent='✓ '+files.length+'장 선택됨 ('+mb.toFixed(1)+'MB)'+(files.length<30?' · 30장 이상을 권합니다':'');
+    }
+  }
+  async function uploadPhotos(onProgress){
+    var input=document.querySelector('#fields .ffiles');
+    if(!input||!input.files||!input.files.length)return null;
+    var files=Array.prototype.slice.call(input.files);
+    var big=files.filter(function(f){return f.size>PHOTO_MAX;});
+    if(big.length)throw new Error('사진 '+big.length+'장이 10MB를 넘습니다. 해당 사진을 빼고 다시 시도해 주세요.');
+    var folder=(window.crypto&&crypto.randomUUID)?crypto.randomUUID():(''+Date.now()+Math.random().toString(16).slice(2));
+    var paths=[];
+    for(var i=0;i<files.length;i++){
+      var f=files[i];
+      var ext=(f.name.split('.').pop()||'jpg').toLowerCase().replace(/[^a-z0-9]/g,'')||'jpg';
+      var path=folder+'/'+String(i+1).padStart(3,'0')+'.'+ext;
+      var r=await sb.storage.from('request-photos').upload(path,f,{contentType:f.type||'image/jpeg',upsert:false});
+      if(r.error)throw new Error('사진 업로드 실패('+f.name+'): '+r.error.message);
+      paths.push(r.data.path);
+      if(onProgress)onProgress(i+1,files.length);
+    }
+    return {folder:folder,paths:paths};
+  }
   async function submitRequest(){
     var hint=document.getElementById('formHint');
     var setErr=function(m){hint.textContent=m;hint.style.color="#c0392b";};
@@ -1485,6 +1564,15 @@
     var details=collectDetails(area);
     var extra=document.getElementById('f_extra').value.trim();
     if(extra)details['기타 요청사항']=extra;
+    /* 사진이 있으면 먼저 업로드 */
+    try{
+      var up=await uploadPhotos(function(done,total){btn.textContent='사진 올리는 중 '+done+'/'+total;});
+      if(up){details['학원 사진']=up.paths.length+'장';details['_photos']=up.paths;}
+    }catch(e){
+      btn.disabled=false;btn.textContent='신청서 제출';
+      return setErr(e.message||'사진 업로드에 실패했습니다. 사진을 빼고 제출하시거나 링크로 남겨주세요.');
+    }
+    btn.textContent='제출 중...';
     var res=await sb.from('requests').insert({area:AREA_KO[area]||area,academy_name:academy,manager_name:manager,phone:phone,email:email,message:message,details:details,consent:consent});
     if(res.error){btn.disabled=false;btn.textContent='신청서 제출';setErr('제출 실패: '+res.error.message);return;}
     document.getElementById('doneWhat').textContent='접수 내용 · '+(AREA_KO[area]||area)+' 지원 · '+academy;
@@ -1623,7 +1711,7 @@
     var tag=document.getElementById('priceTag');
     if(tag){tag.innerHTML=premium?'<span class="ptag on">✓ 프리미엄 회원가로 표시 중</span>':'<span class="ptag">일반 가격입니다 · <b>프리미엄(파트너) 회원</b>은 회원가로 더 저렴합니다</span>';}
     var sd=document.getElementById('sidePriceDoc');if(sd)sd.textContent=premium?'관리비 3만~':'관리비 5만~';
-    var sm=document.getElementById('sidePriceMkt');if(sm)sm.textContent=premium?'편당 5,000원':'편당 9,900원';
+    var sm=document.getElementById('sidePriceMkt');if(sm)sm.textContent=premium?'편당 3,000원':'편당 6,000원';
     renderBlogPrice(premium);
     renderOfficePrice(premium);
   }
@@ -1647,7 +1735,7 @@
     el.innerHTML=h;
   }
   /* 블로그 홍보 회원별 가격 */
-  var BLOG_PRICE={general:'9,900',premium:'5,000'};
+  var BLOG_PRICE={general:'6,000',premium:'3,000'};
   function renderBlogPrice(premium){
     var h='<div class="bcard'+(premium?'':' on')+'">'
       +'<div class="bl">일반 회원'+(premium?'':' <span class="bnow">지금 적용</span>')+'</div>'
@@ -1659,9 +1747,9 @@
       +'<div class="bd">파트너 코드로 전환하신 회원에게 적용됩니다.</div></div>';
     var note='<div class="cnote" style="grid-column:1/-1">'
       +(premium
-        ? '✓ <b>프리미엄 회원가</b>로 표시 중입니다. 월 발행 횟수 × 편당 5,000원으로 정산합니다.'
-        : '💡 <b>로그인하면</b> 회원 종류에 맞는 가격이 표시됩니다. 프리미엄(파트너) 회원은 <b>편당 5,000원</b>으로 절반 가까이 저렴합니다.')
-      +' 사진·후기 등 자료를 주시면 추가 비용 없이 반영합니다.</div>';
+        ? '✓ <b>프리미엄 회원가</b>로 표시 중입니다. 주문하신 편수 × 편당 '+BLOG_PRICE.premium+'원으로 정산합니다.'
+        : '💡 <b>로그인하면</b> 회원 종류에 맞는 가격이 표시됩니다. 프리미엄(파트너) 회원은 <b>편당 '+BLOG_PRICE.premium+'원</b>으로 절반 저렴합니다.')
+      +' <b>원하시는 편수만큼 주문</b>하시면 되고, 약정 기간이나 기본료는 없습니다.</div>';
     ['blogPrice','blogPrice2'].forEach(function(id){var el=document.getElementById(id);if(el)el.innerHTML=h+note;});
   }
   renderPricing(false);
