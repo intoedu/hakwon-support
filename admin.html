@@ -830,14 +830,31 @@
         +'</div></div>';
       return;
     }
+    var surl=s.share_key?BLOG_URL+'status.html?k='+s.share_key:'';
     $('d_blog').innerHTML='<b>'+s.total_qty+'편 주문 · '+s.done+'편 발행 완료</b>'
       +'<span class="muted" style="font-weight:600;font-size:.84rem">만든 글 '+s.made+'편'
       +(s.waiting?' · 검수 대기 '+s.waiting:'')
       +(s.paid_at?'':' · 입금 대기')
       +(s.deadline?' · 마감 '+s.deadline:'')+'</span>'
       +'<span style="margin-left:auto"><button class="btn btn-ghost" style="padding:7px 13px" type="button" '
-      +'onclick="window.open(BLOG_URL+\'#order='+s.order_id+'\',\'_blank\')">블로그 센터에서 열기 ↗</button></span>';
+      +'onclick="window.open(BLOG_URL+\'#order='+s.order_id+'\',\'_blank\')">블로그 센터에서 열기 ↗</button></span>'
+      +(surl?'<div style="width:100%;margin-top:10px;padding-top:10px;border-top:1px solid var(--line)">'
+        +'<div class="muted" style="font-size:.82rem;margin-bottom:6px">학원에 보낼 진행현황 주소 — '
+        +'로그인 없이 열리고, 이 학원 것만 보입니다 (블로거 이름·단가는 안 보입니다)</div>'
+        +'<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">'
+        +'<input class="inp" readonly style="flex:1;min-width:230px;font-size:.8rem" value="'+esc(surl)+'" onclick="this.select()">'
+        +'<button class="btn btn-primary" style="padding:7px 13px" type="button" '
+        +'onclick="copyStatusUrl(this,\''+esc(surl)+'\')">📋 복사</button>'
+        +'<button class="btn btn-ghost" style="padding:7px 13px" type="button" '
+        +'onclick="window.open(\''+esc(surl)+'\',\'_blank\')">열어보기 ↗</button>'
+        +'</div></div>':'');
   }
+
+  /* 인라인 onclick 에서 부르므로 전역이어야 합니다 */
+  window.copyStatusUrl=async function(btn,url){
+    try{await navigator.clipboard.writeText(url);toast('주소를 복사했습니다. 학원에 보내주세요');}
+    catch(e){window.prompt('아래 주소를 복사해 학원에 보내주세요',url);}
+  };
 
   window.makeBlogOrder=async function(){
     var qty=Number($('bo_qty').value);
