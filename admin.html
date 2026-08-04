@@ -490,7 +490,8 @@
   };
   var STATUSES=['접수','진행중','보류','완료'];
   var ROLE_KO={owner:'최고관리자',admin:'관리자',staff:'직원'};
-  var PERM_KO={site_board:'홈페이지 게시판 관리',manage_staff:'직원 승인·권한 관리'};
+  var PERM_KO={site_board:'홈페이지 게시판 관리',manage_staff:'직원 승인·권한 관리',
+               blog_admin:'블로그 센터 운영 (전체)',blog_review:'블로그 원고 검수만'};
 
   var ME=null, STAFF=[], DATA={'인력':[],'컨텐츠':[],'마케팅':[]}, CUR='인력', CURROW=null, STTAB='wait', SET={}, QD=null;
   window.BLOG_URL="https://intoedu.github.io/hakwon-blog/";  /* 인라인 onclick에서 쓰므로 전역 */
@@ -578,7 +579,7 @@
     $('meName').textContent=(me.name||me.email||'-');
     $('meRole').textContent=ROLE_KO[me.role]||'직원';
     if(me.role==='owner'||can('manage_staff')){$('navStaff').classList.remove('hide');$('navSet').classList.remove('hide');}
-    if(can('blog_admin'))$('navBlog').classList.remove('hide');
+    if(can('blog_admin')||can('blog_review'))$('navBlog').classList.remove('hide');
     await loadSettings();
     loadAll();
   }
