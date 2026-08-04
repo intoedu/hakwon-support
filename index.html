@@ -227,6 +227,18 @@
   .qsum{margin-top:11px;font-size:.88rem;font-weight:700;background:color-mix(in srgb,var(--accent) 8%,var(--surface));border:1px solid color-mix(in srgb,var(--accent) 25%,var(--line));border-radius:10px;padding:12px 15px}
   .qsum .qsm{display:block;font-weight:600;color:var(--muted);font-size:.8rem;margin-top:4px}
   @media(max-width:720px){.qtyopts{grid-template-columns:repeat(2,1fr)}}
+  /* 접어둔 선택 입력 칸 */
+  .ffold{border:1.5px dashed color-mix(in srgb,var(--accent) 35%,var(--line));border-radius:12px;
+         margin:2px 0 20px;background:color-mix(in srgb,var(--accent) 4%,var(--surface))}
+  .ffold>summary{list-style:none;cursor:pointer;padding:14px 16px;font-weight:800;font-size:.93rem;
+                 display:flex;align-items:center;justify-content:flex-start;gap:9px;flex-wrap:wrap}
+  .ffold>summary::-webkit-details-marker{display:none}
+  .ffold>summary::before{content:"＋";color:var(--accent);font-size:1.02rem;width:17px;text-align:center;flex:none}
+  .ffold[open]>summary::before{content:"－"}
+  .ffold>summary small{font-weight:600;color:var(--muted);font-size:.82rem}
+  .ffoldin{padding:6px 16px 2px;border-top:1px solid color-mix(in srgb,var(--accent) 18%,var(--line))}
+  .ffoldwhy{font-size:.84rem;color:var(--muted);line-height:1.6;margin:10px 0 16px}
+  .ffoldwhy b{color:var(--ink)}
   /* 편수별 기간·가격 표 */
   .qtbl{grid-column:1/-1;margin-top:16px;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--surface)}
   .qtbl table{width:100%;border-collapse:collapse;font-size:.88rem}
@@ -1421,6 +1433,23 @@
       {t:'text',k:'사진 링크 (드라이브·MYBOX)',ph:'업로드가 어려우시면 링크를 적어 주세요'},
       {t:'textarea',k:'꼭 알리고 싶은 점',ph:'다른 학원과 다른 점, 자랑하고 싶은 것을 적어 주세요. 글에 녹여 넣습니다.'},
       {t:'textarea',k:'쓰지 말아야 할 것',ph:'언급을 피하고 싶은 내용이 있으면 적어 주세요 (예: 수강료, 특정 경쟁 학원)'},
+      {t:'note',note:'blogcall'},
+      /* ── 여기부터 접어둔 선택 칸 ── */
+      {t:'foldstart',k:'글이 훨씬 좋아집니다 — 5분만 더 쓰시면',sub:'안 쓰셔도 신청은 됩니다'},
+      {t:'note',note:'blogwhy'},
+      {t:'text',k:'학부모가 자주 묻는 질문 ①',ph:'예: 우리 아이 레벨이 어느 정도인가요?'},
+      {t:'text',k:'학부모가 자주 묻는 질문 ②',ph:'예: 숙제는 얼마나 나가나요?'},
+      {t:'text',k:'학부모가 자주 묻는 질문 ③',ph:'예: 중간에 반을 바꿀 수 있나요?'},
+      {t:'text',k:'우리 학원을 한 문장으로',ph:'예: 성수동에서 12년째, 중등 내신만 파는 소수정예 영어학원'},
+      {t:'check',k:'다른 학원과 다른 점',opts:['소수정예','원어민 수업','자체 교재','관리형(숙제·출결 관리)','1:1 맞춤','성적 향상 보장','상담이 잦음','오래된 학원','학원 차량 운행']},
+      {t:'check',k:'주로 오는 학생',opts:['내신 대비','선행','기초 다지기','특목고·자사고','유학 준비','편입·재수','경시·올림피아드']},
+      {t:'textarea',k:'수업 한 타임이 어떻게 진행되나요',ph:'예: 단어 시험 10분 → 본문 강의 40분 → 문제 풀이 30분 → 오답 확인 10분'},
+      {t:'text',k:'쓰는 교재·커리큘럼 이름',ph:'예: 자체 제작 IM VOCA, 능률 중2 영어, 리딩튜터'},
+      {t:'text',k:'최근 성과 (숫자로)',ph:'예: 3개월 만에 내신 20점 상승 / 작년 특목고 7명 합격'},
+      {t:'text',k:'원장님 경력 한 줄',ph:'예: 대치동 10년 강의 후 성수동 개원, 영어교육 석사'},
+      {t:'text',k:'시설 중 자랑하고 싶은 것',ph:'예: 층 전체를 쓰는 자습실, 학생별 개인 사물함'},
+      {t:'text',k:'상담 오면 꼭 보여주시는 것',ph:'예: 학생별 오답 노트, 월간 학습 리포트'},
+      {t:'foldend'},
       {t:'note',note:'blogad'}
     ]
   };
@@ -1488,8 +1517,16 @@
         else if(f.note==='blogfixed')h+='<div class="guidebox mini"><b>📋 모든 글에 똑같이 들어갈 정보</b><p>이 내용은 모든 글에 그대로 들어갑니다. 정확하게 적어 주세요.</p></div>';
         else if(f.note==='blogphoto')h+='<div class="guidebox mini"><b>📷 사진</b><p>사진이 많을수록 좋습니다. 글마다 다른 사진을 써야 검색에 잘 걸리기 때문입니다. <b>30장 이상을 권합니다.</b> 간판·건물 바깥, 강의실, 교재, 시간표, 안내문, 수업 자료 등 <b>학생 얼굴이 나오지 않는 사진</b>이면 무엇이든 좋습니다.</p></div>';
         else if(f.note==='blogad')h+='<div class="cnote" style="margin-top:4px">📣 관련 법(공정거래위원회 추천·보증 심사지침)에 따라 <b>모든 글 하단에는 광고임을 알리는 문구가 표기</b>됩니다.</div>';
+        else if(f.note==='blogcall')h+='<div class="guidebox mini"><b>☎️ 접수 후 10분 통화</b><p>신청서를 받으면 담당자가 <b>10분 정도 전화로 몇 가지 더 여쭙습니다.</b> 글로 쓰시는 것보다 말씀으로 듣는 편이 훨씬 좋은 글감이 됩니다. 아래 칸은 <b>미리 알려주실 수 있는 만큼만</b> 적어 주세요.</p></div>';
+        else if(f.note==='blogwhy')h+='<div class="ffoldwhy">학원 이름·주소·과목만으로는 <b>어느 학원에나 들어맞는 뻔한 글</b>이 됩니다. 그런 글은 검색에서도 밀립니다.<br>아래는 <b>원장님만 아시는 것</b>들입니다. 한 줄씩만 적어주셔도 글이 완전히 달라집니다. <b>비워두셔도 신청은 정상 접수됩니다.</b></div>';
         continue;
       }
+      if(f.t==='foldstart'){
+        h+='<details class="ffold"><summary>'+esc(f.k)
+          +(f.sub?' <small>'+esc(f.sub)+'</small>':'')+'</summary><div class="ffoldin">';
+        continue;
+      }
+      if(f.t==='foldend'){h+='</div></details>';continue;}
       h+='<div class="ff"><span class="fflabel'+(f.req?' req':'')+'">'+esc(f.k)+'</span>';
       if(f.hint)h+='<span class="ffhint">'+esc(f.hint)+'</span>';
       if(f.t==='check'||f.t==='radio'){
@@ -1520,7 +1557,7 @@
   function collectDetails(k){
     var schema=FORM_SCHEMA[k]||[],d={};
     schema.forEach(function(f){
-      if(f.t==='note')return;
+      if(f.t==='note'||f.t==='foldstart'||f.t==='foldend')return;
       if(f.t==='files')return; /* 사진은 업로드 후 별도로 넣음 */
       if(f.t==='check'||f.t==='radio'||f.t==='qty'){
         var vals=[];
