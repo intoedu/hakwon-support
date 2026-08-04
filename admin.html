@@ -818,14 +818,29 @@
 
     if(!s){
       var price=r.is_premium?3000:6000;
+      /* 신청서에서 고른 편수·마감일을 그대로 채워 둡니다 */
+      var det=r.details||{};
+      var qty=parseInt(det['원하시는 편수']||'',10);
+      var 기간=det['작성 기간']||'';
+      /* 학원에는 "입금 확인일부터 ○주"로 안내했으므로 오늘 기준으로 계산해 둡니다 */
+      var wk=parseInt(기간,10);
+      var due='';
+      if(wk>0){var dd=new Date();dd.setDate(dd.getDate()+wk*7);
+        due=dd.getFullYear()+'-'+('0'+(dd.getMonth()+1)).slice(-2)+'-'+('0'+dd.getDate()).slice(-2);}
+      else if((det['작성 마감일']||'').match(/^\d{4}-\d{2}-\d{2}$/))due=det['작성 마감일'];
       $('d_blog').innerHTML='<div style="width:100%">'
         +'<b>아직 블로그 주문이 없습니다.</b>'
-        +'<div class="muted" style="font-size:.82rem;margin:6px 0 10px">편수와 마감일만 넣으면 신청서에 적은 '
-        +'지역·과목·대상·목적·사진이 그대로 블로그 센터로 넘어갑니다.</div>'
+        +'<div class="muted" style="font-size:.82rem;margin:6px 0 10px">'
+        +(qty?'신청서에서 고르신 <b>'+qty+'편'+(기간?' · '+esc(기간):'')+'</b>으로 채워 두었습니다. '
+             +'마감일은 <b>오늘부터</b> 계산해 두었으니, 입금이 늦어지면 그때 맞춰 고쳐 주세요.'
+           :'편수와 마감일만 넣으면 신청서에 적은 지역·과목·대상·목적·사진이 그대로 블로그 센터로 넘어갑니다.')
+        +'</div>'
         +'<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">'
-        +'<input class="inp" id="bo_qty" type="number" min="1" placeholder="편수 (예: 100)" style="width:140px">'
+        +'<input class="inp" id="bo_qty" type="number" min="1" placeholder="편수 (예: 100)" style="width:140px"'
+        +(qty?' value="'+qty+'"':'')+'>'
         +'<input class="inp" id="bo_price" type="number" value="'+price+'" style="width:120px" title="편당 받는 돈">'
-        +'<input class="inp" id="bo_deadline" type="date" style="width:165px" title="마감일">'
+        +'<input class="inp" id="bo_deadline" type="date" style="width:165px" title="마감일"'
+        +(due?' value="'+esc(due)+'"':'')+'>'
         +'<button class="btn btn-primary" style="padding:7px 14px" type="button" onclick="makeBlogOrder()">🖊 블로그 주문 만들기</button>'
         +'</div></div>';
       return;
