@@ -768,11 +768,25 @@
   window.deleteRequest=async function(){
     if(!CURROW)return;
     if(ME.role!=='owner'){toast('의뢰 삭제는 최고관리자만 할 수 있습니다');return;}
+    /* 블로그 센터에 주문이 걸려 있으면 같이 지웁니다 (안 지우면 주인 없는 주문이 남습니다) */
+    var bs=await sb.rpc('request_blog_status',{p_request:CURROW.id});
+    var bo=(bs.data&&bs.data.order_id)?bs.data:null;
+
     var q='아래 의뢰를 완전히 삭제할까요? 되돌릴 수 없습니다.\n\n'
       +'· 학원: '+(CURROW.academy_name||'-')+'\n'
       +'· 영역: '+(AREAS[CURROW.area]||CURROW.area)+'\n'
-      +'· 접수: '+fdatetime(CURROW.created_at);
+      +'· 접수: '+fdatetime(CURROW.created_at)
+      +(bo?'\n\n⚠️ 블로그 센터의 주문도 함께 지워집니다.\n'
+          +'   · '+bo.total_qty+'편 주문 · 만든 글 '+bo.made+'편'
+          +(bo.done?' (발행 완료 '+bo.done+'편)':'')
+          +'\n   글과 진행 기록이 모두 사라집니다.':'');
     if(!confirm(q))return;
+
+    if(bo){
+      var rb=await sb.rpc('order_delete',{p_order:bo.order_id});
+      if(rb.error){toast('블로그 주문 삭제 실패: '+rb.error.message);return;}
+      toast('블로그 주문과 글 '+((rb.data&&rb.data.posts)||0)+'편을 지웠습니다');
+    }
     var r=await sb.from('requests').delete().eq('id',CURROW.id).select('id');
     if(r.error){toast('삭제 실패: '+r.error.message);return;}
     if(!r.data||!r.data.length){toast('삭제 권한이 없습니다 (최고관리자만 가능)');return;}
