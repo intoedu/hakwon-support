@@ -1612,7 +1612,7 @@
         }
         h+='</div>';
       }else if(f.t==='textarea'){
-        h+='<textarea class="inp ffinput" data-k="'+esc(f.k)+'" style="min-height:90px"'+(f.ph?' placeholder="'+esc(f.ph)+'"':'')+'></textarea>';
+        h+='<textarea class="inp ffinput" data-k="'+esc(f.k)+'" style="min-height:'+(f.hi?150:90)+'px"'+(f.ph?' placeholder="'+esc(f.ph)+'"':'')+'></textarea>';
       }else if(f.t==='files'){
         h+='<input type="file" class="inp ffinput ffiles" data-k="'+esc(f.k)+'" accept="image/*" multiple onchange="onPhotoPick(this)">'
           +'<div class="fnote" id="photoInfo">아직 선택한 사진이 없습니다.</div>';
