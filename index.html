@@ -487,6 +487,41 @@
   .qanswer b{color:var(--accent);font-size:.85rem}
   .qanswer p{margin-top:6px;white-space:pre-wrap;line-height:1.7;color:var(--ink)}
   .modal-card.wide{max-width:560px}
+  /* 내 계정 — 신청 내역 */
+  .mehead{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap}
+  .mehead h3{font-size:1.2rem;font-weight:800}
+  .mehead span{display:block;font-size:.84rem;color:var(--muted);margin-top:3px;word-break:break-all}
+  .sec-line{margin:22px 0 12px;font-size:.76rem;font-weight:800;letter-spacing:.05em;color:var(--muted);
+       padding-bottom:8px;border-bottom:1px solid var(--line)}
+  .melist{display:grid;gap:10px;max-height:46vh;overflow-y:auto;margin:0 -4px;padding:0 4px}
+  .mecard{border:1px solid var(--line);border-radius:12px;padding:14px 16px;background:var(--surface-2)}
+  .mecard .top{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:7px}
+  .mecard .area{font-size:.7rem;font-weight:800;color:#fff;background:var(--brand);
+       padding:3px 9px;border-radius:999px;white-space:nowrap}
+  .mecard .nm{font-weight:800;font-size:.95rem}
+  .mecard .st{font-size:.7rem;font-weight:800;padding:3px 9px;border-radius:999px;white-space:nowrap;
+       background:var(--surface);border:1px solid var(--line);color:var(--muted)}
+  .mecard .st.go{color:var(--accent-ink);border-color:color-mix(in srgb,var(--accent) 40%,var(--line))}
+  .mecard .st.done{color:var(--brand);border-color:color-mix(in srgb,var(--brand) 40%,var(--line))}
+  .mecard .sum{font-size:.83rem;color:var(--muted);line-height:1.6}
+  .mecard .meta{display:flex;gap:14px;flex-wrap:wrap;margin-top:9px;font-size:.82rem}
+  .mecard .meta b{color:var(--gold);font-weight:800}
+  .mecard .meta i{font-style:normal;color:var(--muted)}
+  .mebar{height:6px;border-radius:999px;background:var(--line);overflow:hidden;margin-top:10px}
+  .mebar i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--brand))}
+  .melink{display:inline-block;margin-top:11px;font-size:.83rem;font-weight:800;color:var(--accent-ink);
+       border:1px solid color-mix(in srgb,var(--accent) 35%,var(--line));background:var(--surface);
+       padding:8px 13px;border-radius:9px;text-decoration:none}
+  .melink:hover{background:var(--accent);border-color:var(--accent);color:#fff}
+  .meempty{font-size:.87rem;color:var(--muted);text-align:center;padding:26px 10px;line-height:1.7}
+  .merow{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:20px;
+       padding-top:16px;border-top:1px solid var(--line)}
+  .merow .lg{background:none;border:0;font-family:inherit;font-weight:700;font-size:.9rem;
+       color:var(--muted);cursor:pointer;padding:8px 2px}
+  .merow .lg:hover{color:#c0392b}
+  .authArea .me{cursor:pointer;border:0;background:none;font-family:inherit}
+  .authArea .me:hover{text-decoration:underline}
+  @media(max-width:560px){ .melist{max-height:52vh} }
   .modal-body h3{font-size:1.2rem;font-weight:800;margin-bottom:14px}
   .chk{display:flex;gap:8px;align-items:center;font-size:.9rem;color:var(--ink);cursor:pointer}
   .chk input{width:17px;height:17px;accent-color:var(--accent);flex:0 0 auto}
@@ -1405,6 +1440,29 @@
 </div>
 
 <!-- 프리미엄 전환 모달 -->
+<!-- 내 계정 — 신청 내역 · 진행현황 · 로그아웃 -->
+<div class="modal" id="meModal" onclick="if(event.target===this)closeMe()">
+  <div class="modal-card wide">
+    <button class="modal-x" onclick="closeMe()" aria-label="닫기">×</button>
+    <div class="modal-body" style="padding:26px 26px 22px">
+      <div class="mehead">
+        <div>
+          <h3 id="meName">내 계정</h3>
+          <span id="meMail"></span>
+        </div>
+        <div id="meTier"></div>
+      </div>
+      <div class="sec-line">내 신청 내역</div>
+      <div id="meList"><div class="meempty">불러오는 중입니다…</div></div>
+      <div class="merow">
+        <button class="lg" type="button" onclick="doLogout();closeMe()">로그아웃</button>
+        <button class="btn btn-primary" type="button" style="width:auto;padding:10px 18px"
+                onclick="closeMe();applyAgain(true)">새 신청하기</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="modal" id="premiumModal" onclick="if(event.target===this)closePremium()">
   <div class="modal-card" style="max-width:390px">
     <button class="modal-x" onclick="closePremium()" aria-label="닫기">×</button>
@@ -1898,6 +1956,7 @@
     if(r.error){alert('변경 실패: '+r.error.message);return;}
     if(!r.data||!r.data.length){alert('권한이 없어 변경되지 않았습니다.');return;}
     await updateAuthUI();
+    if(document.getElementById('meModal').classList.contains('open'))openMe();
   }
   async function updateAuthUI(){
     var area=document.getElementById('authArea');if(!area||!sb)return;
@@ -1922,8 +1981,9 @@
       var tail=premium?'<span class="pbadge">프리미엄</span>':'<button class="up" type="button" onclick="openPremium()">프리미엄 전환</button>';
       /* 관리자 계정 전용: 프리미엄 화면을 껐다 켜며 확인 */
       if(window.__isOwner){tail+='<button class="lg" type="button" title="최고관리자 전용 · 프리미엄 표시 확인용" onclick="togglePremiumSelf()">프리미엄 '+(premium?'OFF':'ON')+'</button>';}
-      area.innerHTML='<span class="me" title="'+name+'">'+name+' 님</span>'+tail+'<button class="lg" type="button" onclick="doLogout()">로그아웃</button>';
-      if(ma){ma.textContent='로그아웃';ma.setAttribute('onclick','doLogout()');}
+      area.innerHTML='<button class="me" type="button" title="내 계정 · 신청 내역 보기" onclick="openMe()">'
+        +esc(name)+' 님 ▾</button>'+tail;
+      if(ma){ma.textContent='내 계정 · 신청 내역';ma.setAttribute('onclick','openMe()');}
     }else{
       window.__uid=null;window.__isPremium=false;window.__isAdmin=false;window.__isOwner=false;window.__academy=null;
       renderPricing(false);
@@ -1932,6 +1992,74 @@
       if(ma){ma.textContent='로그인 / 회원가입';ma.setAttribute('onclick',"openAuth('login')");}
     }
   }
+  /* ===== 내 계정 — 신청 내역 · 진행현황 ===== */
+  function closeMe(){document.getElementById('meModal').classList.remove('open');}
+  async function openMe(){
+    if(!window.__uid){openAuth('login');return;}
+    document.getElementById('meModal').classList.add('open');
+    closeMenu();
+    document.getElementById('meName').textContent=(window.__academy||'내 계정')+' 님';
+    var mail='';try{var u=await sb.auth.getUser();mail=(u.data&&u.data.user)?u.data.user.email:'';}catch(e){}
+    document.getElementById('meMail').textContent=mail;
+    /* 프리미엄 표시 · 최고관리자는 여기서 켜고 끕니다 */
+    var t=window.__isPremium
+      ? '<span class="pbadge">프리미엄 회원</span>'
+      : '<button class="up" type="button" onclick="closeMe();openPremium()">프리미엄 전환</button>';
+    if(window.__isOwner)
+      t+='<button class="up" type="button" style="margin-left:6px" onclick="togglePremiumSelf()">프리미엄 '
+        +(window.__isPremium?'OFF':'ON')+'</button>';
+    document.getElementById('meTier').innerHTML=t;
+    loadMyRequests();
+  }
+  /* 목록이 너무 길면 앞의 몇 개만 보여줍니다 (지역·과목을 다 적으신 분이 많습니다) */
+  function shortList(s,keep){
+    var a=String(s||'').split(/,\s*/);
+    return a.length<=keep?s:a.slice(0,keep).join(', ')+' 외 '+(a.length-keep)+'개';
+  }
+  async function loadMyRequests(){
+    var box=document.getElementById('meList');
+    box.innerHTML='<div class="meempty">불러오는 중입니다…</div>';
+    var r=await sb.rpc('my_requests');
+    if(r.error){box.innerHTML='<div class="meempty">내역을 불러오지 못했습니다.<br>'+esc(r.error.message)+'</div>';return;}
+    var rows=r.data||[];
+    if(!rows.length){
+      box.innerHTML='<div class="meempty"><b>아직 신청하신 내역이 없습니다.</b><br>'
+        +'아래 [새 신청하기]로 신청하시면 여기에서 진행 상황을 보실 수 있습니다.<br>'
+        +'<span style="font-size:.8rem">로그인하지 않고 넣으신 신청서는 여기에 안 나옵니다.</span></div>';
+      return;
+    }
+    var h='<div class="melist">';
+    rows.forEach(function(x){
+      var done=(x.status||'').indexOf('완료')>=0, going=(x.status||'').indexOf('진행')>=0;
+      h+='<div class="mecard"><div class="top">'
+        +'<span class="area">'+esc(x.area||'')+'</span>'
+        +'<span class="nm">'+esc(x.academy_name||'')+'</span>'
+        +'<span class="st'+(done?' done':going?' go':'')+'">'+esc(x.status||'접수')+'</span>'
+        +'<span style="margin-left:auto;font-size:.78rem;color:var(--muted)">'+fdateK(x.created_at)+' 신청</span>'
+        +'</div>';
+      if(x.summary)h+='<div class="sum">'+esc(shortList(x.summary,4))+'</div>';
+      var meta=[];
+      if(x.price)meta.push('<b>'+esc(x.price)+'</b>');
+      if(x.deadline)meta.push('<i>마감 '+esc(x.deadline)+'</i>');
+      if(meta.length)h+='<div class="meta">'+meta.join('')+'</div>';
+      if(x.share_key){
+        var pct=x.qty?Math.round((x.done||0)/x.qty*100):0;
+        h+='<div class="mebar"><i style="width:'+pct+'%"></i></div>'
+          +'<div class="meta"><i>올라간 글 '+(x.done||0)+' / '+(x.qty||0)+'편</i></div>'
+          +'<a class="melink" href="'+BLOG_STATUS_URL+'?k='+encodeURIComponent(x.share_key)+'" '
+          +'target="_blank" rel="noopener">진행현황 자세히 보기 ↗</a>';
+      }
+      h+='</div>';
+    });
+    box.innerHTML=h+'</div>';
+  }
+  function fdateK(s){
+    if(!s)return '';
+    var d=new Date(s);
+    return d.getFullYear()+'.'+('0'+(d.getMonth()+1)).slice(-2)+'.'+('0'+d.getDate()).slice(-2);
+  }
+  var BLOG_STATUS_URL='https://intoedu.github.io/hakwon-blog/status.html';
+
   function openPremium(){var c=document.getElementById('pm_code');c.value='';var m=document.getElementById('pm_msg');m.textContent='';m.className='modal-msg';document.getElementById('premiumModal').classList.add('open');closeMenu();}
   function closePremium(){document.getElementById('premiumModal').classList.remove('open');}
   async function doRedeem(){
