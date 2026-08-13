@@ -159,16 +159,49 @@
   .stat .sub{font-size:.75rem;color:#7E93BC;margin-top:8px}
 
   /* pricing */
-  .ptable{border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;background:var(--surface)}
-  .prow{display:grid;grid-template-columns:1.1fr 2fr .8fr 1fr;align-items:center;gap:16px;padding:20px 24px;border-bottom:1px solid var(--line)}
-  .prow:last-child{border-bottom:0}
-  .prow.h{background:var(--surface-2);font-size:.78rem;font-weight:700;color:var(--muted);letter-spacing:.04em;padding:13px 24px}
-  .prow .stage{font-weight:800}
-  .prow .stage small{display:block;font-weight:600;color:var(--muted);font-size:.8rem;margin-top:2px}
-  .prow .inc{font-size:.9rem;color:var(--muted)}
-  .prow .free{font-weight:700;color:var(--brand)}
-  .prow .fee{font-weight:800;font-size:1.05rem;color:var(--gold)}
-  @media(max-width:720px){.prow{grid-template-columns:1fr 1fr;row-gap:6px}.prow.h{display:none}.prow .inc{grid-column:1/3;order:4}.prow .lbl{font-size:.72rem;color:var(--muted);font-weight:700}}
+  /* 단계별 가격 — 표 대신 카드로. 눈이 「2단계」에 먼저 가도록 만들었습니다 */
+  .pcards{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;align-items:stretch}
+  .pcard{position:relative;display:flex;flex-direction:column;background:var(--surface);
+       border:1px solid var(--line);border-radius:16px;padding:24px 20px 20px;
+       transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease}
+  .pcard:hover{transform:translateY(-4px);border-color:color-mix(in srgb,var(--accent) 45%,var(--line));
+       box-shadow:0 14px 34px -18px rgba(20,40,90,.45)}
+  .pcard.best{border:2px solid var(--gold);padding-top:30px;
+       box-shadow:0 16px 40px -20px color-mix(in srgb,var(--gold) 60%,transparent)}
+  .pbest{position:absolute;top:-1px;left:50%;transform:translate(-50%,-50%);white-space:nowrap;
+       font-size:.72rem;font-weight:800;letter-spacing:.02em;color:#fff;
+       background:linear-gradient(135deg,var(--gold),#8a5a17);padding:5px 14px;border-radius:999px;
+       box-shadow:0 4px 12px -4px color-mix(in srgb,var(--gold) 70%,transparent)}
+  .pstage{font-size:.78rem;font-weight:800;letter-spacing:.04em;color:var(--accent)}
+  .pcard.best .pstage{color:var(--gold)}
+  .psub{font-size:1.18rem;font-weight:800;color:var(--ink);margin-top:3px;line-height:1.3}
+  .ptip{font-size:.8rem;color:var(--muted);margin-top:7px;line-height:1.55;min-height:2.5em}
+  .pmoney{margin:16px 0 14px;padding:15px 0 14px;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .pbig{font-size:1.85rem;font-weight:850;color:var(--gold);line-height:1.15;letter-spacing:-.02em}
+  .pbig small{font-size:.86rem;font-weight:700;color:var(--muted);letter-spacing:0}
+  .pbig.quote{font-size:1.25rem;color:var(--accent)}
+  .psmall{font-size:.83rem;color:var(--muted);margin-top:7px}
+  .psmall b{color:var(--ink);font-weight:800}
+  .psmall b.isfree{color:var(--brand);background:color-mix(in srgb,var(--brand) 12%,transparent);
+       padding:1px 8px;border-radius:999px}
+  .pinc{list-style:none;padding:0;margin:0 0 18px;flex:1}
+  .pinc li{position:relative;padding-left:19px;font-size:.85rem;color:var(--muted);line-height:1.6;margin-bottom:6px}
+  .pinc li::before{content:'✓';position:absolute;left:0;top:0;color:var(--accent);font-weight:800;font-size:.82rem}
+  .pcard.best .pinc li::before{color:var(--gold)}
+  .pbtn{width:100%;border:1px solid var(--line);background:var(--surface-2);color:var(--ink);
+       border-radius:10px;padding:11px 14px;font-size:.86rem;font-weight:800;cursor:pointer;
+       transition:background .15s,border-color .15s,color .15s}
+  .pbtn:hover{background:var(--accent);border-color:var(--accent);color:#fff}
+  .pcard.best .pbtn{background:linear-gradient(135deg,var(--gold),#8a5a17);border-color:transparent;color:#fff}
+  .pcard.best .pbtn:hover{filter:brightness(1.08)}
+  @media(max-width:1000px){
+    .pcards{grid-template-columns:repeat(2,1fr)}
+    .ptip{min-height:0}
+  }
+  @media(max-width:560px){
+    .pcards{grid-template-columns:1fr;gap:16px}
+    .pcard.best{padding-top:32px}
+  }
   .pnote{margin-top:16px;font-size:.86rem;color:var(--muted)}
   .pnote b{color:var(--ink);font-size:1.04rem}
 
@@ -217,6 +250,25 @@
   .ff{margin-bottom:20px}
   .ff .fflabel{display:block;font-size:.88rem;font-weight:800;color:var(--ink);margin-bottom:10px}
   .ff .fflabel.req::after{content:' *';color:var(--accent)}
+  /* 실제 사례 칸 — 검색 노출을 가르는 부분이라 눈에 띄게 둡니다 */
+  .storybox{background:color-mix(in srgb,var(--gold) 9%,var(--surface));
+       border:1.5px solid color-mix(in srgb,var(--gold) 42%,var(--line));
+       border-radius:12px;padding:17px 19px;margin-bottom:0}
+  .storybox b{display:block;font-size:.95rem;margin-bottom:9px;color:var(--gold)}
+  .storybox p{font-size:.87rem;color:var(--muted);line-height:1.7;margin-top:7px}
+  .storybox p b{display:inline;color:var(--ink);font-size:inherit}
+  .storybox .sbwarn{font-size:.8rem;padding-top:10px;margin-top:11px;
+       border-top:1px dashed color-mix(in srgb,var(--gold) 35%,var(--line))}
+  .ff.hi{background:color-mix(in srgb,var(--gold) 5%,var(--surface));
+       border:1.5px solid color-mix(in srgb,var(--gold) 42%,var(--line));border-top:0;
+       border-radius:0 0 12px 12px;padding:16px 19px 18px;margin-top:0}
+  .ff.hi .fflabel{color:var(--gold)}
+  .ff.hi textarea.inp{min-height:132px;border-color:color-mix(in srgb,var(--gold) 40%,var(--line));
+       background:var(--surface)}
+  .ff.hi textarea.inp:focus{border-color:var(--gold);box-shadow:0 0 0 3px color-mix(in srgb,var(--gold) 18%,transparent)}
+  .ffstar{display:inline-block;margin-left:7px;font-size:.7rem;font-weight:800;letter-spacing:.02em;
+       color:#fff;background:linear-gradient(135deg,var(--gold),#8a5a17);
+       padding:3px 9px;border-radius:999px;vertical-align:1px}
   .ffopts{display:flex;flex-wrap:wrap;gap:8px}
   .ffopt{position:relative;display:inline-flex;align-items:center;border:1.5px solid var(--line);background:var(--paper);border-radius:999px;padding:8px 15px;font-size:.86rem;font-weight:600;color:var(--ink);cursor:pointer;transition:border-color .15s,background .15s;user-select:none}
   .ffopt:hover{border-color:var(--accent)}
@@ -628,10 +680,7 @@
         <p>필요한 기능에 따라 단계를 고르시면 됩니다. <b style="color:var(--gold)">프리미엄(파트너) 회원</b>은 회원가로 더 저렴하게 이용하실 수 있습니다.</p>
       </div>
       <div class="ptag-wrap reveal" id="priceTag"></div>
-      <div class="ptable reveal">
-        <div class="prow h"><div>단계</div><div>포함 기능</div><div>제작비</div><div>월 관리비</div></div>
-        <div id="priceRows"></div>
-      </div>
+      <div class="pcards reveal" id="priceRows"></div>
       <p class="pnote">※ <b>유료 도메인은 학원 부담</b>입니다(연 1~2만원대). 사용 여부는 신청 시 선택하실 수 있으며, 도메인은 학원 소유가 됩니다.</p>
     </div>
   </section>
@@ -1441,6 +1490,12 @@
       {t:'files',k:'학원 사진'},
       {t:'text',k:'사진 링크 (드라이브·MYBOX)',ph:'업로드가 어려우시면 링크를 적어 주세요'},
       {t:'textarea',k:'꼭 알리고 싶은 점',ph:'다른 학원과 다른 점, 자랑하고 싶은 것을 적어 주세요. 글에 녹여 넣습니다.'},
+      {t:'note',note:'blogstory'},
+      {t:'textarea',k:'실제 에피소드 · 구체적 사례',hi:1,req:0,
+        ph:'예) 중2 남학생이 3월에 영어 42점으로 왔는데, 단어 시험을 매일 다시 보게 했더니 1학기 기말에 88점이 됐습니다.\n'
+          +'예) 학부모님이 "숙제를 봐줄 사람이 없다"고 하셔서, 수업 끝나고 30분 자습을 붙여 드렸습니다. 지금은 그 반 전체가 그렇게 합니다.\n'
+          +'예) 겨울방학에 예비중 8명이 왔는데 그중 6명이 지금도 다니고 있습니다.',
+        hint:'이름은 빼고 「중2 남학생」처럼만 적어 주세요. 숫자가 들어가면 더 좋습니다.'},
       {t:'textarea',k:'쓰지 말아야 할 것',ph:'언급을 피하고 싶은 내용이 있으면 적어 주세요 (예: 수강료, 특정 경쟁 학원)'},
       {t:'note',note:'blogcall'},
       /* ── 여기부터 접어둔 선택 칸 ── */
@@ -1526,6 +1581,15 @@
         else if(f.note==='blogpurpose')h+='<div class="cnote" style="margin:-8px 0 4px">💡 <b>「영어학원」·「수학학원」 같은 말은 고르지 않으셔도 됩니다.</b> 과목은 위 칸에서 이미 받았고, 여기에 또 넣으면 <b>「영어 내신 수학학원」</b> 처럼 말이 안 되는 검색어가 만들어집니다.</div>';
         else if(f.note==='blogfixed')h+='<div class="guidebox mini"><b>📋 모든 글에 똑같이 들어갈 정보</b><p>이 내용은 모든 글에 그대로 들어갑니다. 정확하게 적어 주세요.</p></div>';
         else if(f.note==='blogphoto')h+='<div class="guidebox mini"><b>📷 사진</b><p>사진이 많을수록 좋습니다. 글마다 다른 사진을 써야 검색에 잘 걸리기 때문입니다. <b>30장 이상을 권합니다.</b> 간판·건물 바깥, 강의실, 교재, 시간표, 안내문, 수업 자료 등 <b>학생 얼굴이 나오지 않는 사진</b>이면 무엇이든 좋습니다.</p><p style="margin-top:8px"><b>지금 다 모으기 어려우시면 비워두셔도 됩니다.</b> 접수 후 <b>사진을 언제든 올리실 수 있는 주소</b>를 따로 안내해 드립니다. 드라이브·MYBOX 링크로 주셔도 됩니다.</p></div>';
+        else if(f.note==='blogstory')h+='<div class="storybox"><b>⭐ 여기가 가장 중요합니다 — 검색 노출이 여기서 갈립니다</b>'
+          +'<p>요즘 네이버는 <b>어디에나 들어맞는 소개글을 좋게 보지 않습니다.</b> '
+          +'학원 이름·과목·주소만 있는 글은 다른 학원 글과 비슷하다고 판단해 <b>검색에서 밀어냅니다.</b></p>'
+          +'<p>반대로 <b>그 학원에서 실제로 있었던 일</b>이 담긴 글은 다른 어디에도 없는 내용이라 '
+          +'<b>검색 상위에 올라가고 오래 남습니다.</b> 읽는 학부모도 그 대목에서 전화를 겁니다.</p>'
+          +'<p style="margin-top:10px"><b>한 줄이라도 좋습니다.</b> 성적이 오른 학생, 학부모가 했던 말, '
+          +'수업 중 있었던 일, 상담 때 자주 나오는 이야기 — 무엇이든 <b>실제로 있었던 일</b>이면 됩니다.</p>'
+          +'<p class="sbwarn">※ 학생 이름·사진은 넣지 마세요. <b>「중2 남학생」「고1 학부모님」</b> 처럼만 적어 주시면 됩니다.<br>'
+          +'※ 저희는 <b>지어내지 않습니다.</b> 여기 적어주신 것만 글에 씁니다.</p></div>';
         else if(f.note==='blogad')h+='<div class="cnote" style="margin-top:4px">📣 관련 법(공정거래위원회 추천·보증 심사지침)에 따라 <b>모든 글 하단에는 광고임을 알리는 문구가 표기</b>됩니다.</div>';
         else if(f.note==='blogcall')h+='<div class="guidebox mini"><b>☎️ 접수 후 10분 통화</b><p>신청서를 받으면 담당자가 <b>10분 정도 전화로 몇 가지 더 여쭙습니다.</b> 글로 쓰시는 것보다 말씀으로 듣는 편이 훨씬 좋은 글감이 됩니다. 아래 칸은 <b>미리 알려주실 수 있는 만큼만</b> 적어 주세요.</p></div>';
         else if(f.note==='blogwhy')h+='<div class="ffoldwhy">학원 이름·주소·과목만으로는 <b>어느 학원에나 들어맞는 뻔한 글</b>이 됩니다. 그런 글은 검색에서도 밀립니다.<br>아래는 <b>원장님만 아시는 것</b>들입니다. 한 줄씩만 적어주셔도 글이 완전히 달라집니다. <b>비워두셔도 신청은 정상 접수됩니다.</b></div>';
@@ -1537,7 +1601,8 @@
         continue;
       }
       if(f.t==='foldend'){h+='</div></details>';continue;}
-      h+='<div class="ff"><span class="fflabel'+(f.req?' req':'')+'">'+esc(f.k)+'</span>';
+      h+='<div class="ff'+(f.hi?' hi':'')+'"><span class="fflabel'+(f.req?' req':'')+'">'+esc(f.k)
+        +(f.hi?' <span class="ffstar">노출에 가장 큰 영향</span>':'')+'</span>';
       if(f.hint)h+='<span class="ffhint">'+esc(f.hint)+'</span>';
       if(f.t==='check'||f.t==='radio'){
         h+='<div class="ffopts">';
@@ -1848,10 +1913,14 @@
   }
   /* ===== 회원별 홈페이지 가격표 ===== */
   var PRICE_STAGES=[
-    {s:'1단계',sub:'단순 홍보형',inc:'학원 소개, 원장 인사말, 시설·시간표 안내, 오시는 길(지도), 전화·카톡 상담 연결'},
-    {s:'2단계',sub:'소통형',inc:'1단계 + 회원가입·로그인, 공지·Q&amp;A 게시판, 갤러리, 자료실'},
-    {s:'3단계',sub:'신청·결제형',inc:'2단계 + 강좌 목록, 온라인 수강신청, 신청 관리, 카드 결제 연동'},
-    {s:'4단계',sub:'맞춤 제작형',inc:'정해진 틀 없이 학원 요구에 맞춰 기능·디자인을 자유롭게 설계하는 완전 맞춤형',merged:true}
+    {s:'1단계',sub:'단순 홍보형',tip:'홈페이지가 아직 없으시다면 여기서 시작하세요',
+     inc:'학원 소개, 원장 인사말, 시설·시간표 안내, 오시는 길(지도), 전화·카톡 상담 연결'},
+    {s:'2단계',sub:'소통형',best:1,tip:'학부모와 주고받을 것이 있다면 이 단계입니다',
+     inc:'1단계에 있는 것 전부, 회원가입·로그인, 공지·Q&amp;A 게시판, 갤러리, 자료실'},
+    {s:'3단계',sub:'신청·결제형',tip:'수강신청·결제까지 홈페이지에서 받으실 때',
+     inc:'2단계에 있는 것 전부, 강좌 목록, 온라인 수강신청, 신청 관리, 카드 결제 연동'},
+    {s:'4단계',sub:'맞춤 제작형',merged:true,tip:'원하시는 것을 말씀해 주시면 맞춰 만듭니다',
+     inc:'정해진 틀 없이 학원 요구에 맞춰 기능·디자인을 자유롭게 설계하는 완전 맞춤형'}
   ];
   var PRICE_TABLE={
     general:[['4.5만원','5만원'],['7만원','5~7만원'],['견적 후 안내','9~12만원'],['견적 후 안내']],
@@ -1862,10 +1931,24 @@
     var arr=premium?PRICE_TABLE.premium:PRICE_TABLE.general,h='';
     for(var i=0;i<PRICE_STAGES.length;i++){
       var st=PRICE_STAGES[i],p=arr[i];
-      h+='<div class="prow"><div class="stage">'+st.s+'<small>'+st.sub+'</small></div><div class="inc">'+st.inc+'</div>';
-      if(st.merged){h+='<div class="free" style="grid-column:3/5">'+p[0]+'</div>';}
-      else{h+='<div class="free"><span class="lbl">제작비 </span>'+p[0]+'</div><div class="fee tnum"><span class="lbl">월 </span>'+p[1]+'</div>';}
-      h+='</div>';
+      var free=p[0],fee=st.merged?'':p[1];
+      var isFree=/무료/.test(free);
+      h+='<div class="pcard'+(st.best?' best':'')+(st.merged?' wide':'')+'">'
+        +(st.best?'<div class="pbest">가장 많이 고르십니다</div>':'')
+        +'<div class="pstage">'+st.s+'</div>'
+        +'<div class="psub">'+st.sub+'</div>'
+        +'<div class="ptip">'+st.tip+'</div>'
+        +'<div class="pmoney">';
+      if(st.merged){
+        h+='<div class="pbig quote">'+free+'</div>'
+          +'<div class="psmall">기능이 정해지면 그때 금액을 알려드립니다</div>';
+      }else{
+        h+='<div class="pbig tnum">'+fee+'<small> / 월</small></div>'
+          +'<div class="psmall">제작비 <b'+(isFree?' class="isfree"':'')+'>'+free+'</b></div>';
+      }
+      h+='</div><ul class="pinc">';
+      st.inc.split(/,\s*/).forEach(function(x){ h+='<li>'+x+'</li>'; });
+      h+='</ul><button class="pbtn" onclick="applyWith(\'doc\')">이 단계로 상담받기</button></div>';
     }
     rowsEl.innerHTML=h;
     var tag=document.getElementById('priceTag');
