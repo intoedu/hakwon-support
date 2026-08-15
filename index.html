@@ -477,6 +477,9 @@
   .sf .sfimg{background:var(--surface-2);border-right:1px solid var(--line);min-height:150px;
        display:flex;align-items:flex-start;overflow:hidden}
   .sf .sfimg.none{display:none}
+  .sf .sfimg.tall{justify-content:center;background:var(--surface-2);padding:14px}
+  .sf .sfimg.tall img{width:auto;max-width:100%;max-height:420px;border-radius:10px;
+       box-shadow:0 10px 26px -14px rgba(0,0,0,.4)}
   .sf .sfimg img{width:100%;display:block}
   .sf figcaption{padding:20px 22px;display:flex;flex-direction:column;justify-content:center}
   .sf .sfn{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:50%;
@@ -1240,7 +1243,7 @@
 
         <div class="benefits">
           <div class="benefit reveal"><div class="bn">01</div><div><h3>교재를 찍으면 단어장이 됩니다</h3><p>원서나 교재 페이지를 사진으로 찍으면 <b style="color:inherit">AI가 외울 단어를 뽑아 자동으로 등록</b>합니다. 학원이 쓰는 어떤 책이든 그대로 단어장이 되고, 직접 추가·수정도 됩니다.</p><div class="bt"><span class="tag">AI 자동 추출</span><span class="tag">원서·교재 그대로</span></div></div></div>
-          <div class="benefit reveal"><div class="bn">02</div><div><h3>외운 다음이 진짜입니다</h3><p>한 번 외우고 끝나면 대부분 잊습니다. 에빙하우스 망각곡선에 맞춰 <b style="color:inherit">1·2·3·6·15·30일 뒤 복습이 자동으로 뜹니다.</b> 학생은 뜨는 것만 하면 되고, 강사는 챙길 필요가 없습니다.</p><div class="bt"><span class="tag">자동 복습</span><span class="tag">망각곡선</span></div></div></div>
+          <div class="benefit reveal"><div class="bn">02</div><div><h3>외운 다음이 진짜입니다</h3><p>한 번 외우고 끝나면 대부분 잊습니다. 에빙하우스 망각곡선에 맞춰 <b style="color:inherit">1·2·3·6·15·30·60일 뒤 복습이 자동으로 뜹니다.</b> 학생은 뜨는 것만 하면 되고, 강사는 챙길 필요가 없습니다.</p><div class="bt"><span class="tag">자동 복습</span><span class="tag">망각곡선</span></div></div></div>
           <div class="benefit reveal"><div class="bn">03</div><div><h3>출제와 채점에서 손을 뗍니다</h3><p>암기카드로 외우고, 다 외우면 바로 테스트로 넘어갑니다. 시험지를 만들고 채점하던 시간이 사라지고, 강사는 결과만 보고 학생을 챙깁니다.</p><div class="bt"><span class="tag">암기카드</span><span class="tag">자동 채점</span></div></div></div>
           <div class="benefit reveal"><div class="bn">04</div><div><h3>점수와 순위가 공부를 시킵니다</h3><p>단어를 외우면 점수가 쌓이고, 앱 전체 사용자와 순위가 매겨집니다. 개인전·단체전이 있어 <b style="color:inherit">학원끼리·반끼리 경쟁</b>이 되고, 시키지 않아도 학생이 먼저 켭니다.</p><div class="bt"><span class="tag">명예의 전당</span><span class="tag">개인전·단체전</span></div></div></div>
         </div>
@@ -1249,7 +1252,7 @@
         <div class="feat reveal">
           <div class="fcard"><b>📚 책장</b><p>수능 기초·심화·숙어·토익 등 기본 단어장이 들어 있고, 원하는 책을 직접 추가할 수 있습니다. DAY별로 나뉘어 단어·뜻·예문을 봅니다.</p></div>
           <div class="fcard"><b>🃏 암기</b><p>책 전체를 한 번에 외우거나, 페이지(DAY)별로 끊어서 외웁니다. 암기카드로 넘기며 외우고 퀴즈로 확인합니다.</p></div>
-          <div class="fcard"><b>📅 복습</b><p>DAY 하나를 끝내면 1·2·3·6·15·30일 복습이 자동 등록됩니다. 오늘 할 복습이 몇 개인지 바로 뜹니다.</p></div>
+          <div class="fcard"><b>📅 복습</b><p>DAY 하나를 끝내면 1·2·3·6·15·30·60일 복습이 자동 등록됩니다. 오늘 할 복습이 몇 개인지 바로 뜹니다.</p></div>
           <div class="fcard"><b>🏆 명예의 전당</b><p>외운 만큼 점수가 쌓입니다. 멤버 순위·개인전·단체전으로 나뉘어 경쟁하게 만듭니다.</p></div>
           <div class="fcard"><b>🔍 검색</b><p>저장한 모든 단어를 영어 또는 뜻으로 찾습니다. 수업 중 바로 꺼내 쓸 수 있습니다.</p></div>
           <div class="fcard"><b>📌 학원 과제</b><p>학원이 지정한 책은 <b>과제</b>로 표시되어 학생 화면 맨 위에 뜹니다. 진도와 완료 여부를 학원이 확인합니다.</p></div>
@@ -1257,12 +1260,24 @@
 
         <div class="panel-intro reveal" style="margin-top:48px"><div><div class="kicker">앱 화면</div><h2>학생이 보는 화면</h2></div></div>
         <div class="phones reveal">
-          <figure class="phone"><div class="frame"><img src="img/imvoca-1.png" alt="IM VOCA 책장 화면" onerror="this.remove()"><div class="ph"><span class="ico">📚</span><b>책장</b><span>기본 단어장 +<br>내가 추가한 책</span></div></div><figcaption><b>책장</b><span>DAY별 단어 관리</span></figcaption></figure>
-          <figure class="phone"><div class="frame"><img src="img/imvoca-2.png" alt="IM VOCA 페이지 촬영 화면" onerror="this.remove()"><div class="ph"><span class="ico">📸</span><b>페이지 촬영</b><span>찍으면 AI가<br>단어 자동 등록</span></div></div><figcaption><b>AI 단어 추출</b><span>원서·교재 스캔</span></figcaption></figure>
-          <figure class="phone"><div class="frame"><img src="img/imvoca-3.png" alt="IM VOCA 암기카드 화면" onerror="this.remove()"><div class="ph"><span class="ico">🃏</span><b>암기카드</b><span>발음 듣기 ·<br>탭해서 뜻 보기</span></div></div><figcaption><b>암기 · 퀴즈</b><span>외우고 바로 테스트</span></figcaption></figure>
-          <figure class="phone"><div class="frame"><img src="img/imvoca-4.png" alt="IM VOCA 복습 현황 화면" onerror="this.remove()"><div class="ph"><span class="ico">📅</span><b>복습 현황</b><span>1·2·3·6·15·30일<br>자동 복습</span></div></div><figcaption><b>망각곡선 복습</b><span>오늘 할 복습만</span></figcaption></figure>
+          <figure class="phone"><div class="frame"><img src="img/imvoca-1.jpg" alt="IM VOCA 책장 화면" onerror="this.remove()"><div class="ph"><span class="ico">📚</span><b>책장</b><span>기본 단어장 +<br>내가 추가한 책</span></div></div><figcaption><b>책장</b><span>과제 · 내 책 한 곳에</span></figcaption></figure>
+          <figure class="phone"><div class="frame"><img src="img/imvoca-2.jpg" alt="IM VOCA 단어 목록 화면" onerror="this.remove()"><div class="ph"><span class="ico">📸</span><b>AI 단어 추출</b><span>찍으면 AI가<br>단어 자동 등록</span></div></div><figcaption><b>뽑힌 단어</b><span>뜻 · 예문 · 발음까지</span></figcaption></figure>
+          <figure class="phone"><div class="frame"><img src="img/imvoca-3.jpg" alt="IM VOCA 암기카드 화면" onerror="this.remove()"><div class="ph"><span class="ico">🃏</span><b>암기카드</b><span>발음 듣기 ·<br>탭해서 뜻 보기</span></div></div><figcaption><b>암기카드</b><span>모름 · 외움으로 넘기기</span></figcaption></figure>
+          <figure class="phone"><div class="frame"><img src="img/imvoca-4.jpg" alt="IM VOCA 복습 현황 화면" onerror="this.remove()"><div class="ph"><span class="ico">📅</span><b>복습 현황</b><span>1·2·3·6·15·30·60일<br>자동 복습</span></div></div><figcaption><b>망각곡선 복습</b><span>오늘 할 복습만</span></figcaption></figure>
         </div>
-        <div class="cnote">🖼️ <b>실제 앱 화면으로 교체 예정:</b> 스크린샷 4장을 <b>hakwon-site/img/</b> 폴더에 <b>imvoca-1.png ~ imvoca-4.png</b> 이름으로 넣으면 이 자리에 자동으로 들어갑니다.</div>
+
+        <div class="panel-intro reveal" style="margin-top:48px"><div><div class="kicker">핵심 기능</div><h2>사진 한 장이면 단어장이 만들어집니다</h2><p>교재든 원서든 <b>페이지를 찍기만 하면</b> AI가 외울 단어를 골라 뜻·예문·발음까지 붙여 저장합니다. <b>특허출원 기술(제10-2026-0127089호)</b>입니다.</p></div></div>
+        <div class="shotflow reveal">
+          <figure class="sf"><div class="sfimg tall"><img src="img/voca/ai1.jpg" alt="페이지 촬영 화면" onerror="this.closest('.sfimg').classList.add('none')"></div>
+            <figcaption><span class="sfn">1</span><b>페이지를 찍습니다</b><p>책을 고르고 페이지 번호만 넣은 뒤 촬영합니다. 갖고 있는 사진을 골라도 됩니다.</p></figcaption></figure>
+          <figure class="sf"><div class="sfimg tall"><img src="img/voca/ai2.jpg" alt="단어 선택 화면" onerror="this.closest('.sfimg').classList.add('none')"></div>
+            <figcaption><span class="sfn">2</span><b>AI가 골라 줍니다</b><p>난이도(CEFR)별로 색이 나뉘어 나옵니다. 아는 단어는 빼고 <b>외울 것만 골라 저장</b>합니다.</p></figcaption></figure>
+          <figure class="sf"><div class="sfimg tall"><img src="img/voca/ai3.jpg" alt="저장된 단어 목록" onerror="this.closest('.sfimg').classList.add('none')"></div>
+            <figcaption><span class="sfn">3</span><b>단어장이 완성됩니다</b><p>기본 뜻에 <b>이 문장에서의 뜻</b>과 예문, 발음 듣기까지 함께 저장됩니다. 바로 암기카드·테스트로 넘어갑니다.</p></figcaption></figure>
+          <figure class="sf"><div class="sfimg tall"><img src="img/voca/ai4.jpg" alt="책 상세 · 페이지별 단어" onerror="this.closest('.sfimg').classList.add('none')"></div>
+            <figcaption><span class="sfn">4</span><b>페이지별로 쌓입니다</b><p>찍은 페이지마다 단어가 모이고, <b>복습 전 · 복습 중 · 복습 완료</b>가 한눈에 보입니다.</p></figcaption></figure>
+        </div>
+
 
         <div class="panel-intro reveal" style="margin-top:48px"><div><div class="kicker">진행 절차</div><h2>요청 → 협의 → 사용</h2></div></div>
         <div class="flow reveal">
