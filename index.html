@@ -365,9 +365,10 @@
   @media(max-width:900px){.phones{grid-template-columns:repeat(2,1fr)}}
   @media(max-width:520px){.phones{grid-template-columns:1fr}}
   .phone{margin:0}
-  .phone .frame{position:relative;aspect-ratio:9/18;border:7px solid #16233c;border-radius:24px;background:#F7F2E9;overflow:hidden;box-shadow:0 12px 28px -14px rgba(10,20,40,.55)}
+  /* 틀 비율을 앱 화면(1080x1956)에 맞춰 둡니다. 9/18 로 두면 좌우가 잘렸습니다 */
+  .phone .frame{position:relative;aspect-ratio:1080/1956;border:7px solid #16233c;border-radius:24px;background:#F4EFE3;overflow:hidden;box-shadow:0 12px 28px -14px rgba(10,20,40,.55)}
   /* 스크린샷 파일이 있으면 그 위를 덮고, 없으면(onerror로 제거) 아래 안내 화면이 보임 */
-  .phone .frame img{position:absolute;inset:0;z-index:1;width:100%;height:100%;object-fit:cover;object-position:top center;display:block}
+  .phone .frame img{position:absolute;inset:0;z-index:1;width:100%;height:100%;object-fit:contain;object-position:top center;display:block}
   .phone .ph{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;padding:16px 12px;text-align:center}
   .phone .ph .ico{font-size:1.7rem;line-height:1}
   .phone .ph b{font-size:.9rem;font-weight:800;color:var(--brand)}
