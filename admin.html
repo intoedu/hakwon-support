@@ -505,7 +505,7 @@
   var PERM_KO={site_board:'홈페이지 게시판 관리',manage_staff:'직원 승인·권한 관리',
                blog_admin:'블로그 센터 운영 (전체)',blog_review:'블로그 원고 검수만'};
 
-  var ME=null, STAFF=[], DATA={'인력':[],'컨텐츠':[],'마케팅':[]}, CUR='인력', CURROW=null, STTAB='wait', SET={}, QD=null;
+  var ME=null, STAFF=[], COMMS=[], DATA={'인력':[],'컨텐츠':[],'마케팅':[]}, CUR='인력', CURROW=null, STTAB='wait', SET={}, QD=null;
   window.BLOG_URL="https://intoedu.github.io/hakwon-blog/";  /* 인라인 onclick에서 쓰므로 전역 */
 
   function $(id){return document.getElementById(id);}
@@ -604,6 +604,9 @@
     (rs.data||[]).forEach(function(x){if(DATA[x.area])DATA[x.area].push(x);});
     var st=await sb.from('staff').select('*').order('created_at',{ascending:true});
     STAFF=st.error?[]:(st.data||[]);
+    /* 소속 고르는 칸에 쓸 공동체 목록 (블로그 센터와 같은 표를 봅니다) */
+    var cm=await sb.from('communities').select('id,name').order('name');
+    COMMS=cm.error?[]:(cm.data||[]);
     Object.keys(AREAS).forEach(function(a){$('c-'+a).textContent=DATA[a].length;});
     var pend=STAFF.filter(function(s){return s.status==='pending';}).length;
     var c=$('c-staff');c.textContent=pend;c.classList.toggle('alert',pend>0);
@@ -1161,10 +1164,11 @@
       $('staffWrap').innerHTML='<div class="empty"><b>'+(STTAB==='wait'?'대기 중인 요청이 없습니다':'승인된 직원이 없습니다')+'</b>'+(STTAB==='wait'?'새 직원이 계정을 만들면 여기에 표시됩니다.':'')+'</div>';
       return;
     }
-    var h='<table><thead><tr><th class="num">#</th><th>이름</th><th>이메일</th><th>연락처</th><th>'+(STTAB==='wait'?'요청일':'직분 · 권한')+'</th><th style="text-align:right">관리</th></tr></thead><tbody>';
+    var h='<table><thead><tr><th class="num">#</th><th>이름</th><th>소속</th><th>이메일</th><th>연락처</th><th>'+(STTAB==='wait'?'요청일':'직분 · 권한')+'</th><th style="text-align:right">관리</th></tr></thead><tbody>';
     list.forEach(function(s,i){
       h+='<tr style="cursor:default"><td class="num tnum">'+(i+1)+'</td>'
         +'<td><span class="nm">'+esc(s.name||'-')+'</span></td>'
+        +'<td>'+homeCell(s)+'</td>'
         +'<td class="muted">'+esc(s.email||'-')+'</td>'
         +'<td class="muted">'+esc(s.phone||'-')+'</td>';
       if(STTAB==='wait'){
@@ -1201,6 +1205,26 @@
     h+='</tbody></table>';
     $('staffWrap').innerHTML=h;
   }
+  /* 소속 — ESC 본부(빈 값) 또는 공동체 하나.
+     ⚠️ 블로그 센터의 「담당 공동체」(여러 개, 검수 화면 표시용)와는 다른 칸입니다.
+     여기는 「이 사람이 어디 사람인가」 하나만 정합니다. */
+  function commName(id){var c=COMMS.filter(function(x){return x.id===id;})[0];return c?c.name:null;}
+  function homeCell(s){
+    var now=commName(s.community_id);
+    var canEdit=(ME.role==='owner'||(ME.perms&&ME.perms.manage_staff===true))
+                && (ME.role==='owner'||s.role!=='owner');
+    if(!canEdit) return '<span class="muted" style="font-size:.82rem">'+esc(now||'ESC')+'</span>';
+    return '<select class="inp" style="width:auto;padding:5px 9px;font-size:.82rem" '
+      +'onchange="setHome(\''+s.id+'\',this.value)">'
+      +'<option value=""'+(s.community_id?'':' selected')+'>ESC</option>'
+      +COMMS.map(function(c){
+        return '<option value="'+c.id+'"'+(s.community_id===c.id?' selected':'')+'>'+esc(c.name)+'</option>';
+      }).join('')+'</select>';
+  }
+  window.setHome=function(id,cid){
+    updStaff(id,{community_id:cid||null},'소속을 바꿨습니다');
+  };
+
   async function updStaff(id,patch,msg){
     var r=await sb.from('staff').update(patch).eq('id',id).select('id');
     if(r.error){toast('실패: '+r.error.message);return;}
